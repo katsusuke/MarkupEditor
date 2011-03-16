@@ -14,18 +14,33 @@
 		6332B0F4132F1F6800A836B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B0F3132F1F6800A836B4 /* main.m */; };
 		6332B0F7132F1F6900A836B4 /* MarkupEditorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B0F6132F1F6900A836B4 /* MarkupEditorAppDelegate.m */; };
 		6332B0FA132F1F6900A836B4 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6332B0F8132F1F6900A836B4 /* MainWindow.xib */; };
-		6332B0FD132F1F6900A836B4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B0FC132F1F6900A836B4 /* RootViewController.m */; };
-		6332B100132F1F6900A836B4 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6332B0FE132F1F6900A836B4 /* RootViewController.xib */; };
 		6332B107132F1F6900A836B4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6332B0E6132F1F6800A836B4 /* UIKit.framework */; };
 		6332B108132F1F6900A836B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6332B0E8132F1F6800A836B4 /* Foundation.framework */; };
 		6332B109132F1F6900A836B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6332B0EA132F1F6800A836B4 /* CoreGraphics.framework */; };
 		6332B111132F1F6900A836B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6332B10F132F1F6900A836B4 /* InfoPlist.strings */; };
-		6332B114132F1F6900A836B4 /* MarkupEditorTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 6332B113132F1F6900A836B4 /* MarkupEditorTests.h */; };
-		6332B116132F1F6900A836B4 /* MarkupEditorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B115132F1F6900A836B4 /* MarkupEditorTests.m */; };
+		6332B128132F1FC900A836B4 /* MarkupDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B123132F1FC900A836B4 /* MarkupDocument.m */; };
+		6332B12A132F1FC900A836B4 /* MarkupElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B125132F1FC900A836B4 /* MarkupElement.m */; };
+		6332B12C132F1FC900A836B4 /* MarkupElementPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B127132F1FC900A836B4 /* MarkupElementPosition.m */; };
+		6332B131132F1FF200A836B4 /* CaretView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B130132F1FF200A836B4 /* CaretView.m */; };
+		6332B134132F200B00A836B4 /* AlertDelegator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B133132F200B00A836B4 /* AlertDelegator.m */; };
+		6332B137132F201600A836B4 /* GraphicalTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B136132F201600A836B4 /* GraphicalTextView.m */; };
+		6332B144132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B139132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m */; };
+		6332B145132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */; };
+		6332B146132F202C00A836B4 /* NSString+drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13D132F202C00A836B4 /* NSString+drawing.m */; };
+		6332B147132F202C00A836B4 /* Pare.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13F132F202C00A836B4 /* Pare.m */; };
+		6332B148132F202C00A836B4 /* TargetActionPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B141132F202C00A836B4 /* TargetActionPair.m */; };
+		6332B149132F202C00A836B4 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B143132F202C00A836B4 /* Tools.m */; };
+		6332B14F132F21F800A836B4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B14D132F21F800A836B4 /* RootViewController.m */; };
+		6332B150132F21F800A836B4 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6332B14E132F21F800A836B4 /* RootViewController.xib */; };
+		6332B157132F489400A836B4 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6332B155132F489400A836B4 /* MainWindow-iPad.xib */; };
+		6332B17B132F9DD500A836B4 /* MarkupElementRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B17A132F9DD300A836B4 /* MarkupElementRange.m */; };
+		6332B181132F9E9F00A836B4 /* MarkupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B180132F9E9B00A836B4 /* MarkupView.m */; };
+		63A619D01330589100976346 /* MarkupViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A619CF1330589000976346 /* MarkupViewCache.m */; };
+		63C1658F1330BC8D007625AB /* MarkupElementPositionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		6332B10A132F1F6900A836B4 /* PBXContainerItemProxy */ = {
+		63F01C9A13309C250030229C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6332B0D9132F1F6800A836B4 /* Project object */;
 			proxyType = 1;
@@ -39,22 +54,54 @@
 		6332B0E6132F1F6800A836B4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6332B0E8132F1F6800A836B4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6332B0EA132F1F6800A836B4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		6332B0EE132F1F6800A836B4 /* MarkupEditor-Info.plist */ = {isa = PBXFileReference; path = "MarkupEditor-Info.plist"; sourceTree = "<group>"; };
+		6332B0EE132F1F6800A836B4 /* MarkupEditor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MarkupEditor-Info.plist"; sourceTree = "<group>"; };
 		6332B0F0132F1F6800A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6332B0F2132F1F6800A836B4 /* MarkupEditor-Prefix.pch */ = {isa = PBXFileReference; path = "MarkupEditor-Prefix.pch"; sourceTree = "<group>"; };
+		6332B0F2132F1F6800A836B4 /* MarkupEditor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MarkupEditor-Prefix.pch"; sourceTree = "<group>"; };
 		6332B0F3132F1F6800A836B4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6332B0F5132F1F6900A836B4 /* MarkupEditorAppDelegate.h */ = {isa = PBXFileReference; path = MarkupEditorAppDelegate.h; sourceTree = "<group>"; };
+		6332B0F5132F1F6900A836B4 /* MarkupEditorAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarkupEditorAppDelegate.h; sourceTree = "<group>"; };
 		6332B0F6132F1F6900A836B4 /* MarkupEditorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarkupEditorAppDelegate.m; sourceTree = "<group>"; };
 		6332B0F9132F1F6900A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		6332B0FB132F1F6900A836B4 /* RootViewController.h */ = {isa = PBXFileReference; path = RootViewController.h; sourceTree = "<group>"; };
-		6332B0FC132F1F6900A836B4 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
-		6332B0FF132F1F6900A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
-		6332B106132F1F6900A836B4 /* MarkupEditorTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkupEditorTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6332B10E132F1F6900A836B4 /* MarkupEditorTests-Info.plist */ = {isa = PBXFileReference; path = "MarkupEditorTests-Info.plist"; sourceTree = "<group>"; };
+		6332B10E132F1F6900A836B4 /* MarkupEditorTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MarkupEditorTests-Info.plist"; sourceTree = "<group>"; };
 		6332B110132F1F6900A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6332B112132F1F6900A836B4 /* MarkupEditorTests-Prefix.pch */ = {isa = PBXFileReference; path = "MarkupEditorTests-Prefix.pch"; sourceTree = "<group>"; };
-		6332B113132F1F6900A836B4 /* MarkupEditorTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MarkupEditorTests.h; sourceTree = "<group>"; };
-		6332B115132F1F6900A836B4 /* MarkupEditorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MarkupEditorTests.m; sourceTree = "<group>"; };
+		6332B112132F1F6900A836B4 /* MarkupEditorTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MarkupEditorTests-Prefix.pch"; sourceTree = "<group>"; };
+		6332B122132F1FC900A836B4 /* MarkupDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupDocument.h; sourceTree = "<group>"; };
+		6332B123132F1FC900A836B4 /* MarkupDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupDocument.m; sourceTree = "<group>"; };
+		6332B124132F1FC900A836B4 /* MarkupElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElement.h; sourceTree = "<group>"; };
+		6332B125132F1FC900A836B4 /* MarkupElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElement.m; sourceTree = "<group>"; };
+		6332B126132F1FC900A836B4 /* MarkupElementPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementPosition.h; sourceTree = "<group>"; };
+		6332B127132F1FC900A836B4 /* MarkupElementPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElementPosition.m; sourceTree = "<group>"; };
+		6332B12F132F1FF200A836B4 /* CaretView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaretView.h; sourceTree = "<group>"; };
+		6332B130132F1FF200A836B4 /* CaretView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaretView.m; sourceTree = "<group>"; };
+		6332B132132F200B00A836B4 /* AlertDelegator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlertDelegator.h; sourceTree = "<group>"; };
+		6332B133132F200B00A836B4 /* AlertDelegator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertDelegator.m; sourceTree = "<group>"; };
+		6332B135132F201600A836B4 /* GraphicalTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicalTextView.h; sourceTree = "<group>"; };
+		6332B136132F201600A836B4 /* GraphicalTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphicalTextView.m; sourceTree = "<group>"; };
+		6332B138132F202C00A836B4 /* NSArray+objectOrNullAtIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+objectOrNullAtIndex.h"; sourceTree = "<group>"; };
+		6332B139132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+objectOrNullAtIndex.m"; sourceTree = "<group>"; };
+		6332B13A132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+insertObjectsAtIndex.h"; sourceTree = "<group>"; };
+		6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+insertObjectsAtIndex.m"; sourceTree = "<group>"; };
+		6332B13C132F202C00A836B4 /* NSString+drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+drawing.h"; sourceTree = "<group>"; };
+		6332B13D132F202C00A836B4 /* NSString+drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+drawing.m"; sourceTree = "<group>"; };
+		6332B13E132F202C00A836B4 /* Pare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pare.h; sourceTree = "<group>"; };
+		6332B13F132F202C00A836B4 /* Pare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pare.m; sourceTree = "<group>"; };
+		6332B140132F202C00A836B4 /* TargetActionPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetActionPair.h; sourceTree = "<group>"; };
+		6332B141132F202C00A836B4 /* TargetActionPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetActionPair.m; sourceTree = "<group>"; };
+		6332B142132F202C00A836B4 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
+		6332B143132F202C00A836B4 /* Tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tools.m; sourceTree = "<group>"; };
+		6332B14A132F20BB00A836B4 /* MyMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyMacro.h; sourceTree = "<group>"; };
+		6332B14C132F21F800A836B4 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		6332B14D132F21F800A836B4 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		6332B14E132F21F800A836B4 /* RootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
+		6332B156132F489400A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		6332B179132F9DD200A836B4 /* MarkupElementRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementRange.h; sourceTree = "<group>"; };
+		6332B17A132F9DD300A836B4 /* MarkupElementRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElementRange.m; sourceTree = "<group>"; };
+		6332B17F132F9E9A00A836B4 /* MarkupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupView.h; sourceTree = "<group>"; };
+		6332B180132F9E9B00A836B4 /* MarkupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupView.m; sourceTree = "<group>"; };
+		63A619CE1330589000976346 /* MarkupViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupViewCache.h; sourceTree = "<group>"; };
+		63A619CF1330589000976346 /* MarkupViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupViewCache.m; sourceTree = "<group>"; };
+		63C1658D1330BC8D007625AB /* MarkupElementPositionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementPositionTest.h; sourceTree = "<group>"; };
+		63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElementPositionTest.m; sourceTree = "<group>"; };
+		63FB95EA1330A90400AD473C /* MarkupEditorTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkupEditorTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				6332B0E2132F1F6800A836B4 /* MarkupEditor.app */,
-				6332B106132F1F6900A836B4 /* MarkupEditorTests.octest */,
+				63FB95EA1330A90400AD473C /* MarkupEditorTests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,12 +160,15 @@
 		6332B0EC132F1F6800A836B4 /* MarkupEditor */ = {
 			isa = PBXGroup;
 			children = (
+				6332B154132F488F00A836B4 /* XIB */,
+				6332B14B132F20CF00A836B4 /* ViewControllers */,
+				6332B12E132F1FDA00A836B4 /* Views */,
+				6332B120132F1F8D00A836B4 /* Models */,
+				6332B11F132F1F8000A836B4 /* Library */,
 				6332B0F5132F1F6900A836B4 /* MarkupEditorAppDelegate.h */,
 				6332B0F6132F1F6900A836B4 /* MarkupEditorAppDelegate.m */,
 				6332B0F8132F1F6900A836B4 /* MainWindow.xib */,
-				6332B0FB132F1F6900A836B4 /* RootViewController.h */,
-				6332B0FC132F1F6900A836B4 /* RootViewController.m */,
-				6332B0FE132F1F6900A836B4 /* RootViewController.xib */,
+				6332B14A132F20BB00A836B4 /* MyMacro.h */,
 				6332B0ED132F1F6800A836B4 /* Supporting Files */,
 			);
 			path = MarkupEditor;
@@ -138,8 +188,7 @@
 		6332B10C132F1F6900A836B4 /* MarkupEditorTests */ = {
 			isa = PBXGroup;
 			children = (
-				6332B113132F1F6900A836B4 /* MarkupEditorTests.h */,
-				6332B115132F1F6900A836B4 /* MarkupEditorTests.m */,
+				6332B178132F6F5400A836B4 /* Cases */,
 				6332B10D132F1F6900A836B4 /* Supporting Files */,
 			);
 			path = MarkupEditorTests;
@@ -153,6 +202,92 @@
 				6332B112132F1F6900A836B4 /* MarkupEditorTests-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6332B11F132F1F8000A836B4 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				6332B138132F202C00A836B4 /* NSArray+objectOrNullAtIndex.h */,
+				6332B139132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m */,
+				6332B13A132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.h */,
+				6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */,
+				6332B13C132F202C00A836B4 /* NSString+drawing.h */,
+				6332B13D132F202C00A836B4 /* NSString+drawing.m */,
+				6332B13E132F202C00A836B4 /* Pare.h */,
+				6332B13F132F202C00A836B4 /* Pare.m */,
+				6332B140132F202C00A836B4 /* TargetActionPair.h */,
+				6332B141132F202C00A836B4 /* TargetActionPair.m */,
+				6332B142132F202C00A836B4 /* Tools.h */,
+				6332B143132F202C00A836B4 /* Tools.m */,
+				6332B132132F200B00A836B4 /* AlertDelegator.h */,
+				6332B133132F200B00A836B4 /* AlertDelegator.m */,
+			);
+			name = Library;
+			sourceTree = "<group>";
+		};
+		6332B120132F1F8D00A836B4 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				6332B121132F1F9000A836B4 /* MarkupDocument */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		6332B121132F1F9000A836B4 /* MarkupDocument */ = {
+			isa = PBXGroup;
+			children = (
+				6332B122132F1FC900A836B4 /* MarkupDocument.h */,
+				6332B123132F1FC900A836B4 /* MarkupDocument.m */,
+				6332B124132F1FC900A836B4 /* MarkupElement.h */,
+				6332B125132F1FC900A836B4 /* MarkupElement.m */,
+				6332B126132F1FC900A836B4 /* MarkupElementPosition.h */,
+				6332B127132F1FC900A836B4 /* MarkupElementPosition.m */,
+				6332B179132F9DD200A836B4 /* MarkupElementRange.h */,
+				6332B17A132F9DD300A836B4 /* MarkupElementRange.m */,
+				6332B17F132F9E9A00A836B4 /* MarkupView.h */,
+				6332B180132F9E9B00A836B4 /* MarkupView.m */,
+				63A619CE1330589000976346 /* MarkupViewCache.h */,
+				63A619CF1330589000976346 /* MarkupViewCache.m */,
+			);
+			name = MarkupDocument;
+			sourceTree = "<group>";
+		};
+		6332B12E132F1FDA00A836B4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6332B135132F201600A836B4 /* GraphicalTextView.h */,
+				6332B136132F201600A836B4 /* GraphicalTextView.m */,
+				6332B12F132F1FF200A836B4 /* CaretView.h */,
+				6332B130132F1FF200A836B4 /* CaretView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		6332B14B132F20CF00A836B4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				6332B14C132F21F800A836B4 /* RootViewController.h */,
+				6332B14D132F21F800A836B4 /* RootViewController.m */,
+				6332B14E132F21F800A836B4 /* RootViewController.xib */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		6332B154132F488F00A836B4 /* XIB */ = {
+			isa = PBXGroup;
+			children = (
+				6332B155132F489400A836B4 /* MainWindow-iPad.xib */,
+			);
+			name = XIB;
+			sourceTree = "<group>";
+		};
+		6332B178132F6F5400A836B4 /* Cases */ = {
+			isa = PBXGroup;
+			children = (
+				63C1658D1330BC8D007625AB /* MarkupElementPositionTest.h */,
+				63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */,
+			);
+			name = Cases;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,11 +322,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				6332B10B132F1F6900A836B4 /* PBXTargetDependency */,
+				63F01C9B13309C250030229C /* PBXTargetDependency */,
 			);
 			name = MarkupEditorTests;
 			productName = MarkupEditorTests;
-			productReference = 6332B106132F1F6900A836B4 /* MarkupEditorTests.octest */;
+			productReference = 63FB95EA1330A90400AD473C /* MarkupEditorTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -224,7 +359,8 @@
 			files = (
 				6332B0F1132F1F6800A836B4 /* InfoPlist.strings in Resources */,
 				6332B0FA132F1F6900A836B4 /* MainWindow.xib in Resources */,
-				6332B100132F1F6900A836B4 /* RootViewController.xib in Resources */,
+				6332B150132F21F800A836B4 /* RootViewController.xib in Resources */,
+				6332B157132F489400A836B4 /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,7 +369,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6332B111132F1F6900A836B4 /* InfoPlist.strings in Resources */,
-				6332B114132F1F6900A836B4 /* MarkupEditorTests.h in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,7 +397,22 @@
 			files = (
 				6332B0F4132F1F6800A836B4 /* main.m in Sources */,
 				6332B0F7132F1F6900A836B4 /* MarkupEditorAppDelegate.m in Sources */,
-				6332B0FD132F1F6900A836B4 /* RootViewController.m in Sources */,
+				6332B128132F1FC900A836B4 /* MarkupDocument.m in Sources */,
+				6332B12A132F1FC900A836B4 /* MarkupElement.m in Sources */,
+				6332B12C132F1FC900A836B4 /* MarkupElementPosition.m in Sources */,
+				6332B131132F1FF200A836B4 /* CaretView.m in Sources */,
+				6332B134132F200B00A836B4 /* AlertDelegator.m in Sources */,
+				6332B137132F201600A836B4 /* GraphicalTextView.m in Sources */,
+				6332B144132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m in Sources */,
+				6332B145132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m in Sources */,
+				6332B146132F202C00A836B4 /* NSString+drawing.m in Sources */,
+				6332B147132F202C00A836B4 /* Pare.m in Sources */,
+				6332B148132F202C00A836B4 /* TargetActionPair.m in Sources */,
+				6332B149132F202C00A836B4 /* Tools.m in Sources */,
+				6332B14F132F21F800A836B4 /* RootViewController.m in Sources */,
+				6332B17B132F9DD500A836B4 /* MarkupElementRange.m in Sources */,
+				6332B181132F9E9F00A836B4 /* MarkupView.m in Sources */,
+				63A619D01330589100976346 /* MarkupViewCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,17 +420,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6332B116132F1F6900A836B4 /* MarkupEditorTests.m in Sources */,
+				63C1658F1330BC8D007625AB /* MarkupElementPositionTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		6332B10B132F1F6900A836B4 /* PBXTargetDependency */ = {
+		63F01C9B13309C250030229C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6332B0E1132F1F6800A836B4 /* MarkupEditor */;
-			targetProxy = 6332B10A132F1F6900A836B4 /* PBXContainerItemProxy */;
+			targetProxy = 63F01C9A13309C250030229C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -301,20 +451,20 @@
 			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
-		6332B0FE132F1F6900A836B4 /* RootViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6332B0FF132F1F6900A836B4 /* en */,
-			);
-			name = RootViewController.xib;
-			sourceTree = "<group>";
-		};
 		6332B10F132F1F6900A836B4 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6332B110132F1F6900A836B4 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		6332B155132F489400A836B4 /* MainWindow-iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6332B156132F489400A836B4 /* en */,
+			);
+			name = "MainWindow-iPad.xib";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -361,7 +511,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MarkupEditor/MarkupEditor-Prefix.pch";
 				INFOPLIST_FILE = "MarkupEditor/MarkupEditor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -374,7 +526,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MarkupEditor/MarkupEditor-Prefix.pch";
 				INFOPLIST_FILE = "MarkupEditor/MarkupEditor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -434,7 +588,7 @@
 				6332B118132F1F6900A836B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		6332B119132F1F6900A836B4 /* Build configuration list for PBXNativeTarget "MarkupEditor" */ = {
 			isa = XCConfigurationList;
@@ -443,6 +597,7 @@
 				6332B11B132F1F6900A836B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 		6332B11C132F1F6900A836B4 /* Build configuration list for PBXNativeTarget "MarkupEditorTests" */ = {
 			isa = XCConfigurationList;
@@ -451,6 +606,7 @@
 				6332B11E132F1F6900A836B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

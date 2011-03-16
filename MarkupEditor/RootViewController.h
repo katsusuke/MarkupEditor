@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GraphicalTextView.h"
 
-@interface RootViewController : UITableViewController {
-
+@interface RootViewController : UIViewController {
+    IBOutlet GraphicalTextView* textView;
 }
-
 
 @end

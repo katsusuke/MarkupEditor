@@ -11,4 +11,11 @@
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+
+    #import "MyMacro.h"
+    #import "Tools.h"
+    #import "Pare.h"
+    #import "NSArray+objectOrNullAtIndex.h"
+    #import "NSMutableArray+insertObjectsAtIndex.h"
+    #import "NSString+drawing.h"
 #endif
