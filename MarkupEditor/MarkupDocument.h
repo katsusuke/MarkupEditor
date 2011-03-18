@@ -54,7 +54,7 @@
 
 + (NSArray*)connectMarkupElements:(NSArray*)lhs
                         andOthers:(NSArray*)rhs;
-+ (void)getFirstFont:(UIFont**)refFont color:(UIColor**)refColor fromElements:(NSArray*)elements;
-+ (void)getLastFont:(UIFont**)refFont color:(UIColor**)refColor fromElements:(NSArray*)elements;
++ (void)getFirstFont:(UIFont**)refFont andColor:(UIColor**)refColor fromElements:(NSArray*)elements;
++ (void)getLastFont:(UIFont**)refFont andColor:(UIColor**)refColor fromElements:(NSArray*)elements;
 
 @end

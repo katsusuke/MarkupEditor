@@ -14,7 +14,6 @@
 
 @synthesize elementIndex=elementIndex_;
 @synthesize valueIndex=valueIndex_;
-@synthesize inAnElement=inAnElement_;
 
 - (id)initWithElementIndex:(NSInteger)elementIndex
                 valueIndex:(NSInteger)valueIndex
@@ -27,7 +26,6 @@
         }
         elementIndex_ = elementIndex;
         valueIndex_ = valueIndex;
-        inAnElement_ = valueIndex_ != 0;
     }
     return self;
 }
@@ -51,11 +49,14 @@
 
 - (NSString*)description{
     return [NSString stringWithFormat:
-            @"%@(elementIndex:%d valueIndex:%d inAnElement:%d)",
+            @"%@(elementIndex:%d valueIndex:%d)",
             [super description],
             elementIndex_,
-            valueIndex_,
-            inAnElement_];
+            valueIndex_];
+}
+
+- (BOOL)inAnElement{
+    return valueIndex_ != 0;
 }
 
 - (BOOL)isFirst{

@@ -66,7 +66,12 @@
 }
 - (void)insertText:(NSString *)text
 {
+    PO(text);
     [document_ replaceRange:selectedTextRange_ withText:text];
+    [selectedTextRange_ release];
+    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
+                                                              end:document_.endPosition];
+    [self setNeedsDisplay];
 }
 - (void)deleteBackward
 {

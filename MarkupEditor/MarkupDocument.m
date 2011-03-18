@@ -57,7 +57,7 @@
                         color:[UIColor blueColor]]];
 	[elements_ addObject:
 	 [MarkupText textWithText:@"hij"
-                         font:[UIFont systemFontOfSize:16]
+                         font:[UIFont systemFontOfSize:20]
                         color:[UIColor greenColor]]];
     
     //elements_ count => 10
@@ -226,22 +226,24 @@
         return [MarkupElementPosition positionWithElementIndex:[elements_ count]
                                                     valueIndex:0];
     }else{
+        if(from.isFirst){
+            return self.startPosition;
+        }
         NSInteger i = from.elementIndex;
         if(from.inAnElement){
-            offset += from.valueIndex;
+            id<MarkupElement> elm = [elements_ objectAtIndex:i];
+            offset -= [elm length] - from.valueIndex;
         }else{
             i--;
-            id<MarkupElement> elm = [elements_ objectAtIndex:i];
-            offset += [elm length];
         }
         
         for(; i >= 0; --i){
             id<MarkupElement> elm = [elements_ objectAtIndex:i];
+            offset += [elm length];
             if(0 <= offset){
                 return [MarkupElementPosition positionWithElementIndex:i
                                                             valueIndex:offset];
             }
-            offset += [elm length];
         }
         return [MarkupElementPosition positionWithElementIndex:0
                                                     valueIndex:0];
@@ -391,16 +393,16 @@
                                                  [elements_ count] - end.elementIndex - 1)];
         
         if(secondPare.first){
-            newElements = [[self class]connectMarkupElements:newElements
+            newElements = [MarkupDocument connectMarkupElements:newElements
                                                    andOthers:[NSArray arrayWithObject:secondPare.first]];
         }
-        newElements = [[self class]connectMarkupElements:newElements
+        newElements = [MarkupDocument connectMarkupElements:newElements
                                                andOthers:textElements];
         if(thirdPare.second){
-            newElements = [[self class]connectMarkupElements:newElements
+            newElements = [MarkupDocument connectMarkupElements:newElements
                                                    andOthers:[NSArray arrayWithObject:thirdPare.second]];
         }
-        newElements = [[self class]connectMarkupElements:newElements andOthers:last];
+        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:last];
         [elements_ removeAllObjects];
         [elements_ addObject:newElements];
     }
@@ -417,16 +419,16 @@
         = [elements_ subarrayWithRange:NSMakeRange(position.elementIndex + 1,
                                                    [elements_ count] - position.elementIndex - 1)];
         if(center.first){
-            newElements = [[self class]connectMarkupElements:newElements
+            newElements = [MarkupDocument connectMarkupElements:newElements
                                                    andOthers:[NSArray arrayWithObject:center.first]];
         }
-        newElements = [[self class]connectMarkupElements:newElements
+        newElements = [MarkupDocument connectMarkupElements:newElements
                                                andOthers:insertElement];
         if(center.second){
-            newElements = [[self class]connectMarkupElements:newElements
+            newElements = [MarkupDocument connectMarkupElements:newElements
                                                    andOthers:[NSArray arrayWithObject:center.second]];
         }
-        newElements = [[self class]connectMarkupElements:newElements
+        newElements = [MarkupDocument connectMarkupElements:newElements
                                                andOthers:last];
         [elements_ removeAllObjects];
         [elements_ addObjectsFromArray:newElements];
@@ -440,21 +442,21 @@
     if(index == 0){
         UIFont* font = nil;
         UIColor* color = nil;
-        [[self class]getFirstFont:&font color:&color fromElements:insertElement];
+        [MarkupDocument getFirstFont:&font andColor:&color fromElements:insertElement];
         //要素の始めに挿入時はdefault を書き換える
         if(font){ self.defaultFont = font; }
         if(color){ self.defaultColor = color; }
-        newElements = [[self class]connectMarkupElements:insertElement
+        newElements = [MarkupDocument connectMarkupElements:insertElement
                                                andOthers:elements_];
     }
     else if(index == [elements_ count]){
-        newElements = [[self class]connectMarkupElements:elements_
+        newElements = [MarkupDocument connectMarkupElements:elements_
                                                andOthers:insertElement];
     }else{
         newElements = [elements_ subarrayWithRange:NSMakeRange(0, index)];
         NSArray* last = [elements_ subarrayWithRange:NSMakeRange(index, [elements_ count] - index)];
-        newElements = [[self class]connectMarkupElements:newElements andOthers:insertElement];
-        newElements = [[self class]connectMarkupElements:newElements andOthers:last];
+        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:insertElement];
+        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:last];
     }
     [elements_ removeAllObjects];
     [elements_ addObjectsFromArray:newElements];
@@ -490,7 +492,7 @@
     return res;
 }
 
-+ (void)getFirstFont:(UIFont **)refFont color:(UIColor **)refColor fromElements:(NSArray *)elements
++ (void)getFirstFont:(UIFont **)refFont andColor:(UIColor **)refColor fromElements:(NSArray *)elements
 {
     *refFont = nil;
     *refColor = nil;
@@ -511,7 +513,7 @@
     }
 }
 
-+ (void)getLastFont:(UIFont **)refFont color:(UIColor **)refColor fromElements:(NSArray *)elements
++ (void)getLastFont:(UIFont **)refFont andColor:(UIColor **)refColor fromElements:(NSArray *)elements
 {
     *refFont = nil;
     *refColor = nil;

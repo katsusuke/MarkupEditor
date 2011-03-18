@@ -13,11 +13,12 @@
 @private
     NSInteger elementIndex_;
     NSInteger valueIndex_;
-    BOOL inAnElement_;
 }
-@property (nonatomic, assign) NSInteger elementIndex;
-@property (nonatomic, assign) NSInteger valueIndex;
-@property (nonatomic, assign) BOOL inAnElement;
+
+- (BOOL)inAnElement;
+@property (nonatomic, readonly) NSInteger elementIndex;
+@property (nonatomic, readonly) NSInteger valueIndex;
+@property (nonatomic, readonly) BOOL inAnElement;
 @property (nonatomic, readonly) BOOL isFirst;
 
 - (id)initWithElementIndex:(NSInteger)elementIndex

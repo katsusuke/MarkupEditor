@@ -70,6 +70,58 @@
     STAssertEqualObjects(t3, @"\n", @"Range is newline");
 }
 
+- (void)testPositionFromPositionOffset
+{
+    MarkupElementPosition* p0 = d.startPosition;
+    //同一element内
+    MarkupElementPosition* p1 = [d positionFromPosition:p0 offset:2];
+    MarkupElementPosition* p1eq = [MarkupElementPosition positionWithElementIndex:0 valueIndex:2];
+    STAssertEqualObjects(p1, p1eq, @"");
+    //element 境界越え
+    MarkupElementPosition* p2 = [d positionFromPosition:p1eq offset:3];
+    MarkupElementPosition* p2eq = [MarkupElementPosition positionWithElementIndex:1 valueIndex:1];
+    STAssertEqualObjects(p2, p2eq, @"");
+    //NewLine 境界越え
+    MarkupElementPosition* p3 = [d positionFromPosition:p2eq offset:2 + 3 + 13 + 1];
+    MarkupElementPosition* p3eq = [MarkupElementPosition positionWithElementIndex:5 valueIndex:0];
+    STAssertEqualObjects(p3, p3eq, @"");
+    //endPosition 手前まで移動
+    MarkupElementPosition* p4 = [d positionFromPosition:p3eq offset:13 + 1 + 4 + 3 + 2];
+    MarkupElementPosition* p4eq = [MarkupElementPosition positionWithElementIndex:9 valueIndex:2];
+    STAssertEqualObjects(p4, p4eq, @"");
+    //終端
+    MarkupElementPosition* p5 = [d positionFromPosition:p4eq offset:1];
+    MarkupElementPosition* p5eq = [MarkupElementPosition positionWithElementIndex:10 valueIndex:0];
+    STAssertEqualObjects(p5, p5eq, @"");
+    //境界を超えても end
+    MarkupElementPosition* p6 = [d positionFromPosition:p4 offset:2];
+    STAssertEqualObjects(p6, d.endPosition, @"");
+    
+    //戻り
+    //境界越え
+    MarkupElementPosition* p7 = [d positionFromPosition:d.endPosition offset:-1];
+    MarkupElementPosition* p7eq = [MarkupElementPosition positionWithElementIndex:9 valueIndex:2];
+    STAssertEqualObjects(p7, p7eq, @"");
+    //境界越えない
+    MarkupElementPosition* p8 = [d positionFromPosition:p7 offset:-1];
+    MarkupElementPosition* p8eq = [MarkupElementPosition positionWithElementIndex:9 valueIndex:1];
+    STAssertEqualObjects(p8, p8eq, @"");
+    //NewLine 超え
+    MarkupElementPosition* p9 = [d positionFromPosition:p8 offset:-1 - 3 - 4 - 1];
+    MarkupElementPosition* p9eq = [MarkupElementPosition positionWithElementIndex:6 valueIndex:0];
+    STAssertEqualObjects(p9, p9eq, @"");
+    //Start 手前
+    MarkupElementPosition* p10 = [d positionFromPosition:p9 offset:-13 - 1 - 13 - 3 - 3 - 3];
+    MarkupElementPosition* p10eq = [MarkupElementPosition positionWithElementIndex:0 valueIndex:1];
+    STAssertEqualObjects(p10, p10eq, @"");
+    //start
+    MarkupElementPosition* p11 = [d positionFromPosition:p10 offset:-1];
+    STAssertEqualObjects(p11, d.startPosition, @"");
+    //start 超えてもstart
+    MarkupElementPosition* p12 = [d positionFromPosition:p10 offset:-2];
+    STAssertEqualObjects(p12, d.startPosition, @"");
+}
+
 - (void)testReplaceInRangeFirst
 {
     P(@"%d", [d elementCount]);
@@ -118,13 +170,115 @@
                                       font:[UIFont systemFontOfSize:30]
                                      color:[UIColor darkGrayColor]], nil];
     [d insertElements:a atIndex:0];
+    //先頭にひっつけると、フォントや色が変わる
     STAssertEqualObjects(d.defaultFont, [UIFont systemFontOfSize:90], @"");
     STAssertEqualObjects(d.defaultColor, [UIColor darkGrayColor], @"");
     STAssertEquals([d elementCount], 12, @"");
 }
-//TODO 先頭にひっつくパターン
+// 先頭にひっつくパターン
 - (void)testInsertElementAtIndexTopConnect{
-    
+    STAssertEqualObjects(d.defaultFont, [UIFont systemFontOfSize:16], @"");
+    STAssertEqualObjects(d.defaultColor, [UIColor redColor], @"");
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:10]],
+                  [MarkupText textWithText:@"かきく"
+                                      font:[UIFont systemFontOfSize:16]
+                                     color:[UIColor redColor]], nil];
+    [d insertElements:a atIndex:0];
+    STAssertEqualObjects(d.defaultFont, [UIFont systemFontOfSize:10], @"");
+    STAssertEqualObjects(d.defaultColor, [UIColor redColor], @"");
+    STAssertEquals([d elementCount], 11, @"");
+    id<MarkupElement> elm = [d elementAtIndex:1];
+    STAssertEqualObjects(elm.stringValue, @"かきくabcd", @"");
+}
+//真ん中でひっつかない
+- (void)testInsertElementAtCenter{
+    STAssertEqualObjects(d.defaultFont, [UIFont systemFontOfSize:16], @"");
+    STAssertEqualObjects(d.defaultColor, [UIColor redColor], @"");
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:10]
+                                     color:[UIColor orangeColor]],
+                  [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:10]], nil];
+    [d insertElements:a atIndex:2];
+    //default Fontは変わらない
+    STAssertEqualObjects(d.defaultFont, [UIFont systemFontOfSize:16], @"");
+    STAssertEqualObjects(d.defaultColor, [UIColor redColor], @"");
+    STAssertEquals([d elementCount], 12, @"");
+}
+//真ん中で手前にひっつく
+- (void)testInsertElementAtCenterConnectBefore{
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:30]
+                                     color:[UIColor blueColor]],
+                  [MarkupText textWithText:@"たちつ"
+                                      font:[UIFont systemFontOfSize:10]
+                                     color:[UIColor orangeColor]], nil];
+    [d insertElements:a atIndex:2];
+    STAssertEquals([d elementCount], 11, @"");
+    STAssertEqualObjects([d elementAtIndex:1].stringValue, @"EFGさしす", @"");
+    STAssertEqualObjects([d elementAtIndex:2].stringValue, @"たちつ", @"");
+}
+//真ん中で次にひっつく
+- (void)testInsertElementAtCenterConnectAfter{
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:10]
+                                     color:[UIColor orangeColor]],
+                  [MarkupText textWithText:@"たちつ"
+                                      font:[UIFont systemFontOfSize:20]
+                                     color:[UIColor greenColor]], nil];
+    [d insertElements:a atIndex:2];
+    STAssertEquals([d elementCount], 11, @"");
+    STAssertEqualObjects([d elementAtIndex:1].stringValue, @"EFG", @"");
+    STAssertEqualObjects([d elementAtIndex:2].stringValue, @"さしす", @"");
+    STAssertEqualObjects([d elementAtIndex:3].stringValue, @"たちつhij", @"");
+}
+//真ん中で両側にひっつく
+- (void)testInsertElementAtCenterConnectBoth
+{
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:30]
+                                     color:[UIColor blueColor]],
+                  [MarkupText textWithText:@"たちつ"
+                                      font:[UIFont systemFontOfSize:20]
+                                     color:[UIColor greenColor]], nil];
+    [d insertElements:a atIndex:2];
+    STAssertEquals([d elementCount], 10, @"");
+    STAssertEqualObjects([d elementAtIndex:1].stringValue, @"EFGさしす", @"");
+    STAssertEqualObjects([d elementAtIndex:2].stringValue, @"たちつhij", @"");
+}
+//後尾でひっつかない
+- (void)testInsertElementAtBottom
+{
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:10]
+                                     color:[UIColor orangeColor]],
+                  [MarkupText textWithText:@"たちつ"
+                                      font:[UIFont systemFontOfSize:20]
+                                     color:[UIColor greenColor]], nil];
+    [d insertElements:a atIndex:10];
+    STAssertEquals([d elementCount], 12, @"");
+    STAssertEqualObjects([d elementAtIndex:10].stringValue, @"さしす", @"");
+    STAssertEqualObjects([d elementAtIndex:11].stringValue, @"たちつ", @"");
+}
+//後尾でひっつく
+- (void)testInsertElementAtBottomConnect
+{
+    NSArray* a = [NSArray arrayWithObjects:
+                  [MarkupText textWithText:@"さしす"
+                                      font:[UIFont systemFontOfSize:16]
+                                     color:[UIColor greenColor]],
+                  [MarkupText textWithText:@"たちつ"
+                                      font:[UIFont systemFontOfSize:20]
+                                     color:[UIColor greenColor]], nil];
+    [d insertElements:a atIndex:10];
+    STAssertEquals([d elementCount], 11, @"");
+    STAssertEqualObjects([d elementAtIndex:9].stringValue, @"hijさしす", @"");
+    STAssertEqualObjects([d elementAtIndex:10].stringValue, @"たちつ", @"");
 }
 
 - (void)testConnectMarkupElements
