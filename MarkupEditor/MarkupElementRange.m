@@ -34,10 +34,25 @@
     return self;
 }
 
-- (BOOL)empty{
-    return [start_ isEqualToPosition:end_];
++ (MarkupElementRange*)rangeWithStart:(MarkupElementPosition *)start
+                                  end:(MarkupElementPosition *)end
+{
+    return [[[[self class]alloc]initWithStart:start end:end]autorelease];
 }
 
++ (MarkupElementRange*)rangeWithStartElement:(NSInteger)startElement
+                             startValueIndex:(NSInteger)startValueIndex
+                                  endElement:(NSInteger)endElement
+                               endValueIndex:(NSInteger)endValueIndex;
+{
+    return [[self class]
+            rangeWithStart:[MarkupElementPosition
+                            positionWithElementIndex:startElement
+                            valueIndex:startValueIndex]
+            end:[MarkupElementPosition
+                 positionWithElementIndex:endElement
+                 valueIndex:endValueIndex]];
+}
 
 - (id)copyWithZone:(NSZone *)zone
 {
@@ -51,10 +66,16 @@
     [super dealloc];
 }
 
+- (BOOL)isEmpty{
+    return [start_ isEqualToPosition:end_];
+}
+
 - (NSString*)description{
     return [NSString stringWithFormat:
-            @"<%@ start:%@ end%@>",
-            [[self class]description],
+            @"%@(\n"
+            @"start: %@\n"
+            @"end: %@)",
+            [super description],
             start_, 
             end_];
 }

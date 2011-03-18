@@ -21,14 +21,8 @@
     document_ = [[MarkupDocument alloc]init];
     [document_ setTestData];
     self.backgroundColor = [UIColor whiteColor];
-    beginningOfDocument_
-    = [MarkupElementPosition positionWithElementIndex:0
-                                           valueIndex:0];
-    endOfDocument_
-    = [MarkupElementPosition positionWithElementIndex:[document_.markupElements count]
-                                           valueIndex:0];
-    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:endOfDocument_
-                                                              end:endOfDocument_];
+    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
+                                                              end:document_.endPosition];
     return self;
 }
 
@@ -107,11 +101,11 @@
 }
 
 - (UITextPosition*)beginningOfDocument{
-    return beginningOfDocument_;
+    return document_.startPosition;
 }
 
 - (UITextPosition*)endOfDocument{
-    return endOfDocument_;
+    return document_.endPosition;
 }
 
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition

@@ -14,7 +14,9 @@
 @class MarkupView;
 @class MarkupViewCache;
 
-@protocol MarkupElement<NSObject>
+@protocol MarkupElement<NSCopying, NSObject>
+
+- (id)copy;
 
 - (void)layoutWithViewCache:(MarkupViewCache*)viewCache
             previousElement:(id<MarkupElement>)previous
@@ -33,24 +35,27 @@
 @optional
 - (UIFont*)font;
 - (UIColor*)color;
+- (NSString*)stringValue;
 @property (nonatomic, readonly) UIFont* font;
 @property (nonatomic, readonly) UIColor* color;
+@property (nonatomic, readonly) NSString* stringValue;
 
 @end
 
-@interface NewLine : NSObject<MarkupElement>
+@interface MarkupNewLine : NSObject<MarkupElement>
 {
 	UIFont* font_;
 	MarkupView* markupView_;
 }
 
 - (id)initWithFont:(UIFont*)font;
++ (MarkupNewLine*)newLineWithFont:(UIFont*)font;
 @property (nonatomic, readonly) UIFont* font;
 
 @end
 
 
-@interface MarkupText : NSObject<MarkupElement, NSCopying>
+@interface MarkupText : NSObject<MarkupElement>
 {
 	NSString* text_;
 	UIFont* font_;
@@ -64,7 +69,7 @@
               font:(UIFont*)font
              color:(UIColor*)color;
 
-+ (MarkupText*)markupTextWithText:(NSString*)text
++ (MarkupText*)textWithText:(NSString*)text
                              font:(UIFont*)font
                             color:(UIColor*)color;
 

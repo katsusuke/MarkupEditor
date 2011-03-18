@@ -62,4 +62,9 @@
     return YES;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [textView becomeFirstResponder];
+}
+
 @end

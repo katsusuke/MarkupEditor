@@ -11,50 +11,56 @@
 
 @implementation MarkupDocument
 
-@synthesize markupElements=elements_;
+@synthesize defaultFont=defaultFont_;
+@synthesize defaultColor=defaultColor_;
 
 - (void)setTestData
 {
+    [defaultFont_ release];
+    [defaultColor_ release];
+    
+    defaultFont_ = [[UIFont systemFontOfSize:16]retain];
+    defaultColor_ = [[UIColor redColor]retain];
+    
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"abcd"
-                               font:[UIFont systemFontOfSize:16]
-                              color:[UIColor redColor]]];
+	 [MarkupText textWithText:@"abcd"
+                         font:defaultFont_
+                        color:defaultColor_]];
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"EFG"
-                               font:[UIFont systemFontOfSize:30]
-                              color:[UIColor blueColor]]];
+	 [MarkupText textWithText:@"EFG"
+                         font:[UIFont systemFontOfSize:30]
+                        color:[UIColor blueColor]]];
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"hij"
-                               font:[UIFont systemFontOfSize:20]
-                              color:[UIColor greenColor]]];
+	 [MarkupText textWithText:@"hij"
+                         font:[UIFont systemFontOfSize:20]
+                        color:[UIColor greenColor]]];
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"klmnopqrstuvw"
-                               font:[UIFont systemFontOfSize:60]
-                              color:[UIColor blackColor]]];
+	 [MarkupText textWithText:@"klmnopqrstuvw"
+                         font:[UIFont systemFontOfSize:60]
+                        color:[UIColor blackColor]]];
 	[elements_ addObject:
-	 [[[NewLine alloc]initWithFont:[UIFont systemFontOfSize:20]]
-	  autorelease]];
+	 [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:30]]];
+	[elements_ addObject:
+	 [MarkupText textWithText:@"xyzあいうえおかきくけこ"
+                         font:[UIFont systemFontOfSize:40]
+                        color:[UIColor redColor]]];
+	[elements_ addObject:
+     [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:10]]];
 	
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"xyzあいうえおかきくけこ"
-                               font:[UIFont systemFontOfSize:40]
-                              color:[UIColor redColor]]];
+	 [MarkupText textWithText:@"abcd"
+                         font:[UIFont systemFontOfSize:20]
+                        color:[UIColor redColor]]];
 	[elements_ addObject:
-	 [[[NewLine alloc]initWithFont:[UIFont systemFontOfSize:20]]
-	  autorelease]];
-	
+	 [MarkupText textWithText:@"EFG"
+                         font:[UIFont systemFontOfSize:40]
+                        color:[UIColor blueColor]]];
 	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"abcd"
-                               font:[UIFont systemFontOfSize:20]
-                              color:[UIColor redColor]]];
-	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"EFG"
-                               font:[UIFont systemFontOfSize:40]
-                              color:[UIColor blueColor]]];
-	[elements_ addObject:
-	 [MarkupText markupTextWithText:@"hij"
-                               font:[UIFont systemFontOfSize:16]
-                              color:[UIColor greenColor]]];
+	 [MarkupText textWithText:@"hij"
+                         font:[UIFont systemFontOfSize:16]
+                        color:[UIColor greenColor]]];
+    
+    //elements_ count => 10
 }
 
 - (id)init;
@@ -76,13 +82,34 @@
 	[super dealloc];
 }
 
+- (BOOL)positionIsValid:(MarkupElementPosition*)position{
+    if([position compareTo:self.endPosition] == NSOrderedAscending){
+        return YES;
+    }else{
+        return NO;
+    }
+}
+- (MarkupElementPosition*)startPosition{
+    return [MarkupElementPosition positionWithElementIndex:0 valueIndex:0];
+}
+- (MarkupElementPosition*)endPosition{
+    return [MarkupElementPosition positionWithElementIndex:[elements_ count] valueIndex:0];
+}
+
+- (NSInteger)elementCount{
+    return [elements_ count];
+}
+- (id<MarkupElement>)elementAtIndex:(NSInteger)index{
+    return [elements_ objectAtIndex:index];
+}
+
 - (void)layoutWithWidth:(CGFloat)width;
 {
     if(viewCache_){
         [viewCache_ release];
     }
     viewCache_ = [[MarkupViewCache alloc]init];
-
+    
 	id<MarkupElement> previous = nil;
     id<MarkupElement> lastObject = [elements_ lastObject];
 	for(id<MarkupElement> elm in elements_)
@@ -130,49 +157,51 @@
         }else if(i == end.elementIndex){
             [string appendString:[elm stringFrom:0 to:end.valueIndex]];
         }else{
-            [string appendString:[elm stringFrom:0 to:[elm length]]];
+            [string appendString:elm.stringValue];
         }
     }
 	return string;
 }
 
 /*
-- (MarkupElementsRange*)markupElementsWithRange:(UITextRange*)range
-{
-	MarkupElementsRange* res = [MarkupElementsRange markupElementsRange];
-	
-	const NSInteger start = ((TextPosition*)range.start).index;
-	const NSInteger end = ((TextPosition*)range.end).index;
-	NSInteger currentStart = 0;
-	NSInteger currentEnd = 0;
-	
-	NSInteger index = 0;
-	
-	for(id<MarkupElement> elem in markupElements_)
-	{
-		currentEnd += [elem length];
-		
-		if(currentStart <= start && start <  currentEnd){
-            res.firstElementIndex = index;
-            res.firstValueIndexInElement = start - currentStart;
-        }
-        if(currentStart <  end   && end   <= currentEnd){
-            res.lastElementIndex = index;
-            res.lastValueIndexInElement = end - currentStart;
-            return res;
-        }
-        
-		currentStart = currentEnd;
-		index++;
-	}
-    ASSERT(NO, @"Index out of range");
-	return nil;
-}
-*/
+ - (MarkupElementsRange*)markupElementsWithRange:(UITextRange*)range
+ {
+ MarkupElementsRange* res = [MarkupElementsRange markupElementsRange];
+ 
+ const NSInteger start = ((TextPosition*)range.start).index;
+ const NSInteger end = ((TextPosition*)range.end).index;
+ NSInteger currentStart = 0;
+ NSInteger currentEnd = 0;
+ 
+ NSInteger index = 0;
+ 
+ for(id<MarkupElement> elem in markupElements_)
+ {
+ currentEnd += [elem length];
+ 
+ if(currentStart <= start && start <  currentEnd){
+ res.firstElementIndex = index;
+ res.firstValueIndexInElement = start - currentStart;
+ }
+ if(currentStart <  end   && end   <= currentEnd){
+ res.lastElementIndex = index;
+ res.lastValueIndexInElement = end - currentStart;
+ return res;
+ }
+ 
+ currentStart = currentEnd;
+ index++;
+ }
+ ASSERT(NO, @"Index out of range");
+ return nil;
+ }
+ */
 
 - (Pare*)splitElementAtPosition:(MarkupElementPosition*)position;
 {
-    if(![self positionIsLast:position]){
+    ASSERT([self positionIsValid:position], @"Position must be valid");
+    ASSERT(position.inAnElement, @"Position must be in an element");
+    if([position compareTo:self.endPosition] == NSOrderedAscending){
         id<MarkupElement> elm = [elements_ objectAtIndex:position.elementIndex];
         return [elm splitAtIndex:position.valueIndex];
     }else{
@@ -258,7 +287,6 @@
 									 font:(UIFont*)font
 									color:(UIColor*)color
 {
-	
 	NSMutableArray* res
 	= [[NSMutableArray alloc]init];
 	
@@ -277,7 +305,7 @@
 		}
 		if([lineStr length] != [lineBreaked length]){
 			//改行を含む
-			NewLine* elem = [[NewLine alloc]initWithFont:font];
+			MarkupNewLine* elem = [[MarkupNewLine alloc]initWithFont:font];
 			[res addObject:elem];
 			[elem release];
 		}
@@ -294,7 +322,7 @@
     if(!position.inAnElement){
         res.first = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
         res.second = [elements_ subarrayWithRange:
-                       NSMakeRange(position.elementIndex, [elements_ count] - position.elementIndex)];
+                      NSMakeRange(position.elementIndex, [elements_ count] - position.elementIndex)];
     }else{
         res.first = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
         Pare* centerElements = [self splitElementsAtPosition:position];
@@ -352,41 +380,103 @@
     = [self markupElementsWithText:text
                               font:font
                              color:color];
-    NSMutableArray* newElements = nil;
     if(range.empty){
-        if(start.isFirst){
-            newElements = [[MarkupDocument connectMarkupElements:textElements andOthers:elements_]retain];
-        }
-        if ([self positionIsLast:start]) {
-            newElements = [[MarkupDocument connectMarkupElements:elements_ andOthers:textElements]retain];
-        }
+        [self insertElements:textElements atPosition:start];
     }else{
-        Pare* startPare = [self splitElementsAtPosition:start];
-        Pare* endPare = [self splitElementsAtPosition:end];
-        newElements = [MarkupDocument connectMarkupElements:startPare.first andOthers:textElements];
-        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:endPare.second];
+        NSArray* newElements = [elements_ subarrayWithRange:NSMakeRange(0, start.elementIndex)];
+        Pare* secondPare = [self splitElementsAtPosition:start];
+        Pare* thirdPare = [self splitElementsAtPosition:end];
+        NSArray* last =
+        [elements_ subarrayWithRange:NSMakeRange(end.elementIndex + 1,
+                                                 [elements_ count] - end.elementIndex - 1)];
+        
+        if(secondPare.first){
+            newElements = [[self class]connectMarkupElements:newElements
+                                                   andOthers:[NSArray arrayWithObject:secondPare.first]];
+        }
+        newElements = [[self class]connectMarkupElements:newElements
+                                               andOthers:textElements];
+        if(thirdPare.second){
+            newElements = [[self class]connectMarkupElements:newElements
+                                                   andOthers:[NSArray arrayWithObject:thirdPare.second]];
+        }
+        newElements = [[self class]connectMarkupElements:newElements andOthers:last];
+        [elements_ removeAllObjects];
+        [elements_ addObject:newElements];
     }
-    [elements_ release];
-    elements_ = newElements;
 }
 
-+ (NSMutableArray*)connectMarkupElements:(NSArray *)lhs andOthers:(NSArray *)rhs
+- (void)insertElements:(NSArray *)insertElement atPosition:(MarkupElementPosition*)position
+{
+    if(!position.inAnElement){
+        [self insertElements:insertElement atIndex:position.elementIndex];
+    }else{
+        NSArray* newElements = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
+        Pare* center = [self splitElementAtPosition:position];
+        NSArray* last
+        = [elements_ subarrayWithRange:NSMakeRange(position.elementIndex + 1,
+                                                   [elements_ count] - position.elementIndex - 1)];
+        if(center.first){
+            newElements = [[self class]connectMarkupElements:newElements
+                                                   andOthers:[NSArray arrayWithObject:center.first]];
+        }
+        newElements = [[self class]connectMarkupElements:newElements
+                                               andOthers:insertElement];
+        if(center.second){
+            newElements = [[self class]connectMarkupElements:newElements
+                                                   andOthers:[NSArray arrayWithObject:center.second]];
+        }
+        newElements = [[self class]connectMarkupElements:newElements
+                                               andOthers:last];
+        [elements_ removeAllObjects];
+        [elements_ addObjectsFromArray:newElements];
+    }
+}
+
+- (void)insertElements:(NSArray*)insertElement atIndex:(NSInteger)index;
+{
+    ASSERT(0 <= index && index <= [elements_ count], @"");
+    NSArray* newElements = nil;
+    if(index == 0){
+        UIFont* font = nil;
+        UIColor* color = nil;
+        [[self class]getFirstFont:&font color:&color fromElements:insertElement];
+        //要素の始めに挿入時はdefault を書き換える
+        if(font){ self.defaultFont = font; }
+        if(color){ self.defaultColor = color; }
+        newElements = [[self class]connectMarkupElements:insertElement
+                                               andOthers:elements_];
+    }
+    else if(index == [elements_ count]){
+        newElements = [[self class]connectMarkupElements:elements_
+                                               andOthers:insertElement];
+    }else{
+        newElements = [elements_ subarrayWithRange:NSMakeRange(0, index)];
+        NSArray* last = [elements_ subarrayWithRange:NSMakeRange(index, [elements_ count] - index)];
+        newElements = [[self class]connectMarkupElements:newElements andOthers:insertElement];
+        newElements = [[self class]connectMarkupElements:newElements andOthers:last];
+    }
+    [elements_ removeAllObjects];
+    [elements_ addObjectsFromArray:newElements];
+}
+
++ (NSArray*)connectMarkupElements:(NSArray *)lhs andOthers:(NSArray *)rhs
 {
     if([lhs count] == 0){
-        return [NSMutableArray arrayWithArray:rhs];
+        return [NSArray arrayWithArray:rhs];
     }
     if([rhs count] == 0){
-        return [NSMutableArray arrayWithArray:lhs];
+        return [NSArray arrayWithArray:lhs];
     }
     NSMutableArray* res = [NSMutableArray array];
     id<MarkupElement> leftLast = [lhs lastObject];
     id<MarkupElement> rightFirst = [rhs objectAtIndex:0];
     id<MarkupElement> connected = [leftLast connectBack:rightFirst];
     NSInteger leftCount = [lhs count];
-    NSInteger rightCout = [rhs count];
+    NSInteger rightStart = 0;
     if(connected){
         leftCount--;
-        rightCout--;
+        rightStart++;
     }
     for(NSInteger i = 0; i < leftCount; ++i){
         [res addObject:[lhs objectAtIndex:i]];
@@ -394,10 +484,52 @@
     if(connected){
         [res addObject:connected];
     }
-    for(NSInteger i = 0; i < rightCout; ++i){
-        [res addObject:[res objectAtIndex:i]];
+    for(NSInteger i = rightStart; i < [rhs count]; ++i){
+        [res addObject:[rhs objectAtIndex:i]];
     }
     return res;
+}
+
++ (void)getFirstFont:(UIFont **)refFont color:(UIColor **)refColor fromElements:(NSArray *)elements
+{
+    *refFont = nil;
+    *refColor = nil;
+    for (id<MarkupElement> elm in elements) {
+        if(*refFont == nil){
+            if([elm respondsToSelector:@selector(font)]){
+                *refFont = elm.font;
+            }
+        }
+        if(*refColor == nil){
+            if([elm respondsToSelector:@selector(color)]){
+                *refColor = elm.color;
+            }
+        }
+        if(*refFont != nil && *refColor != nil){
+            return;
+        }
+    }
+}
+
++ (void)getLastFont:(UIFont **)refFont color:(UIColor **)refColor fromElements:(NSArray *)elements
+{
+    *refFont = nil;
+    *refColor = nil;
+    for (id<MarkupElement> elm in [elements reverseObjectEnumerator]) {
+        if(*refFont == nil){
+            if([elm respondsToSelector:@selector(font)]){
+                *refFont = elm.font;
+            }
+        }
+        if(*refColor == nil){
+            if([elm respondsToSelector:@selector(color)]){
+                *refColor = elm.color;
+            }
+        }
+        if(*refFont != nil && *refColor != nil){
+            return;
+        }
+    }
 }
 
 @end

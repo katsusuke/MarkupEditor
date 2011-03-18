@@ -37,6 +37,8 @@
 		6332B181132F9E9F00A836B4 /* MarkupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B180132F9E9B00A836B4 /* MarkupView.m */; };
 		63A619D01330589100976346 /* MarkupViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A619CF1330589000976346 /* MarkupViewCache.m */; };
 		63C1658F1330BC8D007625AB /* MarkupElementPositionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */; };
+		63F350F51331C4FC00410856 /* MarkupDocumentTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F350F41331C4FC00410856 /* MarkupDocumentTest.m */; };
+		63F350F81332236000410856 /* MarkupElementTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F350F71332235F00410856 /* MarkupElementTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +103,10 @@
 		63A619CF1330589000976346 /* MarkupViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupViewCache.m; sourceTree = "<group>"; };
 		63C1658D1330BC8D007625AB /* MarkupElementPositionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementPositionTest.h; sourceTree = "<group>"; };
 		63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElementPositionTest.m; sourceTree = "<group>"; };
+		63F350F31331C4FC00410856 /* MarkupDocumentTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupDocumentTest.h; sourceTree = "<group>"; };
+		63F350F41331C4FC00410856 /* MarkupDocumentTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupDocumentTest.m; sourceTree = "<group>"; };
+		63F350F61332235F00410856 /* MarkupElementTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementTest.h; sourceTree = "<group>"; };
+		63F350F71332235F00410856 /* MarkupElementTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElementTest.m; sourceTree = "<group>"; };
 		63FB95EA1330A90400AD473C /* MarkupEditorTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MarkupEditorTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -167,7 +173,6 @@
 				6332B11F132F1F8000A836B4 /* Library */,
 				6332B0F5132F1F6900A836B4 /* MarkupEditorAppDelegate.h */,
 				6332B0F6132F1F6900A836B4 /* MarkupEditorAppDelegate.m */,
-				6332B0F8132F1F6900A836B4 /* MainWindow.xib */,
 				6332B14A132F20BB00A836B4 /* MyMacro.h */,
 				6332B0ED132F1F6800A836B4 /* Supporting Files */,
 			);
@@ -268,7 +273,6 @@
 			children = (
 				6332B14C132F21F800A836B4 /* RootViewController.h */,
 				6332B14D132F21F800A836B4 /* RootViewController.m */,
-				6332B14E132F21F800A836B4 /* RootViewController.xib */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -276,7 +280,9 @@
 		6332B154132F488F00A836B4 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
+				6332B14E132F21F800A836B4 /* RootViewController.xib */,
 				6332B155132F489400A836B4 /* MainWindow-iPad.xib */,
+				6332B0F8132F1F6900A836B4 /* MainWindow.xib */,
 			);
 			name = XIB;
 			sourceTree = "<group>";
@@ -286,6 +292,10 @@
 			children = (
 				63C1658D1330BC8D007625AB /* MarkupElementPositionTest.h */,
 				63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */,
+				63F350F31331C4FC00410856 /* MarkupDocumentTest.h */,
+				63F350F41331C4FC00410856 /* MarkupDocumentTest.m */,
+				63F350F61332235F00410856 /* MarkupElementTest.h */,
+				63F350F71332235F00410856 /* MarkupElementTest.m */,
 			);
 			name = Cases;
 			sourceTree = "<group>";
@@ -421,6 +431,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63C1658F1330BC8D007625AB /* MarkupElementPositionTest.m in Sources */,
+				63F350F51331C4FC00410856 /* MarkupDocumentTest.m in Sources */,
+				63F350F81332236000410856 /* MarkupElementTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

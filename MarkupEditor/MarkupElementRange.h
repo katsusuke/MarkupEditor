@@ -18,6 +18,13 @@
 
 - (id)initWithStart:(MarkupElementPosition*)start
                 end:(MarkupElementPosition*)end;
++ (MarkupElementRange*)rangeWithStart:(MarkupElementPosition*)start
+                                  end:(MarkupElementPosition*)end;
++ (MarkupElementRange*)rangeWithStartElement:(NSInteger)startElement
+                             startValueIndex:(NSInteger)startValueIndex
+                                  endElement:(NSInteger)endElement
+                               endValueIndex:(NSInteger)endValueIndex;
+
 - (MarkupElementPosition*)startPosition;
 - (MarkupElementPosition*)endPosition;
 
@@ -26,6 +33,6 @@
 
 - (UITextPosition*)start;
 - (UITextPosition*)end;
-- (BOOL)empty;
+- (BOOL)isEmpty;
 
 @end

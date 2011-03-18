@@ -21,9 +21,6 @@ UITextInput
     NSDictionary* markedTextStyle_;
     id<UITextInputDelegate> inputDelegate_;
     id<UITextInputTokenizer> tokenizer_;
-    
-    MarkupElementPosition* beginningOfDocument_;
-    MarkupElementPosition* endOfDocument_;
 }
 
 @end

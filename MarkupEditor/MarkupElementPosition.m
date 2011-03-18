@@ -21,6 +21,10 @@
 {
     self = [super init];
     if(self){
+        if(elementIndex < 0 || valueIndex < 0){
+            [self release];
+            return nil;
+        }
         elementIndex_ = elementIndex;
         valueIndex_ = valueIndex;
         inAnElement_ = valueIndex_ != 0;
@@ -47,15 +51,20 @@
 
 - (NSString*)description{
     return [NSString stringWithFormat:
-            @"<%@ elementIndex:%d valueIndex:%d inAnElement:%d>",
-            [[self class]description],
+            @"%@(elementIndex:%d valueIndex:%d inAnElement:%d)",
+            [super description],
             elementIndex_,
             valueIndex_,
             inAnElement_];
 }
 
 - (BOOL)isFirst{
-    return elementIndex_ == 0;
+    return elementIndex_ == 0 && valueIndex_ == 0;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    return [self isEqualToPosition:(MarkupElementPosition*)object];
 }
 
 - (BOOL)isEqualToPosition:(MarkupElementPosition *)rhs
@@ -65,12 +74,23 @@
 }
 
 - (NSComparisonResult)compareTo:(MarkupElementPosition*)other{
-    if([self isEqualToPosition:other])return NSOrderedSame;
-    if(elementIndex_ <= other.elementIndex ||
-       valueIndex_ < other.valueIndex){
+    if(elementIndex_ < other.elementIndex){
         return NSOrderedAscending;
     }
-    return NSOrderedDescending;
+    else if(elementIndex_ > other.elementIndex){
+        return NSOrderedDescending;
+    }
+    else{
+        if(valueIndex_ < other.valueIndex){
+            return NSOrderedAscending;
+        }
+        else if(valueIndex_ > other.valueIndex){
+            return NSOrderedDescending;
+        }
+        else{
+            return NSOrderedSame;
+        }
+    }
 }
 
 @end

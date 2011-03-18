@@ -10,7 +10,7 @@
 #import "MarkupDocument.h"
 #import "MarkupView.h"
 
-@implementation NewLine
+@implementation MarkupNewLine
 
 @synthesize font=font_;
 
@@ -24,11 +24,27 @@
 	return self;
 }
 
++ (MarkupNewLine*)newLineWithFont:(UIFont*)font{
+    return [[[[self class]alloc]initWithFont:font]autorelease];
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    return [[[self class]alloc]initWithFont:font_];
+}
+
 - (void)dealloc
 {
 	[markupView_ release];
 	[font_ release];
 	[super dealloc];
+}
+
+- (NSString*)description{
+    return [NSString stringWithFormat:@"%@(font:%@ markupView:0x%08d)",
+            [super description],
+            font_,
+            markupView_];
 }
 
 - (CGSize)size{
@@ -83,10 +99,12 @@
 - (NSInteger)length{
 	return 1;
 }
-
+- (NSString*)stringValue{
+    return [NSString stringWithString:@"\n"];
+}
 - (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end
 {
-	if(start <= 0 && 1 < end){
+	if(start == 0 && 1 == end){
 		return [NSString stringWithString:@"\n"];
 	}
 	return [NSString string];
@@ -94,8 +112,12 @@
 
 - (Pare*)splitAtIndex:(NSInteger)index
 {
-    ASSERT(index == 0, @"");
-    return [Pare pareWithFirst:nil second:self];
+    ASSERT(index == 0 || index == 1, @"");
+    if(index == 0){
+        return [Pare pareWithFirst:nil second:self];
+    }else{//index == 1
+        return [Pare pareWithFirst:self second:nil];
+    }
 }
 
 - (BOOL)isConnectableTo:(id<MarkupElement>)lhs{
@@ -130,7 +152,7 @@
 	return self;
 }
 
-+ (MarkupText*)markupTextWithText:(NSString*)text
++ (MarkupText*)textWithText:(NSString*)text
                              font:(UIFont*)font
                             color:(UIColor*)color
 {
@@ -148,6 +170,21 @@
 	[super dealloc];
 }
 
+- (NSString*)description{
+    return [NSString stringWithFormat:
+            @"%@(text:%@\n"
+            @"font:%@\n"
+            @"color:%@\n"
+            @"textList:%@\n"
+            @"markupViews:%@",
+            [super description],
+            text_,
+            font_,
+            color_,
+            textList_,
+            markupViews_];
+}
+
 - (void)layoutWithViewCache:(MarkupViewCache*)viewCache
             previousElement:(id<MarkupElement>)previous
               documentWidth:(CGFloat)documentWidth
@@ -163,7 +200,7 @@
 		MarkupView* pl = previous.lastView;
 		lineNumber = pl.lineNumber;
 		order = pl.order + 1;
-		if([previous isMemberOfClass:[NewLine class]]){//改行
+		if([previous isMemberOfClass:[MarkupNewLine class]]){//改行
 			lineViewFrame.origin.x = 0;
 			lineViewFrame.origin.y = pl.lineBottom;
 			lineTop = pl.lineBottom;
@@ -262,16 +299,20 @@
 	return [text_ length];
 }
 
+- (NSString*)stringValue{
+    return text_;
+}
 - (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end
 {
-	NSInteger length = [text_ length];
-	if(start <= 0 && 0 < end){
-		return [text_ substringWithRange:NSMakeRange(0, MIN(end, length))];
-	}
-	else if(start < length && length <= end){
-		return [text_ substringWithRange:NSMakeRange(start, MIN(end - start, length - start))];
-	}
-	return [NSString string];
+    start = MAX(start, 0);
+    end = MIN(end, [text_ length]);
+    NSInteger length = end - start;
+    ASSERT(0 <= length, @"length must be plus");
+    if(length == 0){
+        return [NSString string];
+    }else{
+        return [text_ substringWithRange:NSMakeRange(start, length)];
+    }
 }
 
 - (Pare*)splitAtIndex:(NSInteger)index
@@ -279,12 +320,12 @@
     MarkupText* first = nil;
     MarkupText* last = nil;
     if(0 < index){
-        first = [MarkupText markupTextWithText:[text_ substringToIndex:index]
+        first = [MarkupText textWithText:[text_ substringToIndex:index]
                                           font:font_
                                          color:color_];
     }
     if(index < [text_ length] - 1){
-        last = [MarkupText markupTextWithText:[text_ substringFromIndex:index]
+        last = [MarkupText textWithText:[text_ substringFromIndex:index]
                                          font:font_
                                         color:color_];
     }
@@ -324,7 +365,7 @@
 {
     if(![self isConnectableTo:rhs])return nil;
     MarkupText* text = (MarkupText*)rhs;
-    return [MarkupText markupTextWithText:[text_ stringByAppendingString:text.text]
+    return [MarkupText textWithText:[text_ stringByAppendingString:text.text]
                                      font:font_
                                     color:color_];
 }
