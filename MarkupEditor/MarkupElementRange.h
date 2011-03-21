@@ -28,6 +28,9 @@
 - (MarkupElementPosition*)startPosition;
 - (MarkupElementPosition*)endPosition;
 
+@property (nonatomic, readonly)MarkupElementPosition* startPosition;
+@property (nonatomic, readonly)MarkupElementPosition* endPosition;
+
 #pragma mark -
 #pragma mark UITextPosition Methods
 

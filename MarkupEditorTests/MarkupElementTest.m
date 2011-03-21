@@ -57,7 +57,7 @@
 - (void)testSplit
 {
     {
-        Pare* p = [tx0 splitAtIndex:0];
+        Pair* p = [tx0 splitAtIndex:0];
         STAssertNil(p.first, @"");
         STAssertNotNil(p.second, @"");
         id<MarkupElement> e1 = p.second;
@@ -66,7 +66,7 @@
         STAssertEqualObjects(e1.stringValue, @"abc", @"");
     }
     {
-        Pare* p = [tx0 splitAtIndex:1];
+        Pair* p = [tx0 splitAtIndex:1];
         STAssertNotNil(p.first, @"");
         id<MarkupElement> e0 = p.first;
         STAssertEqualObjects(e0.font, [UIFont systemFontOfSize:10], @"");
@@ -80,7 +80,7 @@
         STAssertEqualObjects(e1.stringValue, @"bc", @"");
     }
     {
-        Pare* p = [tx0 splitAtIndex:3];
+        Pair* p = [tx0 splitAtIndex:3];
         STAssertNotNil(p.first, @"");
         STAssertNil(p.second, @"");
         id<MarkupElement> e1 = p.first;
@@ -89,14 +89,14 @@
         STAssertEqualObjects(e1.stringValue, @"abc", @"");
     }
     {
-        Pare* p = [nl0 splitAtIndex:0];
+        Pair* p = [nl0 splitAtIndex:0];
         STAssertNil(p.first, @"");
         id<MarkupElement> e = p.second;
         STAssertEqualObjects(e.font, [UIFont systemFontOfSize:12], @"");
         STAssertEqualObjects(e.stringValue, @"\n", @"");
     }
     {
-        Pare* p = [nl0 splitAtIndex:1];
+        Pair* p = [nl0 splitAtIndex:1];
         STAssertNil(p.second, @"");
         id<MarkupElement> e = p.first;
         STAssertEqualObjects(e.font, [UIFont systemFontOfSize:12], @"");

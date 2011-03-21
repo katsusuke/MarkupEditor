@@ -10,7 +10,7 @@
 
 @class MarkupDocument;
 
-@class Pare;
+@class Pair;
 @class MarkupView;
 @class MarkupViewCache;
 
@@ -27,8 +27,9 @@
 - (NSString*)stringFrom:(NSInteger)start
 					 to:(NSInteger)end;
 
-- (Pare*)splitAtIndex:(NSInteger)index;
+- (Pair*)splitAtIndex:(NSInteger)index;
 - (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs;
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex;
 
 @property(nonatomic, readonly)MarkupView* lastView;
 

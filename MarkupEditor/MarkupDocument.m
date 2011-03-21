@@ -197,7 +197,7 @@
  }
  */
 
-- (Pare*)splitElementAtPosition:(MarkupElementPosition*)position;
+- (Pair*)splitElementAtPosition:(MarkupElementPosition*)position;
 {
     ASSERT([self positionIsValid:position], @"Position must be valid");
     ASSERT(position.inAnElement, @"Position must be in an element");
@@ -205,7 +205,7 @@
         id<MarkupElement> elm = [elements_ objectAtIndex:position.elementIndex];
         return [elm splitAtIndex:position.valueIndex];
     }else{
-        return [Pare pare];
+        return [Pair pair];
     }
 }
 
@@ -318,16 +318,16 @@
 	return res;
 }
 
-- (Pare*)splitElementsAtPosition:(MarkupElementPosition*)position
+- (Pair*)splitElementsAtPosition:(MarkupElementPosition*)position
 {
-    Pare* res = [Pare pare];
+    Pair* res = [Pair pair];
     if(!position.inAnElement){
         res.first = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
         res.second = [elements_ subarrayWithRange:
                       NSMakeRange(position.elementIndex, [elements_ count] - position.elementIndex)];
     }else{
         res.first = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
-        Pare* centerElements = [self splitElementsAtPosition:position];
+        Pair* centerElements = [self splitElementsAtPosition:position];
         if(centerElements.first){
             res.first = [NSMutableArray arrayWithArray:res.first];
             [res.first addObject:centerElements.first];
@@ -344,37 +344,33 @@
     }
     return res;
 }
+- (void)deleteWithRange:(MarkupElementRange*)range;
+{
+    if(range.empty){
+        return;
+    }
+    layouted_ = NO;
+    MarkupElementPosition* start = range.startPosition;
+    MarkupElementPosition* end = range.endPosition;
+    
+    Pair* firstPair = [self splitElementsAtPosition:start];
+    Pair* lastPair = [self splitElementsAtPosition:end];
+    NSArray* newElements = [MarkupDocument connectMarkupElements:firstPair.first andOthers:lastPair.second];
+    [elements_ removeAllObjects];
+    [elements_ addObjectsFromArray:newElements];
+}
 
 - (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text
 {
     layouted_ = NO;
-    
-    MarkupElementPosition* start = (MarkupElementPosition*)range.start;
-    MarkupElementPosition* end = (MarkupElementPosition*)range.end;
+    MarkupElementPosition* start = range.startPosition;
+    MarkupElementPosition* end = range.endPosition;
     
     UIFont* font = nil;
     UIColor* color = nil;
     
-    
-    NSInteger i = 0;
-    if(start.inAnElement){
-        i = start.elementIndex;
-    }
-    else{
-        i = start.elementIndex - 1;
-    }
-    for(; 0 <= i; --i){
-        id<MarkupElement> elm = [elements_ objectAtIndex:i];
-        if([elm respondsToSelector:@selector(font)]){
-            font = elm.font;
-        }
-        if([elm respondsToSelector:@selector(color)]){
-            color = elm.color;
-        }
-        if(font && color){
-            break;
-        }
-    } 
+    NSArray* firstElements = [elements_ subarrayWithRange:NSMakeRange(0, start.splitNextElementIndex)];
+    [MarkupDocument getLastFont:&font andColor:&color fromElements:firstElements];
     if(!font){ font = defaultFont_; }
     if(!color){ color = defaultColor_; }
     
@@ -385,26 +381,13 @@
     if(range.empty){
         [self insertElements:textElements atPosition:start];
     }else{
-        NSArray* newElements = [elements_ subarrayWithRange:NSMakeRange(0, start.elementIndex)];
-        Pare* secondPare = [self splitElementsAtPosition:start];
-        Pare* thirdPare = [self splitElementsAtPosition:end];
-        NSArray* last =
-        [elements_ subarrayWithRange:NSMakeRange(end.elementIndex + 1,
-                                                 [elements_ count] - end.elementIndex - 1)];
+        Pair* firstPair = [self splitElementsAtPosition:start];
+        Pair* lastPair = [self splitElementsAtPosition:end];
         
-        if(secondPare.first){
-            newElements = [MarkupDocument connectMarkupElements:newElements
-                                                   andOthers:[NSArray arrayWithObject:secondPare.first]];
-        }
-        newElements = [MarkupDocument connectMarkupElements:newElements
-                                               andOthers:textElements];
-        if(thirdPare.second){
-            newElements = [MarkupDocument connectMarkupElements:newElements
-                                                   andOthers:[NSArray arrayWithObject:thirdPare.second]];
-        }
-        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:last];
+        NSArray* newElements = [MarkupDocument connectMarkupElements:firstPair.first andOthers:textElements];
+        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:lastPair.second];
         [elements_ removeAllObjects];
-        [elements_ addObject:newElements];
+        [elements_ addObjectsFromArray:newElements];
     }
 }
 
@@ -414,7 +397,7 @@
         [self insertElements:insertElement atIndex:position.elementIndex];
     }else{
         NSArray* newElements = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
-        Pare* center = [self splitElementAtPosition:position];
+        Pair* center = [self splitElementAtPosition:position];
         NSArray* last
         = [elements_ subarrayWithRange:NSMakeRange(position.elementIndex + 1,
                                                    [elements_ count] - position.elementIndex - 1)];
@@ -460,6 +443,18 @@
     }
     [elements_ removeAllObjects];
     [elements_ addObjectsFromArray:newElements];
+}
+
+- (CGRect)caretRectForPosition:(MarkupElementPosition*)position width:(CGFloat)width;
+{
+    [self layoutWithWidth:width];
+    if(position.elementIndex == [elements_ count]){
+        id<MarkupElement> last = [elements_ lastObject];
+        return [last createRectForValueIndex:[last length]];
+    }else{
+        id<MarkupElement> elm = [elements_ objectAtIndex:position.elementIndex];
+        return [elm createRectForValueIndex:position.valueIndex];
+    }
 }
 
 + (NSArray*)connectMarkupElements:(NSArray *)lhs andOthers:(NSArray *)rhs

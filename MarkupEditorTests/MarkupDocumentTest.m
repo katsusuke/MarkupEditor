@@ -207,7 +207,7 @@
     STAssertEquals([d elementCount], 12, @"");
 }
 //真ん中で手前にひっつく
-- (void)testInsertElementAtCenterConnectBefore{
+- (void)testInsertElementAtCenterConnectPrevious{
     NSArray* a = [NSArray arrayWithObjects:
                   [MarkupText textWithText:@"さしす"
                                       font:[UIFont systemFontOfSize:30]
@@ -221,7 +221,7 @@
     STAssertEqualObjects([d elementAtIndex:2].stringValue, @"たちつ", @"");
 }
 //真ん中で次にひっつく
-- (void)testInsertElementAtCenterConnectAfter{
+- (void)testInsertElementAtCenterConnectNext{
     NSArray* a = [NSArray arrayWithObjects:
                   [MarkupText textWithText:@"さしす"
                                       font:[UIFont systemFontOfSize:10]

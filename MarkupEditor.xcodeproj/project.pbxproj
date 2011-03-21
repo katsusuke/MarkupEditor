@@ -27,7 +27,7 @@
 		6332B144132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B139132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m */; };
 		6332B145132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */; };
 		6332B146132F202C00A836B4 /* NSString+drawing.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13D132F202C00A836B4 /* NSString+drawing.m */; };
-		6332B147132F202C00A836B4 /* Pare.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13F132F202C00A836B4 /* Pare.m */; };
+		6332B147132F202C00A836B4 /* Pair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B13F132F202C00A836B4 /* Pair.m */; };
 		6332B148132F202C00A836B4 /* TargetActionPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B141132F202C00A836B4 /* TargetActionPair.m */; };
 		6332B149132F202C00A836B4 /* Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B143132F202C00A836B4 /* Tools.m */; };
 		6332B14F132F21F800A836B4 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B14D132F21F800A836B4 /* RootViewController.m */; };
@@ -84,8 +84,8 @@
 		6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+insertObjectsAtIndex.m"; sourceTree = "<group>"; };
 		6332B13C132F202C00A836B4 /* NSString+drawing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+drawing.h"; sourceTree = "<group>"; };
 		6332B13D132F202C00A836B4 /* NSString+drawing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+drawing.m"; sourceTree = "<group>"; };
-		6332B13E132F202C00A836B4 /* Pare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pare.h; sourceTree = "<group>"; };
-		6332B13F132F202C00A836B4 /* Pare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pare.m; sourceTree = "<group>"; };
+		6332B13E132F202C00A836B4 /* Pair.h */ = {isa = PBXFileReference; fileEncoding = 4; path = Pair.h; sourceTree = "<group>"; };
+		6332B13F132F202C00A836B4 /* Pair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Pair.m; sourceTree = "<group>"; };
 		6332B140132F202C00A836B4 /* TargetActionPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TargetActionPair.h; sourceTree = "<group>"; };
 		6332B141132F202C00A836B4 /* TargetActionPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TargetActionPair.m; sourceTree = "<group>"; };
 		6332B142132F202C00A836B4 /* Tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tools.h; sourceTree = "<group>"; };
@@ -218,8 +218,8 @@
 				6332B13B132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m */,
 				6332B13C132F202C00A836B4 /* NSString+drawing.h */,
 				6332B13D132F202C00A836B4 /* NSString+drawing.m */,
-				6332B13E132F202C00A836B4 /* Pare.h */,
-				6332B13F132F202C00A836B4 /* Pare.m */,
+				6332B13E132F202C00A836B4 /* Pair.h */,
+				6332B13F132F202C00A836B4 /* Pair.m */,
 				6332B140132F202C00A836B4 /* TargetActionPair.h */,
 				6332B141132F202C00A836B4 /* TargetActionPair.m */,
 				6332B142132F202C00A836B4 /* Tools.h */,
@@ -416,7 +416,7 @@
 				6332B144132F202C00A836B4 /* NSArray+objectOrNullAtIndex.m in Sources */,
 				6332B145132F202C00A836B4 /* NSMutableArray+insertObjectsAtIndex.m in Sources */,
 				6332B146132F202C00A836B4 /* NSString+drawing.m in Sources */,
-				6332B147132F202C00A836B4 /* Pare.m in Sources */,
+				6332B147132F202C00A836B4 /* Pair.m in Sources */,
 				6332B148132F202C00A836B4 /* TargetActionPair.m in Sources */,
 				6332B149132F202C00A836B4 /* Tools.m in Sources */,
 				6332B14F132F21F800A836B4 /* RootViewController.m in Sources */,

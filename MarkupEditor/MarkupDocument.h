@@ -44,13 +44,16 @@
 
 - (NSString*)textInRange:(MarkupElementRange *)range;
 - (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text;
-- (Pare*)splitElementsAtPosition:(MarkupElementPosition*)position;
+- (void)deleteWithRange:(MarkupElementRange*)range;
+- (Pair*)splitElementsAtPosition:(MarkupElementPosition*)position;
 - (MarkupElementPosition*)positionFromPosition:(MarkupElementPosition*)position
                                         offset:(NSInteger)offset;
 - (NSInteger)offsetFrom:(MarkupElementPosition*)from to:(MarkupElementPosition*)to;
 - (BOOL)positionIsLast:(MarkupElementPosition*)position;
 - (void)insertElements:(NSArray*)insertElement atIndex:(NSInteger)index;
 - (void)insertElements:(NSArray *)insertElement atPosition:(MarkupElementPosition*)position;
+
+- (CGRect)caretRectForPosition:(MarkupElementPosition*)position width:(CGFloat)width;
 
 + (NSArray*)connectMarkupElements:(NSArray*)lhs
                         andOthers:(NSArray*)rhs;

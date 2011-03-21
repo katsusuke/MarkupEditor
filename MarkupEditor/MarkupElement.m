@@ -63,11 +63,21 @@
 	lineViewFrame.size.height = [font_ lineHeight];
 	if(previous){
 		MarkupView* pl = previous.lastView;
-		lineNumber = pl.lineNumber;
-		order = pl.order + 1;
-		lineViewFrame.origin.x = pl.frame.origin.x + pl.frame.size.width;
-		lineViewFrame.origin.y = pl.lineTop;
-		lineTop = pl.lineTop;
+        if([previous isMemberOfClass:[MarkupNewLine class]]){
+            lineNumber = pl.lineNumber + 1;
+            order = 0;
+            lineViewFrame.origin.x = 0;
+            lineViewFrame.origin.y = pl.lineBottom;
+            lineTop = pl.lineBottom;
+            lineNumber = pl.lineNumber + 1;
+        }
+        else{
+            lineNumber = pl.lineNumber;
+            order = pl.order + 1;
+            lineViewFrame.origin.x = pl.frame.origin.x + pl.frame.size.width;
+            lineViewFrame.origin.y = pl.lineTop;
+            lineTop = pl.lineTop;
+        }
 	}
 	[markupView_ release];
 	markupView_ = [[MarkupView alloc]initWithMarkupElement:self
@@ -110,13 +120,13 @@
 	return [NSString string];
 }
 
-- (Pare*)splitAtIndex:(NSInteger)index
+- (Pair*)splitAtIndex:(NSInteger)index
 {
     ASSERT(index == 0 || index == 1, @"");
     if(index == 0){
-        return [Pare pareWithFirst:nil second:self];
+        return [Pair pairWithFirst:nil second:self];
     }else{//index == 1
-        return [Pare pareWithFirst:self second:nil];
+        return [Pair pairWithFirst:self second:nil];
     }
 }
 
@@ -127,6 +137,12 @@
 - (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs
 {
     return nil;
+}
+
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex
+{
+    ASSERT(valueIndex == 0 || valueIndex == 1, @"");
+    return markupView_.frame;
 }
 
 @end
@@ -315,7 +331,7 @@
     }
 }
 
-- (Pare*)splitAtIndex:(NSInteger)index
+- (Pair*)splitAtIndex:(NSInteger)index
 {
     MarkupText* first = nil;
     MarkupText* last = nil;
@@ -330,13 +346,13 @@
                                         color:color_];
     }
     if(first && last){
-        return [Pare pareWithFirst:first second:last];
+        return [Pair pairWithFirst:first second:last];
     }
     if(first){
-        return [Pare pareWithFirst:first second:nil];
+        return [Pair pairWithFirst:first second:nil];
     }
     if(last){
-        return [Pare pareWithFirst:nil second:last];
+        return [Pair pairWithFirst:nil second:last];
     }
     ASSERT(0, @"[text length] == 0");
     return nil;
@@ -375,6 +391,32 @@
 }
 - (UIColor*)color{
     return color_;
+}
+
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex
+{
+    NSInteger i = 0;
+    NSInteger index = 0;
+    for(NSString* text in textList_)
+    {
+        if(index <= valueIndex && valueIndex < index + [text length])
+        {
+            MarkupView* view = [markupViews_ objectAtIndex:i];
+            NSString* substr = [text substringToIndex:valueIndex - index];
+            CGFloat width = [substr widthWithFont:font_];
+            return CGRectMake(view.frame.origin.x + width,
+                              view.frame.origin.y,
+                              0,
+                              view.frame.size.height);
+        }
+        index += [text length];
+        i++;
+    }
+    MarkupView* view = [markupViews_ lastObject];
+    return CGRectMake(view.frame.origin.x + view.frame.size.width,
+                      view.frame.origin.y,
+                      0,
+                      view.frame.size.height);
 }
 
 @end

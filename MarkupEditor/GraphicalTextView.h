@@ -17,6 +17,7 @@ UITextInput
 	MarkupDocument* document_;
 
     MarkupElementRange* selectedTextRange_;
+    //日本語入力字などで変換途中の文字
     MarkupElementRange* markedTextRange_;
     NSDictionary* markedTextStyle_;
     id<UITextInputDelegate> inputDelegate_;

@@ -23,6 +23,8 @@
     self.backgroundColor = [UIColor whiteColor];
     selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
                                                               end:document_.endPosition];
+    markedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
+                                                            end:document_.endPosition];
     return self;
 }
 
@@ -66,16 +68,27 @@
 }
 - (void)insertText:(NSString *)text
 {
+    LOG(@"text:%@", text);
     PO(text);
     [document_ replaceRange:selectedTextRange_ withText:text];
+    PO(selectedTextRange_);
     [selectedTextRange_ release];
     selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
                                                               end:document_.endPosition];
+    PO(selectedTextRange_);
     [self setNeedsDisplay];
 }
 - (void)deleteBackward
 {
-    
+    LOG(@"");
+    MarkupElementPosition* start
+    = [document_ positionFromPosition:selectedTextRange_.startPosition
+                               offset:-1];
+    [document_ deleteWithRange:
+     [MarkupElementRange rangeWithStart:start
+                                    end:selectedTextRange_.endPosition]];
+    [selectedTextRange_ release];
+    selectedTextRange_ = [MarkupElementRange rangeWithStart:start end:start];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -98,7 +111,8 @@
 
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
-    
+    LOG(@"markedText:%@ selectedRange:(location:%d length:%d",
+        markedText, selectedRange.location, selectedRange.length);
 }
 - (void)unmarkText
 {
@@ -171,7 +185,11 @@
 }
 - (CGRect)caretRectForPosition:(UITextPosition *)position
 {
-    
+    CGRect rect
+    = [document_ caretRectForPosition:(MarkupElementPosition*)position
+                                width:self.frame.size.width];
+    rect.size.width = 3;
+    return rect;
 }
 
 /* Hit testing. */

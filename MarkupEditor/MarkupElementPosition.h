@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Pare.h"
+#import "Pair.h"
 
 @interface MarkupElementPosition : UITextPosition<NSCopying> {
 @private
@@ -16,7 +16,11 @@
 }
 
 - (BOOL)inAnElement;
+
+- (NSInteger)splitNextElementIndex;
+
 @property (nonatomic, readonly) NSInteger elementIndex;
+@property (nonatomic, readonly) NSInteger splitNextElementIndex;
 @property (nonatomic, readonly) NSInteger valueIndex;
 @property (nonatomic, readonly) BOOL inAnElement;
 @property (nonatomic, readonly) BOOL isFirst;

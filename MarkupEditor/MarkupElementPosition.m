@@ -55,6 +55,10 @@
             valueIndex_];
 }
 
+- (NSInteger)splitNextElementIndex{
+    return elementIndex_ + (valueIndex_ == 0 ? 0 : 1);
+}
+
 - (BOOL)inAnElement{
     return valueIndex_ != 0;
 }
