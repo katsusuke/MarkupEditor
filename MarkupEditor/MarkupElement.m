@@ -142,7 +142,11 @@
 - (CGRect)createRectForValueIndex:(NSInteger)valueIndex
 {
     ASSERT(valueIndex == 0 || valueIndex == 1, @"");
-    return markupView_.frame;
+    if(valueIndex == 0){
+        return markupView_.frame;
+    }else{
+        return CGRectMake(0, markupView_.lineBottom, 0, markupView_.frame.size.height);
+    }
 }
 
 @end
@@ -215,18 +219,19 @@
 	if(previous){
 		MarkupView* pl = previous.lastView;
 		lineNumber = pl.lineNumber;
-		order = pl.order + 1;
 		if([previous isMemberOfClass:[MarkupNewLine class]]){//改行
 			lineViewFrame.origin.x = 0;
 			lineViewFrame.origin.y = pl.lineBottom;
 			lineTop = pl.lineBottom;
 			lineNumber = pl.lineNumber + 1;
+            order = 0;
 		}
 		else{
 			lineViewFrame.origin.x = pl.frame.origin.x + pl.frame.size.width;
 			lineViewFrame.origin.y = pl.lineTop;
 			lineTop = pl.lineTop;
 			lineNumber = pl.lineNumber;
+            order = pl.order + 1;
 			width -= lineViewFrame.origin.x;
 		}
 	}
@@ -305,8 +310,10 @@
 		if(CGRectIntersectsRect(lineView.frame, rect)){
 			NSString* text = [textList_ objectAtIndex:i];
 			[text drawAtPoint:lineView.frame.origin withFont:font_];
+#ifdef DEBUG
 			CGContextRef currentContext = UIGraphicsGetCurrentContext();
 			CGContextStrokeRect(currentContext, lineView.frame);
+#endif
 		}
 	}
 }
@@ -333,29 +340,20 @@
 
 - (Pair*)splitAtIndex:(NSInteger)index
 {
-    MarkupText* first = nil;
-    MarkupText* last = nil;
+    Pair* res = [Pair pair];
     if(0 < index){
-        first = [MarkupText textWithText:[text_ substringToIndex:index]
-                                          font:font_
-                                         color:color_];
+        if(index <= [text_ length]){
+            res.first = [MarkupText textWithText:[text_ substringToIndex:index]
+                                            font:font_
+                                           color:color_];
+        }
+        if(index < [text_ length]){
+            res.second = [MarkupText textWithText:[text_ substringFromIndex:index]
+                                             font:font_
+                                            color:color_];
+        }
     }
-    if(index < [text_ length] - 1){
-        last = [MarkupText textWithText:[text_ substringFromIndex:index]
-                                         font:font_
-                                        color:color_];
-    }
-    if(first && last){
-        return [Pair pairWithFirst:first second:last];
-    }
-    if(first){
-        return [Pair pairWithFirst:first second:nil];
-    }
-    if(last){
-        return [Pair pairWithFirst:nil second:last];
-    }
-    ASSERT(0, @"[text length] == 0");
-    return nil;
+    return res;
 }
 
 - (id)copyWithZone:(NSZone *)zone
@@ -419,4 +417,191 @@
                       view.frame.size.height);
 }
 
+@end
+
+@implementation MarkupHandWritingChar
+
+- (void)createBitmap
+{
+    CGFloat left = CGFLOAT_MAX;;
+    CGFloat right = 0;
+    for(NSValue* value in points_){
+        CGPoint point = [value CGPointValue];
+        left = MIN(left, point.x);
+        right = MAX(right, point.x);
+    }
+    CGFloat width = right - left;
+    CGFloat marginLeft = size_.height * 0.1;
+    size_.width = width * size_.height + marginLeft * 2;
+    bitmap_ = BitmapContextCreate(size_);
+    //CGContextSetFillColorWithColor(bitmap_->context, [[UIColor clearColor]CGColor]);
+    CGContextSetRGBFillColor(bitmap_->context, 1, 1, 1, 0);
+    CGContextFillRect(bitmap_->context, CGRectMake(0, 0, size_.width, size_.height));
+    CGContextSetStrokeColorWithColor(bitmap_->context, [color_ CGColor]);
+    CGContextSetLineWidth(bitmap_->context, 1);
+    CGContextSetLineCap(bitmap_->context, kCGLineCapRound);
+    
+    for (NSInteger i = 0; i < [points_ count]; i += 2) {
+        NSValue* v0 = [points_ objectAtIndex:i];
+        NSValue* v1 = [points_ objectAtIndex:i + 1];
+        CGPoint p = [v0 CGPointValue];
+        CGPoint q = [v1 CGPointValue];
+        CGContextBeginPath(bitmap_->context);
+        CGContextMoveToPoint(bitmap_->context,
+                             marginLeft + (p.x - left) * size_.height,
+                             p.y * size_.height);
+        CGContextAddLineToPoint(bitmap_->context,
+                                marginLeft + (q.x - left) * size_.height,
+                                q.y * size_.height);
+        CGContextStrokePath(bitmap_->context);
+    }
+}
+
+- (id)initWithPoints:(NSArray*)points
+                font:(UIFont *)font
+               color:(UIColor *)color
+{
+    self = [super init];
+    if(self)
+    {
+        points_ = [[NSArray alloc]initWithArray:points];
+        font_ = [font retain];
+        color_ = [color retain];
+        size_.height = [font lineHeight];
+        [self createBitmap];
+    }
+    return self;
+}
+
++ (id)charWithPoints:(NSArray*)points
+                font:(UIFont*)font
+               color:(UIColor *)color
+{
+    return [[[[self class]alloc]initWithPoints:points font:font color:color]autorelease];
+}
+- (id)copyWithZone:(NSZone *)zone{
+    return [[[self class]alloc]initWithPoints:points_ font:font_ color:color_];
+}
+- (void)dealloc{
+    [points_ release];
+    [font_ release];
+    [super dealloc];
+}
+- (CGSize)size{
+    return size_;
+}
+- (void)layoutWithViewCache:(MarkupViewCache *)viewCache
+            previousElement:(id<MarkupElement>)previous
+              documentWidth:(CGFloat)documentWidth
+                     isLast:(BOOL)isLast
+{
+    [markupView_ release];
+    markupView_ = nil;
+    NSInteger lineNumber = 0;
+    NSInteger order = 0;
+    CGFloat lineTop = 0;
+    CGRect lineViewFrame = CGRectZero;
+    lineViewFrame.size = size_;
+
+    if(previous){
+        MarkupView* pl = previous.lastView;
+        if([previous isMemberOfClass:[MarkupNewLine class]] ||//前が改行
+           documentWidth < CGRectGetMaxX(pl.frame) + size_.width)//現在の行に入りきらない
+        {
+            CGFloat lineHeight = [viewCache lineHeightWithNumber:pl.lineNumber];
+            [viewCache setLineViewOriginYWithNumber:pl.lineNumber
+                                     withLineHeight:lineHeight];
+            pl = previous.lastView;
+            
+            lineViewFrame.origin.x = 0;
+            lineViewFrame.origin.y = pl.lineBottom;
+            lineTop = pl.lineBottom;
+            lineNumber = pl.lineNumber + 1;
+            order = 0;
+        }
+        else{
+            //現在の行に入り切る
+            lineViewFrame.origin.x = CGRectGetMaxX(pl.frame);
+            lineViewFrame.origin.y = pl.lineTop;
+            lineTop = pl.lineTop;
+            lineNumber = pl.lineNumber;
+            order = pl.order + 1;
+        }
+    }
+    markupView_ = [[MarkupView alloc]initWithMarkupElement:self
+                                                lineNumber:lineNumber
+                                                     order:order
+                                                   lineTop:lineTop
+                                                     frame:lineViewFrame];
+    [viewCache addViewCache:markupView_];
+
+    if(isLast){
+        CGFloat lineHeight = [viewCache lineHeightWithNumber:lineNumber];
+        [viewCache setLineViewOriginYWithNumber:lineNumber
+                                 withLineHeight:lineHeight];
+    }
+    
+}
+- (MarkupView*)lastView{
+    return markupView_;
+}
+- (void)drawRect:(CGRect)rect
+{
+    CGRect frame = markupView_.frame;
+    CGImageRef image = CGBitmapContextCreateImage(bitmap_->context);
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    CGContextDrawImage(currentContext, frame, image);
+    CGImageRelease(image);
+}
+- (NSInteger)length{
+    return 1;
+}
+- (NSString*)stringValue{
+    return [NSString stringWithString:@" "];
+}
+- (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end
+{
+    if(start == 0 && end == 1){
+        return [self stringValue];
+    }else{
+        return [NSString string];
+    }
+}
+
+- (Pair*)splitAtIndex:(NSInteger)index
+{
+    ASSERT(index == 0 || index == 1, @"");
+    if(index == 0){
+        return [Pair pairWithFirst:nil second:self];
+    }else{
+        return [Pair pairWithFirst:self second:nil];
+    }
+}
+- (BOOL)isConnectableTo:(id<MarkupElement>)lhs{
+    return NO;
+}
+- (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs
+{
+    return nil;
+}
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex
+{
+    ASSERT(valueIndex == 0 || valueIndex == 1, @"");
+    if(valueIndex == 0){
+        return CGRectMake(markupView_.frame.origin.x,
+                          markupView_.frame.origin.y,
+                          0, markupView_.frame.size.height);
+    }else{
+        return CGRectMake(CGRectGetMaxX(markupView_.frame),
+                          markupView_.frame.origin.y,
+                          0, markupView_.frame.size.height);
+    }
+}
+- (UIFont*)font{
+    return font_;
+}
+- (UIColor*)color{
+    return color_;
+}
+           
 @end

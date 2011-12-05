@@ -35,6 +35,7 @@ BitmapContextRef BitmapContextCreate(CGSize size)
 		CGColorSpaceRelease(colorSpace);
 		return NULL;
 	}
+    memset(bitmapData, 0xff, bitmapByteCount);
 
 	CGContextRef context
 	= CGBitmapContextCreate(bitmapData,
@@ -60,8 +61,10 @@ BitmapContextRef BitmapContextCreate(CGSize size)
 
 void BitmapContextRelease(BitmapContextRef context)
 {
-	CGContextRelease(context->context);
-	free(context->data);
-	free(context);
+    if(context){
+        CGContextRelease(context->context);
+        free(context->data);
+        free(context);
+    }
 }
 

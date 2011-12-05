@@ -19,7 +19,7 @@
 
 #ifdef DEBUG
 #  define ASSERT(exp, msg) if(!(exp)){ \
-LOG(msg, nil); \
+LOG(msg); \
 NSAssert(exp, msg); \
 }else{}
 #  define ASSERT1(exp, fmt, ...) if(!(exp)){ \
@@ -36,7 +36,7 @@ NSAssert1(exp, fmt, ##__VA_ARGS__); \
 #  define PO(exp) NSLog(@ "%s => %@", #exp, exp)
 #else
 #  define P(fmt, exp)
-#  define PO(fmt, exp)
+#  define PO(exp)
 #endif
 
 #ifdef DEBUG

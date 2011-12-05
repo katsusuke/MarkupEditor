@@ -63,7 +63,7 @@
     //elements_ count => 10
 }
 
-- (id)init;
+- (id)init
 {
 	self = [super init];
 	if (self != nil) {
@@ -80,6 +80,13 @@
 	[defaultFont_ release];
 	[defaultColor_ release];
 	[super dealloc];
+}
+
+
+- (void)addHandWritingPoints:(NSArray*)points
+                     atRange:(MarkupElementRange*)position;
+{
+    
 }
 
 - (BOOL)positionIsValid:(MarkupElementPosition*)position{
@@ -162,40 +169,6 @@
     }
 	return string;
 }
-
-/*
- - (MarkupElementsRange*)markupElementsWithRange:(UITextRange*)range
- {
- MarkupElementsRange* res = [MarkupElementsRange markupElementsRange];
- 
- const NSInteger start = ((TextPosition*)range.start).index;
- const NSInteger end = ((TextPosition*)range.end).index;
- NSInteger currentStart = 0;
- NSInteger currentEnd = 0;
- 
- NSInteger index = 0;
- 
- for(id<MarkupElement> elem in markupElements_)
- {
- currentEnd += [elem length];
- 
- if(currentStart <= start && start <  currentEnd){
- res.firstElementIndex = index;
- res.firstValueIndexInElement = start - currentStart;
- }
- if(currentStart <  end   && end   <= currentEnd){
- res.lastElementIndex = index;
- res.lastValueIndexInElement = end - currentStart;
- return res;
- }
- 
- currentStart = currentEnd;
- index++;
- }
- ASSERT(NO, @"Index out of range");
- return nil;
- }
- */
 
 - (Pair*)splitElementAtPosition:(MarkupElementPosition*)position;
 {
@@ -327,7 +300,7 @@
                       NSMakeRange(position.elementIndex, [elements_ count] - position.elementIndex)];
     }else{
         res.first = [elements_ subarrayWithRange:NSMakeRange(0, position.elementIndex)];
-        Pair* centerElements = [self splitElementsAtPosition:position];
+        Pair* centerElements = [self splitElementAtPosition:position];
         if(centerElements.first){
             res.first = [NSMutableArray arrayWithArray:res.first];
             [res.first addObject:centerElements.first];
@@ -360,7 +333,7 @@
     [elements_ addObjectsFromArray:newElements];
 }
 
-- (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text
+- (void)replaceRange:(MarkupElementRange *)range withElements:(NSArray *)elements
 {
     layouted_ = NO;
     MarkupElementPosition* start = range.startPosition;
@@ -373,22 +346,49 @@
     [MarkupDocument getLastFont:&font andColor:&color fromElements:firstElements];
     if(!font){ font = defaultFont_; }
     if(!color){ color = defaultColor_; }
-    
-    NSArray* textElements
-    = [self markupElementsWithText:text
-                              font:font
-                             color:color];
     if(range.empty){
-        [self insertElements:textElements atPosition:start];
+        [self insertElements:elements atPosition:start];
     }else{
         Pair* firstPair = [self splitElementsAtPosition:start];
         Pair* lastPair = [self splitElementsAtPosition:end];
         
-        NSArray* newElements = [MarkupDocument connectMarkupElements:firstPair.first andOthers:textElements];
+        NSArray* newElements = [MarkupDocument connectMarkupElements:firstPair.first andOthers:elements];
         newElements = [MarkupDocument connectMarkupElements:newElements andOthers:lastPair.second];
         [elements_ removeAllObjects];
         [elements_ addObjectsFromArray:newElements];
     }
+}
+
+- (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text
+{
+    UIFont* font = nil;
+    UIColor* color = nil;
+    
+    NSArray* firstElements
+    = [elements_ subarrayWithRange:NSMakeRange(0, range.startPosition.splitNextElementIndex)];
+    [MarkupDocument getLastFont:&font andColor:&color fromElements:firstElements];
+    if(!font){ font = defaultFont_; }
+    if(!color){ color = defaultColor_; }
+    NSArray* elements
+    = [self markupElementsWithText:text
+                              font:font
+                             color:color];
+    [self replaceRange:range withElements:elements];
+}
+
+- (void)replaceRange:(MarkupElementRange *)range withHandWritePoints:(NSArray *)points
+{
+    UIFont* font = nil;
+    UIColor* color = nil;
+    
+    NSArray* firstElements = [elements_ subarrayWithRange:NSMakeRange(0, range.startPosition.splitNextElementIndex)];
+    [MarkupDocument getLastFont:&font andColor:&color fromElements:firstElements];
+    if(!font){ font = defaultFont_; }
+    if(!color){ color = defaultColor_; }
+    NSArray* elements
+    = [NSArray arrayWithObject:
+       [MarkupHandWritingChar charWithPoints:points font:font color:color]];
+    [self replaceRange:range withElements:elements];
 }
 
 - (void)insertElements:(NSArray *)insertElement atPosition:(MarkupElementPosition*)position
@@ -528,5 +528,6 @@
         }
     }
 }
+
 
 @end

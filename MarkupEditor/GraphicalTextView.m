@@ -8,6 +8,13 @@
 
 #import "GraphicalTextView.h"
 #import "MarkupElementPosition.h"
+#import "HandWritingInputView.h"
+
+@interface GraphicalTextView()
+
+- (void)syncCaretViewFrame;
+
+@end
 
 @implementation GraphicalTextView
 
@@ -20,11 +27,11 @@
 - (id)preInit_{
     document_ = [[MarkupDocument alloc]init];
     [document_ setTestData];
-    self.backgroundColor = [UIColor whiteColor];
     selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
                                                               end:document_.endPosition];
     markedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
                                                             end:document_.endPosition];
+    cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
     return self;
 }
 
@@ -48,6 +55,7 @@
 
 - (void)dealloc {
 	[document_ release];
+    [cartView_ release];
     [super dealloc];
 }
 
@@ -57,14 +65,59 @@
 	[document_ drawRect:rect width:self.frame.size.width];
 }
 
-- (BOOL)canBecomeFirstResponder;
-{ 
+- (UIView*)inputView{
+    if(inputTextMode_ == InputTextModeQwerty){
+        return [super inputView];
+    }else{
+        HandWritingInputView* view
+        = [[[HandWritingInputView alloc]initWithGraphicalTextView:self]autorelease];
+        view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        return view;
+    }
+}
+
+- (InputTextMode)inputTextMode{
+    return inputTextMode_;
+}
+- (void)setInputTextMode:(InputTextMode)newValue
+{
+    inputTextMode_ = newValue;
+}
+
+- (BOOL)canBecomeFirstResponder{ 
 	return YES;
 }
+- (BOOL)becomeFirstResponder{
+    [self addSubview:cartView_];
+    [self syncCaretViewFrame];
+    return [super becomeFirstResponder];
+}
+
+- (BOOL)resignFirstResponder{
+    [cartView_ removeFromSuperview];
+    [self syncCaretViewFrame];
+    return [super resignFirstResponder];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self becomeFirstResponder];
+}
+
 
 - (BOOL)hasText
 {
     return YES;
+}
+- (void)addHandWritingPoints:(NSArray *)array
+{
+    [document_ replaceRange:selectedTextRange_
+        withHandWritePoints:array];
+    [selectedTextRange_ release];
+    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
+                                                              end:document_.endPosition];
+    [self setNeedsDisplay];
+    [self syncCaretViewFrame];
 }
 - (void)insertText:(NSString *)text
 {
@@ -77,6 +130,7 @@
                                                               end:document_.endPosition];
     PO(selectedTextRange_);
     [self setNeedsDisplay];
+    [self syncCaretViewFrame];
 }
 - (void)deleteBackward
 {
@@ -88,7 +142,10 @@
      [MarkupElementRange rangeWithStart:start
                                     end:selectedTextRange_.endPosition]];
     [selectedTextRange_ release];
-    selectedTextRange_ = [MarkupElementRange rangeWithStart:start end:start];
+    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
+                                                              end:document_.endPosition];
+    [self setNeedsDisplay];
+    [self syncCaretViewFrame];
 }
 
 - (void)setFrame:(CGRect)frame
@@ -138,11 +195,17 @@
 {
     return [document_ positionFromPosition:(MarkupElementPosition*)position offset:offset];
 }
+
+//ソフトキーボードには無いけど、上下左右キーが押されたときに呼ばれる。
+//エディタ的に、左端からn 文字目に移動することにする
+//改行は無視する
 - (UITextPosition *)positionFromPosition:(UITextPosition *)position
                              inDirection:(UITextLayoutDirection)direction
                                   offset:(NSInteger)offset
 {
-    
+    PO(position);
+    PO(direction);
+    P(@"%d", offset);
 }
 
 - (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
@@ -158,31 +221,38 @@
 - (UITextPosition *)positionWithinRange:(UITextRange *)range
                     farthestInDirection:(UITextLayoutDirection)direction
 {
-    
+    PO(range);
+    P(@"%d", direction);
 }
 - (UITextRange *)characterRangeByExtendingPosition:(UITextPosition *)position
                                        inDirection:(UITextLayoutDirection)direction
 {
-    
+    PO(position);
+    P(@"%d", direction);
 }
 
 /* Writing direction */
 - (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position
                                               inDirection:(UITextStorageDirection)direction
 {
-    
+    PO(position);
+    P(@"%d", direction);
 }
+
 - (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection
                        forRange:(UITextRange *)range
 {
+    PO(range);
+    P(@"%d", writingDirection);
     
 }
 
 /* Geometry used to provide, for example, a correction rect. */
 - (CGRect)firstRectForRange:(UITextRange *)range
 {
-    
+    PO(range);
 }
+
 - (CGRect)caretRectForPosition:(UITextPosition *)position
 {
     CGRect rect
@@ -195,16 +265,21 @@
 /* Hit testing. */
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
 {
-    
+    POINTLOG(point);
 }
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
                                withinRange:(UITextRange *)range
 {
-    
+    POINTLOG(point);
+    PO(range);
 }
 - (UITextRange *)characterRangeAtPoint:(CGPoint)point
 {
-    
+    POINTLOG(point);
+}
+
+- (void)syncCaretViewFrame{
+    cartView_.frame = [self caretRectForPosition:selectedTextRange_.start];
 }
 
 

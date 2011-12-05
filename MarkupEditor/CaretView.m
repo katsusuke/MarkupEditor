@@ -10,16 +10,55 @@
 
 @implementation CaretView
 
+static const NSTimeInterval InitialBlinkDelay = 0.7;
+static const NSTimeInterval BlinkRate = 0.5;
+
 @synthesize animated=animated_;
+
+// Class method that returns current caret color (note that in this sample,
+// the color cannot be changed)
++ (UIColor *)caretColor
+{
+    static UIColor *color = nil;
+    if (color == nil) {
+        color = [[UIColor alloc] initWithRed:0.25 green:0.50 blue:1.0 alpha:1.0];
+    }
+    return color;
+}
+
++ (UIColor*)selectionColor
+{
+    static UIColor *color = nil;
+    if (color == nil) {
+        color = [[UIColor alloc] initWithRed:0.25 green:0.50 blue:1.0 alpha:0.50];    
+    }    
+    return color;
+}
 
 - (id)initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         // Initialization code
-		[self setBackgroundColor:[UIColor blueColor]];
+		[self setBackgroundColor:[CaretView caretColor]];
 		[self animationFadeOut];
     }
     return self;
 }
+- (void)dealloc
+{
+    [blinkTimer_ invalidate];
+    [blinkTimer_ release];
+    [super dealloc];
+}
+
+- (void)blink{
+    self.hidden = !self.hidden;
+}
+- (void)delayBlink
+{
+    self.hidden = NO;
+    [blinkTimer_ setFireDate:[NSDate dateWithTimeIntervalSinceNow:InitialBlinkDelay]];
+}
+
 
 -(void)animationFadeIn {
 	if (self.animated) {
@@ -50,9 +89,23 @@
 	}
 }
 
-- (void)dealloc
+- (void)didMoveToSuperview
 {
-    [super dealloc];
+    self.hidden = NO;
+    
+    if (self.superview) {
+        blinkTimer_ = [[NSTimer scheduledTimerWithTimeInterval:BlinkRate
+                                                        target:self
+                                                      selector:@selector(blink)
+                                                      userInfo:nil
+                                                       repeats:YES] retain];
+        [self delayBlink];
+    } else {
+        [blinkTimer_ invalidate];
+        [blinkTimer_ release];
+        blinkTimer_ = nil;        
+    }
 }
+
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "CACommon.h"
 
 @class MarkupDocument;
 
@@ -79,5 +80,28 @@
 - (UIFont*)font;
 - (UIColor*)color;
 - (id)copyWithZone:(NSZone*)zone;
+
+@end
+
+@interface MarkupHandWritingChar : NSObject<MarkupElement> {
+@private
+    NSArray* points_;
+    UIFont* font_;
+    UIColor* color_;
+    MarkupView* markupView_;
+    BitmapContext* bitmap_;
+    CGSize size_;
+}
+
+- (id)initWithPoints:(NSArray*)points
+                font:(UIFont*)font
+               color:(UIColor*)color;
+
++ (id)charWithPoints:(NSArray*)points
+                font:(UIFont*)font
+               color:(UIColor*)color;
+
+@property (nonatomic, readonly) UIFont* font;
+@property (nonatomic, readonly) UIColor* color;
 
 @end

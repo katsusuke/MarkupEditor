@@ -11,11 +11,17 @@
 
 @interface CaretView : UIView {
 	bool animated_;
+    NSTimer* blinkTimer_;
 }
+
++ (UIColor*)caretColor;
++ (UIColor*)selectionColor;
+
 
 @property (nonatomic, assign) bool animated;
 
 -(void)animationFadeIn;
 -(void)animationFadeOut;
+-(void)delayBlink;
 
 @end

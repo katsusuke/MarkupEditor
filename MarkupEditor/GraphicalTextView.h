@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "MarkupDocument.h"
+#import "CaretView.h"
+
+typedef enum{
+    InputTextModeQwerty,
+    InputTextModeHandWriting,
+}
+InputTextMode;
 
 @interface GraphicalTextView : UIView
 <
@@ -22,6 +29,14 @@ UITextInput
     NSDictionary* markedTextStyle_;
     id<UITextInputDelegate> inputDelegate_;
     id<UITextInputTokenizer> tokenizer_;
+    CaretView* cartView_;
+    
+    InputTextMode inputTextMode_;
 }
+
+- (UIView*)inputView;
+@property (nonatomic, assign)InputTextMode inputTextMode;
+
+- (void)addHandWritingPoints:(NSArray*)array;
 
 @end

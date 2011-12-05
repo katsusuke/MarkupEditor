@@ -23,9 +23,9 @@
 	UIColor* defaultColor_;
 }
 
+- (id)init;
 - (void)setTestData;
 
-- (id)init;
 
 - (BOOL)positionIsValid:(MarkupElementPosition*)position;
 - (MarkupElementPosition*)startPosition;
@@ -43,7 +43,11 @@
 - (void)layoutWithWidth:(CGFloat)width;
 
 - (NSString*)textInRange:(MarkupElementRange *)range;
+
+- (void)replaceRange:(MarkupElementRange*)range withElements:(NSArray*)elements;
 - (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text;
+- (void)replaceRange:(MarkupElementRange*)range withHandWritePoints:(NSArray*)points;
+
 - (void)deleteWithRange:(MarkupElementRange*)range;
 - (Pair*)splitElementsAtPosition:(MarkupElementPosition*)position;
 - (MarkupElementPosition*)positionFromPosition:(MarkupElementPosition*)position

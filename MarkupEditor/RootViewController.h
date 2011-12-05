@@ -8,9 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "GraphicalTextView.h"
+#import "HandWritingView.h"
 
 @interface RootViewController : UIViewController {
-    IBOutlet GraphicalTextView* textView;
+    IBOutlet GraphicalTextView* textView0;
+    IBOutlet GraphicalTextView* textView1;
+    IBOutlet GraphicalTextView* textView2;
 }
+
+- (IBAction)buttonBushed:(id)sender;
 
 @end
