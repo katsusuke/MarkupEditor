@@ -46,18 +46,22 @@
 
 - (void)replaceRange:(MarkupElementRange*)range withElements:(NSArray*)elements;
 - (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text;
+- (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text marked:(BOOL)marked;
 - (void)replaceRange:(MarkupElementRange*)range withHandWritePoints:(NSArray*)points;
 
 - (void)deleteWithRange:(MarkupElementRange*)range;
 - (Pair*)splitElementsAtPosition:(MarkupElementPosition*)position;
 - (MarkupElementPosition*)positionFromPosition:(MarkupElementPosition*)position
                                         offset:(NSInteger)offset;
+- (MarkupElementPosition*)positionDownFromPosition:(MarkupElementPosition*)position lines:(NSInteger)lines;
 - (NSInteger)offsetFrom:(MarkupElementPosition*)from to:(MarkupElementPosition*)to;
 - (BOOL)positionIsLast:(MarkupElementPosition*)position;
 - (void)insertElements:(NSArray*)insertElement atIndex:(NSInteger)index;
-- (void)insertElements:(NSArray *)insertElement atPosition:(MarkupElementPosition*)position;
+- (void)insertElements:(NSArray *)insertElements atPosition:(MarkupElementPosition*)position;
 
 - (CGRect)caretRectForPosition:(MarkupElementPosition*)position width:(CGFloat)width;
+
+- (void)unmarkTextWithRange:(MarkupElementRange*)range;
 
 + (NSArray*)connectMarkupElements:(NSArray*)lhs
                         andOthers:(NSArray*)rhs;

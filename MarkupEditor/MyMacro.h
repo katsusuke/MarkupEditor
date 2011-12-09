@@ -60,3 +60,39 @@ NSAssert1(exp, fmt, ##__VA_ARGS__); \
 //他のマクロ
 #define LS(key) [[NSBundle mainBundle] localizedStringForKey:(key) value:@"" table:nil]
 
+//メッセージ解析用
+#ifdef DEBUG
+    #define TV() NSLog(@"-%@", NSStringFromSelector(_cmd))
+#else
+    #define TV()
+#endif
+
+#ifdef DEBUG
+    #define T(...) NSLog(@"-%@ %@", NSStringFromSelector(_cmd), [NSString stringWithFormat:__VA_ARGS__])
+#else
+    #define T(...)
+#endif
+
+#ifdef DEBUG
+    #define RO(exp) \
+        do{id res = exp; \
+        NSLog(@"=> %@", res); \
+        return res;}while(0)
+#else
+    #define RO(exp) return exp
+#endif
+
+#ifdef DEBUG
+    #define RD(exp) \
+        do{int res = exp; \
+        NSLog(@"=> %d", res); \
+        return res;}while(0)
+#else
+    #define RD(exp) return exp
+#endif
+
+#ifdef DEBUG
+    #define R(format) NSLog(format, res)
+#else
+    #define R(format)
+#endif

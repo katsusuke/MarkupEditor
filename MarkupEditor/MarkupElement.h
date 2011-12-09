@@ -29,6 +29,7 @@
 					 to:(NSInteger)end;
 
 - (Pair*)splitAtIndex:(NSInteger)index;
+- (BOOL)isConnectableTo:(id<MarkupElement>)lhs;
 - (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs;
 - (CGRect)createRectForValueIndex:(NSInteger)valueIndex;
 
@@ -41,6 +42,7 @@
 @property (nonatomic, readonly) UIFont* font;
 @property (nonatomic, readonly) UIColor* color;
 @property (nonatomic, readonly) NSString* stringValue;
+@property (nonatomic, assign)BOOL marked;
 
 @end
 
@@ -59,6 +61,7 @@
 
 @interface MarkupText : NSObject<MarkupElement>
 {
+    BOOL marked_;
 	NSString* text_;
 	UIFont* font_;
 	UIColor* color_;
@@ -69,13 +72,20 @@
 
 - (id)initWithText:(NSString*)text
               font:(UIFont*)font
-             color:(UIColor*)color;
+             color:(UIColor*)color
+            marked:(BOOL)marked;
 
 + (MarkupText*)textWithText:(NSString*)text
-                             font:(UIFont*)font
-                            color:(UIColor*)color;
+                       font:(UIFont*)font
+                      color:(UIColor*)color
+                     marked:(BOOL)marked;
+
++ (MarkupText*)textWithText:(NSString*)text
+                       font:(UIFont*)font
+                      color:(UIColor*)color;
 
 @property (nonatomic, copy)NSString* text;
+@property (nonatomic, assign)BOOL marked;
 
 - (UIFont*)font;
 - (UIColor*)color;

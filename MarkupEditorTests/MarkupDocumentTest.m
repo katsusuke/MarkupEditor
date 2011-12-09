@@ -270,7 +270,7 @@
 {
     NSArray* a = [NSArray arrayWithObjects:
                   [MarkupText textWithText:@"さしす"
-                                      font:[UIFont systemFontOfSize:16]
+                                      font:[UIFont systemFontOfSize:20]
                                      color:[UIColor greenColor]],
                   [MarkupText textWithText:@"たちつ"
                                       font:[UIFont systemFontOfSize:20]

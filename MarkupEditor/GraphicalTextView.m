@@ -29,8 +29,7 @@
     [document_ setTestData];
     selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
                                                               end:document_.endPosition];
-    markedTextRange_ = [[MarkupElementRange alloc]initWithStart:document_.endPosition
-                                                            end:document_.endPosition];
+    markedTextRange_ = nil;
     cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
     return self;
 }
@@ -166,14 +165,53 @@
     [document_ replaceRange:(MarkupElementRange*)range withText:text];
 }
 
+- (void)setMarkedTextRange:(UITextRange*)range
+{
+    if(markedTextRange_ != range){
+        [markedTextRange_ release];
+        markedTextRange_ = [(MarkupElementRange*)range retain];
+    }
+}
+
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
 {
-    LOG(@"markedText:%@ selectedRange:(location:%d length:%d",
-        markedText, selectedRange.location, selectedRange.length);
+    T(@"markedText:%@ selectedRange:(location:%d length:%d)",
+      markedText, selectedRange.location, selectedRange.length);
+    
+    if (markedTextRange_){
+        if (!markedText){ 
+            markedText = @"";// nilが来ることある
+        }
+		// Replace characters in text storage and update markedText range length
+        [document_ replaceRange:markedTextRange_ withText:markedText marked:YES];
+        [self setMarkedTextRange:
+         [self textRangeFromPosition:markedTextRange_.startPosition
+                          toPosition:[self positionFromPosition:markedTextRange_.startPosition
+                                                                               offset:markedText.length]]];
+    } else{
+		// There currently isn't a marked text range, but there is a selected range,
+		// so replace text storage at selected range and update markedTextRange.
+        [document_ replaceRange:selectedTextRange_ withText:markedText marked:YES];
+        [self setMarkedTextRange:[self textRangeFromPosition:selectedTextRange_.startPosition
+                                                  toPosition:[self positionFromPosition:selectedTextRange_.startPosition
+                                                                                 offset:markedText.length]]];
+    }    
+	// Updated selected text range and underlying SimpleCoreTextView
+    [self setSelectedTextRange:[self textRangeFromPosition:markedTextRange_.endPosition
+                                                toPosition:markedTextRange_.endPosition]];	
+    [self setNeedsDisplay];
+    [self syncCaretViewFrame];
 }
+
 - (void)unmarkText
 {
+    if(!markedTextRange_)return;
     
+    [document_ unmarkTextWithRange:markedTextRange_];
+    
+    [self setMarkedTextRange:nil];
+    [self setNeedsDisplay];
+    [self syncCaretViewFrame];
 }
 
 - (UITextPosition*)beginningOfDocument{
@@ -206,6 +244,17 @@
     PO(position);
     PO(direction);
     P(@"%d", offset);
+    NSInteger toOffset = offset;
+    switch (direction) {
+        case UITextLayoutDirectionLeft:
+            toOffset = -offset;
+        case UITextLayoutDirectionRight:
+            return [self positionFromPosition:position offset:toOffset];
+        case UITextLayoutDirectionUp:
+            toOffset = -offset;
+        case UITextLayoutDirectionDown:
+            return [document_ positionDownFromPosition:(MarkupElementPosition*)position lines:toOffset];
+    }
 }
 
 - (NSInteger)offsetFromPosition:(UITextPosition *)from toPosition:(UITextPosition *)toPosition
@@ -218,6 +267,8 @@
     return [(MarkupElementPosition*)position compareTo:(MarkupElementPosition*)other];
 }
 
+// UITextInput protocol method - Return the text position that is at the farthest 
+// extent in a given layout direction within a range of text.
 - (UITextPosition *)positionWithinRange:(UITextRange *)range
                     farthestInDirection:(UITextLayoutDirection)direction
 {
@@ -235,22 +286,30 @@
 - (UITextWritingDirection)baseWritingDirectionForPosition:(UITextPosition *)position
                                               inDirection:(UITextStorageDirection)direction
 {
-    PO(position);
-    P(@"%d", direction);
+    T(@"position:%@ direction:%d", position, direction);
+    RD(UITextWritingDirectionLeftToRight);
+    // This sample assumes LTR text direction and does not currently support BiDi or RTL.
+    return UITextWritingDirectionLeftToRight;
 }
 
 - (void)setBaseWritingDirection:(UITextWritingDirection)writingDirection
                        forRange:(UITextRange *)range
 {
-    PO(range);
-    P(@"%d", writingDirection);
-    
+    T(@"writingDirection:%d range:%@", writingDirection, range);
 }
 
 /* Geometry used to provide, for example, a correction rect. */
 - (CGRect)firstRectForRange:(UITextRange *)range
 {
     PO(range);
+    CGRect r0 = [document_ caretRectForPosition:(MarkupElementPosition*)range.start
+                                          width:self.frame.size.width];
+    CGRect r1 = [document_ caretRectForPosition:(MarkupElementPosition*)range.end
+                                          width:self.frame.size.width];
+    RECTLOG(r0);
+    RECTLOG(r1);
+    r0.size.width = 30;
+    return r0;
 }
 
 - (CGRect)caretRectForPosition:(UITextPosition *)position
@@ -263,19 +322,25 @@
 }
 
 /* Hit testing. */
+//実装しなくても動くらしい
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
 {
     POINTLOG(point);
+    return nil;
 }
+//実装しなくても動くらしい
 - (UITextPosition *)closestPositionToPoint:(CGPoint)point
                                withinRange:(UITextRange *)range
 {
     POINTLOG(point);
     PO(range);
+    return nil;
 }
+//実装しなくても動くらしい
 - (UITextRange *)characterRangeAtPoint:(CGPoint)point
 {
     POINTLOG(point);
+    return nil;
 }
 
 - (void)syncCaretViewFrame{

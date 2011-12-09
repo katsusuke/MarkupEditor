@@ -222,6 +222,66 @@
                                                     valueIndex:0];
     }
 }
+- (MarkupElementPosition*)positionDownFromPosition:(MarkupElementPosition*)position
+                                             lines:(NSInteger)lines
+{
+    if(lines == 0)return [[self copy]autorelease];
+    //行頭を0とした場合のIndex
+    NSInteger columns = position.valueIndex;
+    for(NSInteger i = position.elementIndex - 1; 0 <= i; --i){
+        id<MarkupElement> elm = [elements_ objectAtIndex:i];
+        if([elm isKindOfClass:[MarkupNewLine class]]){
+            break;
+        }else{
+            columns += [elm length];
+        }
+    }
+    //行頭のElement -> NewLineの次か、先頭
+    MarkupElementPosition* topPosition = nil;
+    if(0 < lines){
+        for(NSInteger i = position.splitNextElementIndex;
+            i < self.endPosition.splitNextElementIndex; ++i)
+        {
+            id<MarkupElement> elm = [elements_ objectAtIndex:i];
+            if([elm isMemberOfClass:[MarkupNewLine class]]){
+                lines--;
+                if(lines <= 0){
+                    topPosition = [MarkupElementPosition positionWithElementIndex:i + 1 valueIndex:0];
+                    break;
+                }
+            }
+        }
+        if(!topPosition){
+            topPosition = self.endPosition;
+        }
+    }else{
+        for(NSInteger i = position.elementIndex - 1; 0 <= i; --i){
+            id<MarkupElement> elm = [elements_ objectAtIndex:i];
+            if([elm isMemberOfClass:[MarkupNewLine class]]){
+                lines++;
+                if(0 < lines){
+                    topPosition = [MarkupElementPosition positionWithElementIndex:i + 1 valueIndex:0];
+                }
+            }
+        }
+        if(!topPosition){
+            topPosition = self.startPosition;
+        }
+    }
+    for(NSInteger i = topPosition.elementIndex; i < self.endPosition.splitNextElementIndex; ++i){
+        id<MarkupElement> elm = [elements_ objectAtIndex:i];
+        if([elm isMemberOfClass:[MarkupNewLine class]]){
+            return [MarkupElementPosition positionWithElementIndex:i
+                                                        valueIndex:0];
+        }
+        if(columns < [elm length]){
+            return [MarkupElementPosition positionWithElementIndex:i
+                                                        valueIndex:columns];
+        }
+        columns -= [elm length];
+    }
+    return self.endPosition;
+}
 
 - (NSInteger)offsetFrom:(MarkupElementPosition*)from to:(MarkupElementPosition*)to;
 {
@@ -261,6 +321,7 @@
 - (NSMutableArray*)markupElementsWithText:(NSString*)text
 									 font:(UIFont*)font
 									color:(UIColor*)color
+                                   marked:(BOOL)marked
 {
 	NSMutableArray* res
 	= [[NSMutableArray alloc]init];
@@ -274,7 +335,8 @@
 		if([lineStr length] != 0){
 			MarkupText* elem = [[MarkupText alloc]initWithText:lineStr
                                                           font:font
-                                                         color:color];
+                                                         color:color
+                                                        marked:marked];
 			[res addObject:elem];
 			[elem release];
 		}
@@ -361,6 +423,11 @@
 
 - (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text
 {
+    [self replaceRange:range withText:text marked:NO];
+}
+
+- (void)replaceRange:(MarkupElementRange*)range withText:(NSString*)text marked:(BOOL)marked
+{
     UIFont* font = nil;
     UIColor* color = nil;
     
@@ -372,7 +439,8 @@
     NSArray* elements
     = [self markupElementsWithText:text
                               font:font
-                             color:color];
+                             color:color
+                            marked:marked];
     [self replaceRange:range withElements:elements];
 }
 
@@ -418,27 +486,27 @@
     }
 }
 
-- (void)insertElements:(NSArray*)insertElement atIndex:(NSInteger)index;
+- (void)insertElements:(NSArray*)insertElements atIndex:(NSInteger)index;
 {
     ASSERT(0 <= index && index <= [elements_ count], @"");
     NSArray* newElements = nil;
     if(index == 0){
         UIFont* font = nil;
         UIColor* color = nil;
-        [MarkupDocument getFirstFont:&font andColor:&color fromElements:insertElement];
+        [MarkupDocument getFirstFont:&font andColor:&color fromElements:insertElements];
         //要素の始めに挿入時はdefault を書き換える
         if(font){ self.defaultFont = font; }
         if(color){ self.defaultColor = color; }
-        newElements = [MarkupDocument connectMarkupElements:insertElement
+        newElements = [MarkupDocument connectMarkupElements:insertElements
                                                andOthers:elements_];
     }
     else if(index == [elements_ count]){
         newElements = [MarkupDocument connectMarkupElements:elements_
-                                               andOthers:insertElement];
+                                               andOthers:insertElements];
     }else{
         newElements = [elements_ subarrayWithRange:NSMakeRange(0, index)];
         NSArray* last = [elements_ subarrayWithRange:NSMakeRange(index, [elements_ count] - index)];
-        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:insertElement];
+        newElements = [MarkupDocument connectMarkupElements:newElements andOthers:insertElements];
         newElements = [MarkupDocument connectMarkupElements:newElements andOthers:last];
     }
     [elements_ removeAllObjects];
@@ -455,6 +523,21 @@
         id<MarkupElement> elm = [elements_ objectAtIndex:position.elementIndex];
         return [elm createRectForValueIndex:position.valueIndex];
     }
+}
+- (void)unmarkTextWithRange:(MarkupElementRange*)range
+{
+    NSMutableArray* unmarkedElements = [NSMutableArray array];
+    for(NSInteger i = range.startPosition.elementIndex;
+        i < range.endPosition.splitNextElementIndex; ++i)
+    {
+        //copy しないと駄目かも
+        id<MarkupElement> elm = [elements_ objectAtIndex:i];
+        if([elm respondsToSelector:@selector(setMarked:)]){
+            elm.marked = NO;
+        }
+        [unmarkedElements addObject:elm];
+    }
+    [self replaceRange:range withElements:unmarkedElements];
 }
 
 + (NSArray*)connectMarkupElements:(NSArray *)lhs andOthers:(NSArray *)rhs

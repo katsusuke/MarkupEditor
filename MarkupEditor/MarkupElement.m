@@ -30,7 +30,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-    return [[[self class]alloc]initWithFont:font_];
+    return [[[self class]allocWithZone:zone]initWithFont:font_];
 }
 
 - (void)dealloc
@@ -156,10 +156,12 @@
 @implementation MarkupText
 
 @synthesize text=text_;
+@synthesize marked=marked_;
 
 - (id)initWithText:(NSString*)text
               font:(UIFont*)font
              color:(UIColor*)color
+            marked:(BOOL)marked
 {
 	self = [super init];
 	if (self != nil) {
@@ -168,17 +170,24 @@
 		color_ = [color retain];
 		textList_ = [[NSMutableArray alloc]init];
 		markupViews_ = [[NSMutableArray alloc]init];
+        marked_ = marked;
 	}
 	return self;
 }
 
 + (MarkupText*)textWithText:(NSString*)text
-                             font:(UIFont*)font
-                            color:(UIColor*)color
+                       font:(UIFont*)font
+                      color:(UIColor*)color
+                     marked:(BOOL)marked
 {
 	return [[[MarkupText alloc]initWithText:text
                                        font:font
-                                      color:color]autorelease];
+                                      color:color
+                                     marked:marked]autorelease];
+}
++ (MarkupText*)textWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color
+{
+    return [MarkupText textWithText:text font:font color:color marked:NO];
 }
 
 - (void)dealloc{
@@ -308,6 +317,12 @@
 	{
 		MarkupView* lineView = [markupViews_ objectAtIndex:i];
 		if(CGRectIntersectsRect(lineView.frame, rect)){
+            if(marked_){
+                [[UIColor redColor]set];
+                CGContextRef context = UIGraphicsGetCurrentContext();
+                CGContextFillRect(context, lineView.frame);
+                [color_ set];
+            }
 			NSString* text = [textList_ objectAtIndex:i];
 			[text drawAtPoint:lineView.frame.origin withFont:font_];
 #ifdef DEBUG
@@ -341,16 +356,23 @@
 - (Pair*)splitAtIndex:(NSInteger)index
 {
     Pair* res = [Pair pair];
-    if(0 < index){
+    if(index <= 0){
+        MarkupText* cp = [self copy];
+        res.second = cp;
+        [cp release];
+    }
+    else{
         if(index <= [text_ length]){
             res.first = [MarkupText textWithText:[text_ substringToIndex:index]
                                             font:font_
-                                           color:color_];
+                                           color:color_
+                                          marked:marked_];
         }
         if(index < [text_ length]){
             res.second = [MarkupText textWithText:[text_ substringFromIndex:index]
                                              font:font_
-                                            color:color_];
+                                            color:color_
+                                           marked:marked_];
         }
     }
     return res;
@@ -358,17 +380,18 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	id clone = [[[self class]allocWithZone:zone]initWithText:text_
-                                                        font:font_
-                                                       color:color_];
-	return clone;
+	return [[[self class]allocWithZone:zone]initWithText:text_
+                                                    font:font_
+                                                   color:color_
+                                                  marked:marked_];
 }
 
 - (BOOL)isConnectableTo:(id<MarkupElement>)lhs{
     if([lhs isMemberOfClass:[self class]]){
         MarkupText* markupText = (MarkupText*)lhs;
         if([font_ isEqual:markupText.font] &&
-           [color_ isEqual:markupText.color]){
+           [color_ isEqual:markupText.color] &&
+           marked_ == markupText.marked){
             return YES;
         }
     }
@@ -381,7 +404,8 @@
     MarkupText* text = (MarkupText*)rhs;
     return [MarkupText textWithText:[text_ stringByAppendingString:text.text]
                                      font:font_
-                                    color:color_];
+                                    color:color_
+                             marked:marked_];
 }
 
 - (UIFont*)font{
@@ -480,7 +504,7 @@
     return [[[[self class]alloc]initWithPoints:points font:font color:color]autorelease];
 }
 - (id)copyWithZone:(NSZone *)zone{
-    return [[[self class]alloc]initWithPoints:points_ font:font_ color:color_];
+    return [[[self class]allocWithZone:zone]initWithPoints:points_ font:font_ color:color_];
 }
 - (void)dealloc{
     [points_ release];
