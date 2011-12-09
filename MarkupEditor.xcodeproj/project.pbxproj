@@ -22,7 +22,6 @@
 		6332B108132F1F6900A836B4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6332B0E8132F1F6800A836B4 /* Foundation.framework */; };
 		6332B109132F1F6900A836B4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6332B0EA132F1F6800A836B4 /* CoreGraphics.framework */; };
 		6332B111132F1F6900A836B4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6332B10F132F1F6900A836B4 /* InfoPlist.strings */; };
-		6332B128132F1FC900A836B4 /* MarkupDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B123132F1FC900A836B4 /* MarkupDocument.m */; };
 		6332B12A132F1FC900A836B4 /* MarkupElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B125132F1FC900A836B4 /* MarkupElement.m */; };
 		6332B12C132F1FC900A836B4 /* MarkupElementPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B127132F1FC900A836B4 /* MarkupElementPosition.m */; };
 		6332B131132F1FF200A836B4 /* CaretView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B130132F1FF200A836B4 /* CaretView.m */; };
@@ -77,8 +76,6 @@
 		6332B10E132F1F6900A836B4 /* MarkupEditorTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MarkupEditorTests-Info.plist"; sourceTree = "<group>"; };
 		6332B110132F1F6900A836B4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6332B112132F1F6900A836B4 /* MarkupEditorTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MarkupEditorTests-Prefix.pch"; sourceTree = "<group>"; };
-		6332B122132F1FC900A836B4 /* MarkupDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupDocument.h; sourceTree = "<group>"; };
-		6332B123132F1FC900A836B4 /* MarkupDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupDocument.m; sourceTree = "<group>"; };
 		6332B124132F1FC900A836B4 /* MarkupElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElement.h; sourceTree = "<group>"; };
 		6332B125132F1FC900A836B4 /* MarkupElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupElement.m; sourceTree = "<group>"; };
 		6332B126132F1FC900A836B4 /* MarkupElementPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementPosition.h; sourceTree = "<group>"; };
@@ -258,8 +255,6 @@
 		6332B121132F1F9000A836B4 /* MarkupDocument */ = {
 			isa = PBXGroup;
 			children = (
-				6332B122132F1FC900A836B4 /* MarkupDocument.h */,
-				6332B123132F1FC900A836B4 /* MarkupDocument.m */,
 				6332B124132F1FC900A836B4 /* MarkupElement.h */,
 				6332B125132F1FC900A836B4 /* MarkupElement.m */,
 				6332B126132F1FC900A836B4 /* MarkupElementPosition.h */,
@@ -431,7 +426,6 @@
 			files = (
 				6332B0F4132F1F6800A836B4 /* main.m in Sources */,
 				6332B0F7132F1F6900A836B4 /* MarkupEditorAppDelegate.m in Sources */,
-				6332B128132F1FC900A836B4 /* MarkupDocument.m in Sources */,
 				6332B12A132F1FC900A836B4 /* MarkupElement.m in Sources */,
 				6332B12C132F1FC900A836B4 /* MarkupElementPosition.m in Sources */,
 				6332B131132F1FF200A836B4 /* CaretView.m in Sources */,

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MarkupDocument.h"
 #import "CaretView.h"
+#import "MarkupViewCache.h"
+#import "MarkupElementRange.h"
 
 typedef enum{
     InputTextModeQwerty,
@@ -21,7 +22,14 @@ InputTextMode;
 UITextInput
 >
 {
-	MarkupDocument* document_;
+    @private
+	NSMutableArray* elements_;
+    MarkupViewCache* viewCache_;
+    
+	BOOL layouted_;
+	
+	UIFont* defaultFont_;
+	UIColor* defaultColor_;
 
     MarkupElementRange* selectedTextRange_;
     //日本語入力字などで変換途中の文字
@@ -35,7 +43,12 @@ UITextInput
 }
 
 - (UIView*)inputView;
+
 @property (nonatomic, assign)InputTextMode inputTextMode;
+@property(nonatomic, retain) UIFont* defaultFont;
+@property(nonatomic, retain) UIColor* defaultColor;
+@property(nonatomic, readonly) MarkupElementPosition* beginPosition;
+@property(nonatomic, readonly) MarkupElementPosition* endPosition;
 
 - (void)addHandWritingPoints:(NSArray*)array;
 

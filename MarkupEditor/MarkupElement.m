@@ -7,8 +7,8 @@
 //
 
 #import "MarkupElement.h"
-#import "MarkupDocument.h"
 #import "MarkupView.h"
+#import "MarkupViewCache.h"
 
 @implementation MarkupNewLine
 
