@@ -43,6 +43,7 @@
 			break;
 		}
 	}
+    ASSERT1(find, @"lineNumber:%d is out of range", lineNumber);
 	return lineHeight;
 }
 

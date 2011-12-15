@@ -16,7 +16,6 @@
 @synthesize lineTop=lineTop_;
 @synthesize frame=frame_;
 
-
 - (id)initWithMarkupElement:(id<MarkupElement>)markupElement
                  lineNumber:(NSInteger)lineNumber
                       order:(NSInteger)order

@@ -29,6 +29,7 @@
                 valueIndex:(NSInteger)valueIndex;
 + (id)positionWithElementIndex:(NSInteger)elementIndex
                     valueIndex:(NSInteger)valueIndex;
++ (id)positionWithPosition:(MarkupElementPosition*)position;
 
 - (BOOL)isEqualToPosition:(MarkupElementPosition*)rhs;
 - (NSComparisonResult)compareTo:(MarkupElementPosition*)other;

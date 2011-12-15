@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "CACommon.h"
 
-@class MarkupDocument;
-
 @class Pair;
 @class MarkupView;
 @class MarkupViewCache;
@@ -53,7 +51,7 @@
 }
 
 - (id)initWithFont:(UIFont*)font;
-+ (MarkupNewLine*)newLineWithFont:(UIFont*)font;
++ (id)markupNewLineWithFont:(UIFont*)font;
 @property (nonatomic, readonly) UIFont* font;
 
 @end
@@ -75,12 +73,12 @@
              color:(UIColor*)color
             marked:(BOOL)marked;
 
-+ (MarkupText*)textWithText:(NSString*)text
++ (id)textWithText:(NSString*)text
                        font:(UIFont*)font
                       color:(UIColor*)color
                      marked:(BOOL)marked;
 
-+ (MarkupText*)textWithText:(NSString*)text
++ (id)textWithText:(NSString*)text
                        font:(UIFont*)font
                       color:(UIColor*)color;
 

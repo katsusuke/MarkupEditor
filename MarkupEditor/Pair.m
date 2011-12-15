@@ -45,11 +45,11 @@
 }
 
 + (id)pair{
-    return [[[[self class]alloc]init]autorelease];
+    return [[[self alloc]init]autorelease];
 }
 
 + (id)pairWithFirst:(id)first second:(id)second{
-    return [[[[self class]alloc]initWithFirst:first second:second]autorelease];
+    return [[[self alloc]initWithFirst:first second:second]autorelease];
 }
 
 @end

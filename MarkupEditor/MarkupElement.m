@@ -14,27 +14,22 @@
 
 @synthesize font=font_;
 
-- (id)initWithFont:(UIFont*)font;
-{
+- (id)initWithFont:(UIFont*)font;{
 	self = [super init];
-	if(self)
-	{
+	if(self){
 		font_ = [font retain];
 	}
 	return self;
 }
 
-+ (MarkupNewLine*)newLineWithFont:(UIFont*)font{
-    return [[[[self class]alloc]initWithFont:font]autorelease];
++ (id)markupNewLineWithFont:(UIFont*)font{
+    return [[[self alloc]initWithFont:font] autorelease];
 }
-
-- (id)copyWithZone:(NSZone *)zone
-{
+- (id)copyWithZone:(NSZone *)zone{
     return [[[self class]allocWithZone:zone]initWithFont:font_];
 }
 
-- (void)dealloc
-{
+- (void)dealloc{
 	[markupView_ release];
 	[font_ release];
 	[super dealloc];
@@ -54,8 +49,7 @@
 - (void)layoutWithViewCache:(MarkupViewCache*)viewCache
             previousElement:(id<MarkupElement>)previous
               documentWidth:(CGFloat)documentWidth
-                     isLast:(BOOL)isLast;
-{
+                     isLast:(BOOL)isLast{
 	NSInteger lineNumber = 0;
 	NSInteger order = 0;
 	CGFloat lineTop = 0;
@@ -64,7 +58,6 @@
 	if(previous){
 		MarkupView* pl = previous.lastView;
         if([previous isMemberOfClass:[MarkupNewLine class]]){
-            lineNumber = pl.lineNumber + 1;
             order = 0;
             lineViewFrame.origin.x = 0;
             lineViewFrame.origin.y = pl.lineBottom;
@@ -91,37 +84,29 @@
 	[viewCache setLineViewOriginYWithNumber:lineNumber
 							 withLineHeight:lineHeight];
 }
-
-- (MarkupView*)lastView
-{
+- (MarkupView*)lastView{
 	return markupView_;
 }
-
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect{
 	//Do nothing
 #ifdef DEBUG
 	[@"↓" drawAtPoint:markupView_.frame.origin
 			 withFont:font_];
 #endif
 }
-
 - (NSInteger)length{
 	return 1;
 }
 - (NSString*)stringValue{
     return [NSString stringWithString:@"\n"];
 }
-- (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end
-{
+- (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end{
 	if(start == 0 && 1 == end){
 		return [NSString stringWithString:@"\n"];
 	}
 	return [NSString string];
 }
-
-- (Pair*)splitAtIndex:(NSInteger)index
-{
+- (Pair*)splitAtIndex:(NSInteger)index{
     ASSERT(index == 0 || index == 1, @"");
     if(index == 0){
         return [Pair pairWithFirst:nil second:self];
@@ -129,18 +114,13 @@
         return [Pair pairWithFirst:self second:nil];
     }
 }
-
 - (BOOL)isConnectableTo:(id<MarkupElement>)lhs{
     return NO;
 }
-
-- (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs
-{
+- (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs{
     return nil;
 }
-
-- (CGRect)createRectForValueIndex:(NSInteger)valueIndex
-{
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex{
     ASSERT(valueIndex == 0 || valueIndex == 1, @"");
     if(valueIndex == 0){
         return markupView_.frame;
@@ -151,8 +131,6 @@
 
 @end
 
-
-
 @implementation MarkupText
 
 @synthesize text=text_;
@@ -161,8 +139,7 @@
 - (id)initWithText:(NSString*)text
               font:(UIFont*)font
              color:(UIColor*)color
-            marked:(BOOL)marked
-{
+            marked:(BOOL)marked{
 	self = [super init];
 	if (self != nil) {
 		text_ = [text copy];
@@ -178,15 +155,13 @@
 + (MarkupText*)textWithText:(NSString*)text
                        font:(UIFont*)font
                       color:(UIColor*)color
-                     marked:(BOOL)marked
-{
+                     marked:(BOOL)marked{
 	return [[[MarkupText alloc]initWithText:text
                                        font:font
                                       color:color
                                      marked:marked]autorelease];
 }
-+ (MarkupText*)textWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color
-{
++ (MarkupText*)textWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color{
     return [MarkupText textWithText:text font:font color:color marked:NO];
 }
 
@@ -217,8 +192,7 @@
 - (void)layoutWithViewCache:(MarkupViewCache*)viewCache
             previousElement:(id<MarkupElement>)previous
               documentWidth:(CGFloat)documentWidth
-                     isLast:(BOOL)isLast;
-{
+                     isLast:(BOOL)isLast{
 	NSInteger lineNumber = 0;
 	NSInteger order = 0;
 	CGFloat lineTop = 0;
@@ -227,7 +201,6 @@
 	CGFloat width = documentWidth;
 	if(previous){
 		MarkupView* pl = previous.lastView;
-		lineNumber = pl.lineNumber;
 		if([previous isMemberOfClass:[MarkupNewLine class]]){//改行
 			lineViewFrame.origin.x = 0;
 			lineViewFrame.origin.y = pl.lineBottom;
@@ -310,8 +283,7 @@
 	return [markupViews_ lastObject];
 }
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect{
 	[color_ set];
 	for(NSInteger i = 0; i < [textList_ count]; ++i)
 	{
@@ -340,8 +312,7 @@
 - (NSString*)stringValue{
     return text_;
 }
-- (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end
-{
+- (NSString*)stringFrom:(NSInteger)start to:(NSInteger)end{
     start = MAX(start, 0);
     end = MIN(end, [text_ length]);
     NSInteger length = end - start;
@@ -353,8 +324,7 @@
     }
 }
 
-- (Pair*)splitAtIndex:(NSInteger)index
-{
+- (Pair*)splitAtIndex:(NSInteger)index{
     Pair* res = [Pair pair];
     if(index <= 0){
         MarkupText* cp = [self copy];
@@ -378,8 +348,7 @@
     return res;
 }
 
-- (id)copyWithZone:(NSZone *)zone
-{
+- (id)copyWithZone:(NSZone *)zone{
 	return [[[self class]allocWithZone:zone]initWithText:text_
                                                     font:font_
                                                    color:color_
@@ -398,8 +367,7 @@
     return NO;
 }
 
-- (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs
-{
+- (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs{
     if(![self isConnectableTo:rhs])return nil;
     MarkupText* text = (MarkupText*)rhs;
     return [MarkupText textWithText:[text_ stringByAppendingString:text.text]
@@ -415,8 +383,7 @@
     return color_;
 }
 
-- (CGRect)createRectForValueIndex:(NSInteger)valueIndex
-{
+- (CGRect)createRectForValueIndex:(NSInteger)valueIndex{
     NSInteger i = 0;
     NSInteger index = 0;
     for(NSString* text in textList_)
@@ -483,8 +450,7 @@
 
 - (id)initWithPoints:(NSArray*)points
                 font:(UIFont *)font
-               color:(UIColor *)color
-{
+               color:(UIColor *)color{
     self = [super init];
     if(self)
     {
@@ -499,9 +465,8 @@
 
 + (id)charWithPoints:(NSArray*)points
                 font:(UIFont*)font
-               color:(UIColor *)color
-{
-    return [[[[self class]alloc]initWithPoints:points font:font color:color]autorelease];
+               color:(UIColor *)color{
+    return [[[self alloc]initWithPoints:points font:font color:color]autorelease];
 }
 - (id)copyWithZone:(NSZone *)zone{
     return [[[self class]allocWithZone:zone]initWithPoints:points_ font:font_ color:color_];
@@ -517,8 +482,7 @@
 - (void)layoutWithViewCache:(MarkupViewCache *)viewCache
             previousElement:(id<MarkupElement>)previous
               documentWidth:(CGFloat)documentWidth
-                     isLast:(BOOL)isLast
-{
+                     isLast:(BOOL)isLast{
     [markupView_ release];
     markupView_ = nil;
     NSInteger lineNumber = 0;
@@ -564,7 +528,6 @@
         [viewCache setLineViewOriginYWithNumber:lineNumber
                                  withLineHeight:lineHeight];
     }
-    
 }
 - (MarkupView*)lastView{
     return markupView_;
@@ -592,8 +555,7 @@
     }
 }
 
-- (Pair*)splitAtIndex:(NSInteger)index
-{
+- (Pair*)splitAtIndex:(NSInteger)index{
     ASSERT(index == 0 || index == 1, @"");
     if(index == 0){
         return [Pair pairWithFirst:nil second:self];

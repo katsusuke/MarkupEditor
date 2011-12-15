@@ -12,16 +12,16 @@
 @implementation MarkupElementRange
 
 - (UITextPosition*)start{
-    return start_;
+    return [MarkupElementPosition positionWithPosition:start_];
 }
 - (UITextPosition*)end{
-    return end_;
+    return [MarkupElementPosition positionWithPosition:end_];
 }
 - (MarkupElementPosition*)startPosition{
-    return start_;
+    return [MarkupElementPosition positionWithPosition:start_];
 }
 - (MarkupElementPosition*)endPosition{
-    return end_;
+    return [MarkupElementPosition positionWithPosition:end_];
 }
 
 - (id)initWithStart:(MarkupElementPosition *)start end:(MarkupElementPosition *)end
@@ -37,7 +37,7 @@
 + (MarkupElementRange*)rangeWithStart:(MarkupElementPosition *)start
                                   end:(MarkupElementPosition *)end
 {
-    return [[[[self class]alloc]initWithStart:start end:end]autorelease];
+    return [[[self alloc]initWithStart:start end:end]autorelease];
 }
 
 + (MarkupElementRange*)rangeWithStartElement:(NSInteger)startElement
@@ -45,13 +45,12 @@
                                   endElement:(NSInteger)endElement
                                endValueIndex:(NSInteger)endValueIndex;
 {
-    return [[self class]
-            rangeWithStart:[MarkupElementPosition
-                            positionWithElementIndex:startElement
-                            valueIndex:startValueIndex]
-            end:[MarkupElementPosition
-                 positionWithElementIndex:endElement
-                 valueIndex:endValueIndex]];
+    return [self rangeWithStart:[MarkupElementPosition
+                                 positionWithElementIndex:startElement
+                                 valueIndex:startValueIndex]
+                            end:[MarkupElementPosition
+                                 positionWithElementIndex:endElement
+                                 valueIndex:endValueIndex]];
 }
 
 - (id)copyWithZone:(NSZone *)zone

@@ -14,6 +14,12 @@
 #ifdef DEBUG
 static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 {
+    if(pos == nil){
+        LOG(@"pos is null!!!!!");
+    }
+    if(![pos isMemberOfClass:[MarkupElementPosition class]]){
+        LOG(@"pos is not IndexedPosition. pos:%@", pos);
+    }
     return (MarkupElementPosition*)pos;
 }
 #else
@@ -134,14 +140,12 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                          font:[UIFont systemFontOfSize:60]
                         color:[UIColor blackColor]]];
 	[elements_ addObject:
-	 [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:30]]];
-	[elements_ addObject:
+	 [MarkupNewLine markupNewLineWithFont:[UIFont systemFontOfSize:30]]];
+    [elements_ addObject:
 	 [MarkupText textWithText:@"xyzあいうえおかきくけこ"
                          font:[UIFont systemFontOfSize:40]
                         color:[UIColor redColor]]];
-	[elements_ addObject:
-     [MarkupNewLine newLineWithFont:[UIFont systemFontOfSize:10]]];
-	
+	[elements_ addObject:[MarkupNewLine markupNewLineWithFont:[UIFont systemFontOfSize:10]]];
 	[elements_ addObject:
 	 [MarkupText textWithText:@"abcd"
                          font:[UIFont systemFontOfSize:20]
@@ -158,7 +162,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     //elements_ count => 10
 }
 
-- (id)preInit_{
+- (void)preInit_{
     elements_ = [[NSMutableArray alloc]init];
     defaultFont_ = [[UIFont systemFontOfSize:20]retain];
     defaultColor_ = [[UIColor blackColor]retain];
@@ -170,14 +174,13 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                                            end:self.endPosition];
     markedTextRange_ = nil;
     cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
-    return self;
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if(self){
-        self = [self preInit_];
+        [self preInit_];
     }
     return self;
 }
@@ -186,7 +189,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     
     self = [super initWithFrame:frame];
     if (self) {
-        self = [self preInit_];
+        [self preInit_];
     }
     return self;
 }
@@ -277,7 +280,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 
 - (BOOL)hasText
 {
-    return YES;
+    return [elements_ count] != 0;
 }
 - (void)insertText:(NSString *)text
 {
@@ -405,8 +408,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 									color:(UIColor*)color
                                    marked:(BOOL)marked
 {
-	NSMutableArray* res
-	= [[NSMutableArray alloc]init];
+	NSMutableArray* res = [NSMutableArray array];
 	
     NSRange textRange = NSMakeRange(0, [text length]);
     while(textRange.length > 0) {
@@ -568,10 +570,11 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     }
 }
 
-- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedRange
+- (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedNSRange
 {
-    T(@"markedText:%@ selectedRange:(location:%d length:%d)",
-      markedText, selectedRange.location, selectedRange.length);
+    T(@"markedText:%@ selectedNSRange:(location:%d length:%d)",
+      markedText, selectedNSRange.location, selectedNSRange.length);
+    LOG(@"markedTextRange_:%@", markedTextRange_);
     
     if (markedTextRange_){
         if (!markedText){ 
@@ -584,20 +587,48 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                           toPosition:[self positionFromPosition:markedTextRange_.startPosition
                                                                                offset:markedText.length]]];
     } else{
-		// There currently isn't a marked text range, but there is a selected range,
-		// so replace text storage at selected range and update markedTextRange.
-        [self replaceRange:selectedTextRange_ withText:markedText marked:YES];
-        [self setMarkedTextRange:[self textRangeFromPosition:selectedTextRange_.startPosition
-                                                  toPosition:[self positionFromPosition:selectedTextRange_.startPosition
-                                                                                 offset:markedText.length]]];
+        if([markedText length] != 0){
+            // There currently isn't a marked text range, but there is a selected range,
+            // so replace text storage at selected range and update markedTextRange.
+            [self replaceRange:selectedTextRange_ withText:markedText marked:YES];
+            [self setMarkedTextRange:[self textRangeFromPosition:selectedTextRange_.startPosition
+                                                      toPosition:[self positionFromPosition:selectedTextRange_.startPosition
+                                                                                     offset:markedText.length]]];
+        }else{
+            // There currently isn't marked or selected text ranges, so just insert
+            // given text into storage and update markedTextRange.
+            
+        }
     }    
 	// Updated selected text range and underlying SimpleCoreTextView
-    [self setSelectedTextRange:[self textRangeFromPosition:markedTextRange_.endPosition
-                                                toPosition:markedTextRange_.endPosition]];	
+    if(markedTextRange_){
+        [self setSelectedTextRange:[self textRangeFromPosition:markedTextRange_.endPosition
+                                                    toPosition:markedTextRange_.endPosition]];	
+    }
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
 }
 
+- (MarkupElementPosition*)positionFromIndex:(NSInteger)index
+{
+    for(NSInteger i = 0; i < [elements_ count]; ++i){
+        id<MarkupElement> elm = [elements_ objectAtIndex:i];
+        if(index < [elm length]){
+            return [MarkupElementPosition positionWithElementIndex:index valueIndex:index];
+        }else{
+            index -= [elm length];
+        }
+    }
+    return [self endPosition];
+}
+- (NSInteger)indexWithPosition:(MarkupElementPosition*)pos{
+    NSInteger index = 0;
+    for(NSInteger i = 0; i < pos.splitNextElementIndex - 1; ++i){
+        id<MarkupElement> elm = [elements_ objectAtIndex:i];
+        index += [elm length];
+    }
+    return index + pos.valueIndex;
+}
 - (void)unmarkText
 {
     if(!markedTextRange_)return;
@@ -614,6 +645,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
         [unmarkedElements addObject:elm];
     }
     [self replaceRange:markedTextRange_ withElements:unmarkedElements];
+    NSInteger index = [self indexWithPosition:markedTextRange_.endPosition];
+    MarkupElementPosition* pos = [self positionFromIndex:index];
+    [selectedTextRange_ release];
+    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:pos end:pos];
     
     [self setMarkedTextRange:nil];
     [self setNeedsDisplay];
@@ -623,8 +658,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 - (UITextRange*)textRangeFromPosition:(UITextPosition *)fromPosition
                            toPosition:(UITextPosition *)toPosition
 {
-    return [[[MarkupElementRange alloc]initWithStart:POS_CAST(fromPosition)
-                                                 end:POS_CAST(toPosition)]autorelease];
+    return [MarkupElementRange rangeWithStart:POS_CAST(fromPosition)
+                                          end:POS_CAST(toPosition)];
 }
 
 - (UITextPosition*)positionFromPosition:(UITextPosition *)textPosition offset:(NSInteger)offset
@@ -796,10 +831,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     switch (direction) {
         case UITextLayoutDirectionUp:
         case UITextLayoutDirectionLeft:
-            return range.start;
+            return [[range.start copy]autorelease];
         case UITextLayoutDirectionRight:
         case UITextLayoutDirectionDown:
-            return range.end;
+            return [[range.end copy]autorelease];
     }
 }
 
@@ -843,7 +878,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 - (CGRect)caretRectForPosition:(MarkupElementPosition*)position width:(CGFloat)width;
 {
     [self layout];
-    if(position.elementIndex == [elements_ count]){
+    if(position.elementIndex >= [elements_ count]){
         id<MarkupElement> last = [elements_ lastObject];
         return [last createRectForValueIndex:[last length]];
     }else{

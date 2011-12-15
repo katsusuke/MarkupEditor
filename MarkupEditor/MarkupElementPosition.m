@@ -33,8 +33,13 @@
 + (id)positionWithElementIndex:(NSInteger)elementIndex
                     valueIndex:(NSInteger)valueIndex
 {
-    return [[[[self class]alloc]initWithElementIndex:elementIndex
+    return [[[self alloc]initWithElementIndex:elementIndex
                                           valueIndex:valueIndex]autorelease];
+}
++ (id)positionWithPosition:(MarkupElementPosition*)position
+{
+    return [self positionWithElementIndex:position.elementIndex
+                               valueIndex:position.valueIndex];
 }
 
 - (id)copyWithZone:(NSZone *)zone
