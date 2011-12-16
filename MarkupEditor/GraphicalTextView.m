@@ -169,9 +169,9 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     
     [self setTestData];
     
-    selectedTextRange_
-    = [[MarkupElementRange alloc]initWithStart:self.endPosition
-                                           end:self.endPosition];
+    [self setSelectedTextRange:
+     [[MarkupElementRange alloc]initWithStart:self.endPosition
+                                          end:self.endPosition]];
     markedTextRange_ = nil;
     cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
 }
@@ -287,10 +287,9 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     T(@"text:%@", text);
     [self replaceRange:selectedTextRange_ withText:text];
     PO(selectedTextRange_);
-    [selectedTextRange_ release];
-    selectedTextRange_
-    = [[MarkupElementRange alloc]initWithStart:POS_CAST(self.endOfDocument)
-                                           end:POS_CAST(self.endOfDocument)];
+    [self setSelectedTextRange:
+     [[MarkupElementRange alloc]initWithStart:self.endPosition
+                                          end:self.endPosition]];
     PO(selectedTextRange_);
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
@@ -358,10 +357,9 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     [self deleteWithRange:
      [MarkupElementRange rangeWithStart:start
                                     end:selectedTextRange_.endPosition]];
-    [selectedTextRange_ release];
-    selectedTextRange_
-    = [[MarkupElementRange alloc]initWithStart:self.beginPosition
-                                           end:self.endPosition];
+    [self setSelectedTextRange:
+     [[MarkupElementRange alloc]initWithStart:self.beginPosition
+                                          end:self.endPosition]];
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
 }
@@ -554,19 +552,27 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
        [MarkupHandWritingChar charWithPoints:points font:font color:color]];
     [self replaceRange:selectedTextRange_ withElements:elements];
     
-    
-    [selectedTextRange_ release];
-    selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:self.endPosition
-                                                              end:self.endPosition];
+    [self setSelectedTextRange:
+     [[MarkupElementRange alloc]initWithStart:self.endPosition
+                                          end:self.endPosition]];
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
 }
 
 - (void)setMarkedTextRange:(UITextRange*)range
 {
+    T(@"range:%@", range);
     if(markedTextRange_ != range){
         [markedTextRange_ release];
         markedTextRange_ = [(MarkupElementRange*)range retain];
+    }
+}
+- (void)setSelectedTextRange:(UITextRange *)range
+{
+    T(@"range:%@", range);
+    if(selectedTextRange_ != range){
+        [selectedTextRange_ release];
+        selectedTextRange_ = [(MarkupElementRange*)range retain];
     }
 }
 
@@ -614,7 +620,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     for(NSInteger i = 0; i < [elements_ count]; ++i){
         id<MarkupElement> elm = [elements_ objectAtIndex:i];
         if(index < [elm length]){
-            return [MarkupElementPosition positionWithElementIndex:index valueIndex:index];
+            return [MarkupElementPosition positionWithElementIndex:i valueIndex:[elm length]];
         }else{
             index -= [elm length];
         }
