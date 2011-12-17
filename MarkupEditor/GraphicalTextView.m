@@ -29,6 +29,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 @interface GraphicalTextView()
 
 - (void)syncCaretViewFrame;
+- (NSInteger)indexFromPosition:(MarkupElementPosition*)pos;
+- (MarkupElementPosition*)positionFromIndex:(NSInteger)index;
 
 @end
 
@@ -114,7 +116,6 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
         }
     }
 }
-
 - (void)setTestData
 {
     [defaultFont_ release];
@@ -158,6 +159,16 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 	 [MarkupText textWithText:@"hij"
                          font:[UIFont systemFontOfSize:20]
                         color:[UIColor greenColor]]];
+    
+    MarkupElementPosition* ep = self.endPosition;
+    NSInteger i = [self indexFromPosition:ep];
+    MarkupElementPosition* p2 = [self positionFromIndex:i];
+    LOG(@"%d", [ep isEqualToPosition:p2]);
+    
+    MarkupElementPosition* p3 = [MarkupElementPosition positionWithElementIndex:9
+                                                                     valueIndex:2];
+    NSInteger i2 = [self indexFromPosition:p3];
+    ASSERT(i2 == 47, @"indexFromPosition");
     
     //elements_ count => 10
 }
@@ -351,15 +362,24 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 - (void)deleteBackward
 {
     TV();
-    MarkupElementPosition* start =
-    POS_CAST([self positionFromPosition:selectedTextRange_.startPosition
-                                 offset:-1]);
-    [self deleteWithRange:
-     [MarkupElementRange rangeWithStart:start
-                                    end:selectedTextRange_.endPosition]];
+    NSInteger index = [self indexFromPosition:selectedTextRange_.startPosition];
+    if(selectedTextRange_.isEmpty){
+        if(index == 0)return;
+        MarkupElementPosition* start =
+        POS_CAST([self positionFromPosition:selectedTextRange_.startPosition
+                                     offset:-1]);
+        index--;
+        [self deleteWithRange:
+         [MarkupElementRange rangeWithStart:start
+                                        end:selectedTextRange_.endPosition]];
+        
+    }else{
+        [self deleteWithRange:selectedTextRange_];
+    }
+    MarkupElementPosition* pos = [self positionFromIndex:index];
     [self setSelectedTextRange:
-     [[MarkupElementRange alloc]initWithStart:self.beginPosition
-                                          end:self.endPosition]];
+     [MarkupElementRange rangeWithStart:pos
+                                    end:pos]];
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
 }
@@ -573,6 +593,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     if(selectedTextRange_ != range){
         [selectedTextRange_ release];
         selectedTextRange_ = [(MarkupElementRange*)range retain];
+        [self syncCaretViewFrame];
     }
 }
 
@@ -620,16 +641,16 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     for(NSInteger i = 0; i < [elements_ count]; ++i){
         id<MarkupElement> elm = [elements_ objectAtIndex:i];
         if(index < [elm length]){
-            return [MarkupElementPosition positionWithElementIndex:i valueIndex:[elm length]];
+            return [MarkupElementPosition positionWithElementIndex:i valueIndex:index];
         }else{
             index -= [elm length];
         }
     }
     return [self endPosition];
 }
-- (NSInteger)indexWithPosition:(MarkupElementPosition*)pos{
+- (NSInteger)indexFromPosition:(MarkupElementPosition*)pos{
     NSInteger index = 0;
-    for(NSInteger i = 0; i < pos.splitNextElementIndex - 1; ++i){
+    for(NSInteger i = 0; i < pos.elementIndex; ++i){
         id<MarkupElement> elm = [elements_ objectAtIndex:i];
         index += [elm length];
     }
@@ -650,8 +671,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
         }
         [unmarkedElements addObject:elm];
     }
+    NSInteger index = [self indexFromPosition:markedTextRange_.endPosition];
     [self replaceRange:markedTextRange_ withElements:unmarkedElements];
-    NSInteger index = [self indexWithPosition:markedTextRange_.endPosition];
     MarkupElementPosition* pos = [self positionFromIndex:index];
     [selectedTextRange_ release];
     selectedTextRange_ = [[MarkupElementRange alloc]initWithStart:pos end:pos];
@@ -775,9 +796,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                              inDirection:(UITextLayoutDirection)direction
                                   offset:(NSInteger)offset
 {
-    PO(position);
-    PO(direction);
-    P(@"%d", offset);
+    T(@"position:%@ direction:%d offset:%d", position, direction, offset);
     NSInteger toOffset = offset;
     switch (direction) {
         case UITextLayoutDirectionLeft:
