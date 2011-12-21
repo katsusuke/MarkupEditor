@@ -10,10 +10,18 @@
 #import "GraphicalTextView.h"
 #import "HandWritingView.h"
 
-@interface RootViewController : UIViewController {
+#import "SizePickerViewController.h"
+#import "ColorPickupViewController.h"
+
+@interface RootViewController : UIViewController<UIPopoverControllerDelegate> {
     IBOutlet GraphicalTextView* textView0;
     IBOutlet GraphicalTextView* textView1;
     IBOutlet GraphicalTextView* textView2;
+    IBOutlet UISegmentedControl* keyboardSelector;
+    IBOutlet UISegmentedControl* styleSelector;
+    UIPopoverController *popover_;
+    SizePickerViewController* sizePickerViewController_;
+    ColorPickupViewController* colorPickerViewController_;
 }
 
 - (IBAction)buttonBushed:(id)sender;

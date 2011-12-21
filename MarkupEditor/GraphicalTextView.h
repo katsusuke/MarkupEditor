@@ -30,6 +30,9 @@ UITextInput
 	
 	UIFont* defaultFont_;
 	UIColor* defaultColor_;
+    
+    UIFont* specificFont_;
+    UIColor* specificColor_;
 
     MarkupElementRange* selectedTextRange_;
     //日本語入力字などで変換途中の文字
@@ -49,6 +52,9 @@ UITextInput
 @property(nonatomic, retain) UIColor* defaultColor;
 @property(nonatomic, readonly) MarkupElementPosition* beginPosition;
 @property(nonatomic, readonly) MarkupElementPosition* endPosition;
+
+@property(nonatomic, retain) UIFont* specificFont;
+@property(nonatomic, retain) UIColor* specificColor;
 
 - (void)addHandWritingPoints:(NSArray*)array;
 

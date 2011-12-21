@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		63034DBF1338D39200A52278 /* HandWritingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 63034DBE1338D39200A52278 /* HandWritingView.m */; };
+		6309FCD514A0237F00AF414C /* ColorPicker.png in Resources */ = {isa = PBXBuildFile; fileRef = 6309FCD414A0237F00AF414C /* ColorPicker.png */; };
 		630A73B61339963900672BFE /* CACommon.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A73B51339963900672BFE /* CACommon.m */; };
 		630A73B91339AAA700672BFE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630A73B81339AAA700672BFE /* QuartzCore.framework */; };
 		630A73BC1339E94B00672BFE /* HandWritingInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A73BB1339E94B00672BFE /* HandWritingInputView.m */; };
@@ -38,6 +39,12 @@
 		6332B157132F489400A836B4 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6332B155132F489400A836B4 /* MainWindow-iPad.xib */; };
 		6332B17B132F9DD500A836B4 /* MarkupElementRange.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B17A132F9DD300A836B4 /* MarkupElementRange.m */; };
 		6332B181132F9E9F00A836B4 /* MarkupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B180132F9E9B00A836B4 /* MarkupView.m */; };
+		6343D17314A207EF00F2FEC7 /* loupe.png in Resources */ = {isa = PBXBuildFile; fileRef = 6343D17214A207EF00F2FEC7 /* loupe.png */; };
+		63877160149F0E8700426BDA /* ColorPickupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387715E149F0E8700426BDA /* ColorPickupViewController.m */; };
+		63877161149F0E8700426BDA /* ColorPickupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6387715F149F0E8700426BDA /* ColorPickupViewController.xib */; };
+		6390575814A08F9E00E0EFDA /* SizePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6390575614A08F9E00E0EFDA /* SizePickerViewController.m */; };
+		6390575914A08F9E00E0EFDA /* SizePickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6390575714A08F9E00E0EFDA /* SizePickerViewController.xib */; };
+		6390575C14A0AA1D00E0EFDA /* ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 6390575B14A0AA1D00E0EFDA /* ring.png */; };
 		63A619D01330589100976346 /* MarkupViewCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A619CF1330589000976346 /* MarkupViewCache.m */; };
 		63C1658F1330BC8D007625AB /* MarkupElementPositionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63C1658E1330BC8D007625AB /* MarkupElementPositionTest.m */; };
 		63F350F51331C4FC00410856 /* MarkupDocumentTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F350F41331C4FC00410856 /* MarkupDocumentTest.m */; };
@@ -57,6 +64,7 @@
 /* Begin PBXFileReference section */
 		63034DBD1338D39200A52278 /* HandWritingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HandWritingView.h; sourceTree = "<group>"; };
 		63034DBE1338D39200A52278 /* HandWritingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HandWritingView.m; sourceTree = "<group>"; };
+		6309FCD414A0237F00AF414C /* ColorPicker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ColorPicker.png; sourceTree = "<group>"; };
 		630A73B41339963900672BFE /* CACommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CACommon.h; sourceTree = "<group>"; };
 		630A73B51339963900672BFE /* CACommon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CACommon.m; sourceTree = "<group>"; };
 		630A73B81339AAA700672BFE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -108,6 +116,14 @@
 		6332B17F132F9E9A00A836B4 /* MarkupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupView.h; sourceTree = "<group>"; };
 		6332B180132F9E9B00A836B4 /* MarkupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupView.m; sourceTree = "<group>"; };
 		633DC67E133B492D005D2FD9 /* Const.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Const.h; sourceTree = "<group>"; };
+		6343D17214A207EF00F2FEC7 /* loupe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loupe.png; sourceTree = "<group>"; };
+		6387715D149F0E8700426BDA /* ColorPickupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickupViewController.h; sourceTree = "<group>"; };
+		6387715E149F0E8700426BDA /* ColorPickupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickupViewController.m; sourceTree = "<group>"; };
+		6387715F149F0E8700426BDA /* ColorPickupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorPickupViewController.xib; sourceTree = "<group>"; };
+		6390575514A08F9E00E0EFDA /* SizePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePickerViewController.h; sourceTree = "<group>"; };
+		6390575614A08F9E00E0EFDA /* SizePickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SizePickerViewController.m; sourceTree = "<group>"; };
+		6390575714A08F9E00E0EFDA /* SizePickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SizePickerViewController.xib; sourceTree = "<group>"; };
+		6390575B14A0AA1D00E0EFDA /* ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ring.png; sourceTree = "<group>"; };
 		63A619CE1330589000976346 /* MarkupViewCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupViewCache.h; sourceTree = "<group>"; };
 		63A619CF1330589000976346 /* MarkupViewCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkupViewCache.m; sourceTree = "<group>"; };
 		63C1658D1330BC8D007625AB /* MarkupElementPositionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupElementPositionTest.h; sourceTree = "<group>"; };
@@ -194,10 +210,13 @@
 		6332B0ED132F1F6800A836B4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6309FCD414A0237F00AF414C /* ColorPicker.png */,
+				6343D17214A207EF00F2FEC7 /* loupe.png */,
 				6332B0EE132F1F6800A836B4 /* MarkupEditor-Info.plist */,
 				6332B0EF132F1F6800A836B4 /* InfoPlist.strings */,
 				6332B0F2132F1F6800A836B4 /* MarkupEditor-Prefix.pch */,
 				6332B0F3132F1F6800A836B4 /* main.m */,
+				6390575B14A0AA1D00E0EFDA /* ring.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -287,6 +306,12 @@
 		6332B14B132F20CF00A836B4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				6387715D149F0E8700426BDA /* ColorPickupViewController.h */,
+				6387715E149F0E8700426BDA /* ColorPickupViewController.m */,
+				6387715F149F0E8700426BDA /* ColorPickupViewController.xib */,
+				6390575514A08F9E00E0EFDA /* SizePickerViewController.h */,
+				6390575614A08F9E00E0EFDA /* SizePickerViewController.m */,
+				6390575714A08F9E00E0EFDA /* SizePickerViewController.xib */,
 				6332B14C132F21F800A836B4 /* RootViewController.h */,
 				6332B14D132F21F800A836B4 /* RootViewController.m */,
 			);
@@ -390,6 +415,11 @@
 				6332B0FA132F1F6900A836B4 /* MainWindow.xib in Resources */,
 				6332B150132F21F800A836B4 /* RootViewController-iPad.xib in Resources */,
 				6332B157132F489400A836B4 /* MainWindow-iPad.xib in Resources */,
+				63877161149F0E8700426BDA /* ColorPickupViewController.xib in Resources */,
+				6309FCD514A0237F00AF414C /* ColorPicker.png in Resources */,
+				6390575914A08F9E00E0EFDA /* SizePickerViewController.xib in Resources */,
+				6390575C14A0AA1D00E0EFDA /* ring.png in Resources */,
+				6343D17314A207EF00F2FEC7 /* loupe.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +474,8 @@
 				63034DBF1338D39200A52278 /* HandWritingView.m in Sources */,
 				630A73B61339963900672BFE /* CACommon.m in Sources */,
 				630A73BC1339E94B00672BFE /* HandWritingInputView.m in Sources */,
+				63877160149F0E8700426BDA /* ColorPickupViewController.m in Sources */,
+				6390575814A08F9E00E0EFDA /* SizePickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

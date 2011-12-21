@@ -7,7 +7,8 @@
 //
 
 #import "RootViewController.h"
-
+#import "ColorPickupViewController.h"
+#import "SizePickerViewController.h"
 
 @implementation RootViewController
 
@@ -26,6 +27,8 @@
     [textView0 release];
     [textView1 release];
     [textView2 release];
+    [styleSelector release];
+    [keyboardSelector release];
     [super dealloc];
 }
 
@@ -43,12 +46,41 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    colorPickerViewController_
+    = [[ColorPickupViewController alloc]initWithNibName:@"ColorPickupViewController"
+                                                 bundle:nil];
+    colorPickerViewController_.contentSizeForViewInPopover
+    = CGSizeMake(270, 270);
     
     
+    const NSString* const sizes[] = {
+        @"8",
+        @"10",
+        @"12",
+        @"14",
+        @"16",
+        @"20",
+        @"24",
+        @"32",
+        @"40",
+    };
+    NSArray* sizeArray = [NSArray arrayWithObjects:sizes
+                                             count:sizeof(sizes) / sizeof(sizes[0])];
+    sizePickerViewController_
+    = [[SizePickerViewController alloc]initWithNibName:@"SizePickerViewController"
+                                                bundle:nil];
+    sizePickerViewController_.contentSizeForViewInPopover = CGSizeMake(216, 216);
+    sizePickerViewController_.sizes = sizeArray;
+    [sizePickerViewController_ reloadAllComponents];
+    [sizePickerViewController_ selectRow:2];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [sizePickerViewController_ release];
+    [colorPickerViewController_ release];
+    sizePickerViewController_ = nil;
+    colorPickerViewController_ = nil;
 }
 
 - (void)viewDidUnload
@@ -74,31 +106,93 @@
 - (IBAction)buttonBushed:(id)sender
 {
     UISegmentedControl* sc = sender;
-    switch (sc.selectedSegmentIndex) {
-        case 0://QWERTY
-            textView0.inputTextMode = InputTextModeQwerty;
-            textView1.inputTextMode = InputTextModeQwerty;
-            textView2.inputTextMode = InputTextModeQwerty;
-            break;
-        case 1://HandWriteView
-            textView0.inputTextMode = InputTextModeHandWriting;
-            textView1.inputTextMode = InputTextModeHandWriting;
-            textView2.inputTextMode = InputTextModeHandWriting;
-            break;
+    if(sender == keyboardSelector){
+        switch (sc.selectedSegmentIndex) {
+            case 0://QWERTY
+                textView0.inputTextMode = InputTextModeQwerty;
+                textView1.inputTextMode = InputTextModeQwerty;
+                textView2.inputTextMode = InputTextModeQwerty;
+                break;
+            case 1://HandWriteView
+                textView0.inputTextMode = InputTextModeHandWriting;
+                textView1.inputTextMode = InputTextModeHandWriting;
+                textView2.inputTextMode = InputTextModeHandWriting;
+                break;
+        }
+        if([textView0 isFirstResponder]){
+            [textView0 resignFirstResponder];
+            [textView0 becomeFirstResponder];
+        }
+        if([textView1 isFirstResponder]){
+            [textView1 resignFirstResponder];
+            [textView1 becomeFirstResponder];
+        }
+        if([textView2 isFirstResponder]){
+            [textView2 resignFirstResponder];
+            [textView2 becomeFirstResponder];
+        }
     }
-    if([textView0 isFirstResponder]){
-        [textView0 resignFirstResponder];
-        [textView0 becomeFirstResponder];
-    }
-    if([textView1 isFirstResponder]){
-        [textView1 resignFirstResponder];
-        [textView1 becomeFirstResponder];
-    }
-    if([textView2 isFirstResponder]){
-        [textView2 resignFirstResponder];
-        [textView2 becomeFirstResponder];
+    else if(sender == styleSelector){
+        switch (sc.selectedSegmentIndex) {
+            case 0:{
+                [popover_ release];
+                popover_ = 
+                [[UIPopoverController alloc] 
+                 initWithContentViewController:colorPickerViewController_];
+                popover_.delegate = self;
+                CGRect rc = styleSelector.frame;
+                rc.size.width /= styleSelector.numberOfSegments;
+                
+                [popover_ presentPopoverFromRect:rc
+                                          inView:styleSelector
+                        permittedArrowDirections:UIPopoverArrowDirectionUp
+                                        animated:YES];
+                break;
+            }
+            case 1:{
+                [popover_ release];
+                popover_ =
+                [[UIPopoverController alloc]
+                 initWithContentViewController:sizePickerViewController_];
+                popover_.delegate = self;
+                CGRect rc = styleSelector.frame;
+                rc.size.width /= styleSelector.numberOfSegments;
+                rc.origin.x += rc.size.width;
+                [popover_ presentPopoverFromRect:rc
+                                          inView:styleSelector
+                        permittedArrowDirections:UIPopoverArrowDirectionUp
+                                        animated:YES];
+                break;
+            }
+        }
     }
     
+}
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    if(popover_.contentViewController == sizePickerViewController_){
+        if([textView0 isFirstResponder]){
+            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
+        }
+        if([textView1 isFirstResponder]){
+            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
+        }
+        if([textView2 isFirstResponder]){
+            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
+        }
+    }
+    else if(popover_.contentViewController == colorPickerViewController_){
+        if([textView0 isFirstResponder]){
+            textView0.specificColor = colorPickerViewController_.color;
+        }
+        if([textView1 isFirstResponder]){
+            textView1.specificColor = colorPickerViewController_.color;
+        }
+        if([textView2 isFirstResponder]){
+            textView2.specificColor = colorPickerViewController_.color;
+        }
+        
+    }
 }
 
 @end

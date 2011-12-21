@@ -44,6 +44,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 @synthesize inputTextMode=inputTextMode_;
 @synthesize defaultFont=defaultFont_;
 @synthesize defaultColor=defaultColor_;
+@synthesize specificFont=specificFont_;
+@synthesize specificColor=specificColor_;
 
 + (NSArray*)connectMarkupElements:(NSArray *)lhs andOthers:(NSArray *)rhs
 {
@@ -159,7 +161,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 	 [MarkupText textWithText:@"hij"
                          font:[UIFont systemFontOfSize:20]
                         color:[UIColor greenColor]]];
-    
+    /*
     MarkupElementPosition* ep = self.endPosition;
     NSInteger i = [self indexFromPosition:ep];
     MarkupElementPosition* p2 = [self positionFromIndex:i];
@@ -169,7 +171,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                                                                      valueIndex:2];
     NSInteger i2 = [self indexFromPosition:p3];
     ASSERT(i2 == 47, @"indexFromPosition");
-    
+    */
     //elements_ count => 10
 }
 
@@ -517,13 +519,6 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     MarkupElementPosition* start = range.startPosition;
     MarkupElementPosition* end = range.endPosition;
     
-    UIFont* font = nil;
-    UIColor* color = nil;
-    
-    NSArray* firstElements = [elements_ subarrayWithRange:NSMakeRange(0, start.splitNextElementIndex)];
-    [GraphicalTextView getLastFont:&font andColor:&color fromElements:firstElements];
-    if(!font){ font = defaultFont_; }
-    if(!color){ color = defaultColor_; }
     if(range.empty){
         [self insertElements:elements atPosition:start];
     }else{
@@ -544,8 +539,11 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     UIFont* font = nil;
     UIColor* color = nil;
     [GraphicalTextView getLastFont:&font andColor:&color fromElements:firstElements];
-    if(!font){ font = defaultFont_; }
-    if(!color){ color = defaultColor_; }
+    if(specificFont_){ font = specificFont_; }
+    else if(!font){ font = defaultFont_; }
+    if(specificColor_){ color = specificColor_; }
+    else if(!color){ color = defaultColor_; }
+    
     NSArray* elements
     = [self markupElementsWithText:text
                               font:font
@@ -590,9 +588,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 - (void)setSelectedTextRange:(UITextRange *)range
 {
     T(@"range:%@", range);
+    MarkupElementRange* elementRange = (MarkupElementRange*)range;
     if(selectedTextRange_ != range){
         [selectedTextRange_ release];
-        selectedTextRange_ = [(MarkupElementRange*)range retain];
+        selectedTextRange_ = [elementRange retain];
         [self syncCaretViewFrame];
     }
 }
