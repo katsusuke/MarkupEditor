@@ -80,7 +80,7 @@
 												 frame:lineViewFrame];
 	[viewCache addViewCache:markupView_];
 	
-	CGFloat lineHeight = [viewCache lineHeightWithNumber:lineNumber];
+	CGFloat lineHeight = [viewCache lineHeightWithLineNumber:lineNumber];
 	[viewCache setLineViewOriginYWithNumber:lineNumber
 							 withLineHeight:lineHeight];
 }
@@ -239,7 +239,7 @@
 			
 			if(isLast){
 				
-				CGFloat lineHeight = [viewCache lineHeightWithNumber:lineNumber];
+				CGFloat lineHeight = [viewCache lineHeightWithLineNumber:lineNumber];
 				[viewCache setLineViewOriginYWithNumber:lineNumber
 										 withLineHeight:lineHeight];
 			}
@@ -264,7 +264,7 @@
 			[markupViews_ addObject:newLineView];
 			[newLineView release];
 			
-			CGFloat lineHeight = [viewCache lineHeightWithNumber:lineNumber];
+			CGFloat lineHeight = [viewCache lineHeightWithLineNumber:lineNumber];
 			[viewCache setLineViewOriginYWithNumber:lineNumber
 									 withLineHeight:lineHeight];
 			text = [text substringFromIndex:[currentLineString length]];
@@ -407,6 +407,10 @@
                       0,
                       view.frame.size.height);
 }
+- (NSInteger)valueIndexFromPoint:(CGPoint)point
+{
+    
+}
 
 @end
 
@@ -496,7 +500,7 @@
         if([previous isMemberOfClass:[MarkupNewLine class]] ||//前が改行
            documentWidth < CGRectGetMaxX(pl.frame) + size_.width)//現在の行に入りきらない
         {
-            CGFloat lineHeight = [viewCache lineHeightWithNumber:pl.lineNumber];
+            CGFloat lineHeight = [viewCache lineHeightWithLineNumber:pl.lineNumber];
             [viewCache setLineViewOriginYWithNumber:pl.lineNumber
                                      withLineHeight:lineHeight];
             pl = previous.lastView;
@@ -524,7 +528,7 @@
     [viewCache addViewCache:markupView_];
 
     if(isLast){
-        CGFloat lineHeight = [viewCache lineHeightWithNumber:lineNumber];
+        CGFloat lineHeight = [viewCache lineHeightWithLineNumber:lineNumber];
         [viewCache setLineViewOriginYWithNumber:lineNumber
                                  withLineHeight:lineHeight];
     }

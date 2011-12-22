@@ -10,6 +10,7 @@
 #import "MarkupElementPosition.h"
 #import "HandWritingInputView.h"
 #import "MarkupElement.h"
+#import "MarkupView.h"
 
 #ifdef DEBUG
 static MarkupElementPosition* POS_CAST(UITextPosition* pos)
@@ -188,6 +189,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                                           end:self.endPosition]];
     markedTextRange_ = nil;
     cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
+    
+    UITapGestureRecognizer* recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTaped:)];
+    [self addGestureRecognizer:recognizer];
+    [recognizer release];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -957,6 +962,58 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 
 - (void)syncCaretViewFrame{
     cartView_.frame = [self caretRectForPosition:selectedTextRange_.start];
+}
+
+- (NSInteger)elementIndexByElement:(id<MarkupElement>)element{
+    NSInteger i = 0;
+    for(id<MarkupElement> elm in elements_){
+        if(element == elm) break;
+        i++;
+    }
+    return i;
+}
+
+- (void)singleTaped:(UITapGestureRecognizer*)sender
+{
+    T(@"sender:%@", sender);
+    CGPoint point = [sender locationInView:self];
+    NSInteger lineNumber = 0;
+    for(NSNumber* lineBottomNumber in [viewCache_ lineBottomsByLine])
+    {
+        CGFloat lineBottom = [lineBottomNumber floatValue];
+        if(lineBottom < point.y){
+            break;
+        }
+        lineNumber++;
+    }
+    NSArray* lineViews = [viewCache_ lineViewsWithNumber:lineNumber];
+    for(MarkupView* lv in lineViews){
+        if(point.x < lv.frame.origin.x + lv.frame.size.width / 2 ||
+           lv == [lineViews lastObject]){
+            if([lv.element length] == 1){
+                NSInteger elementIndex = [self elementIndexByElement:lv.element];
+                [self setSelectedTextRange:[MarkupElementRange
+                                            rangeWithStartElement:elementIndex
+                                            startValueIndex:0
+                                            endElement:elementIndex
+                                            endValueIndex:0]];
+                return;
+            }
+            else{
+                MarkupText* text = (MarkupText*)lv.element;
+                NSInteger elementIndex = [self elementIndexByElement:lv.element];
+                NSInteger valueIndex = [text valueIndexFromPoint:point];
+                [self setSelectedTextRange:[MarkupElementRange
+                                            rangeWithStartElement:elementIndex
+                                            startValueIndex:0
+                                            endElement:elementIndex
+                                            endValueIndex:0]];
+                return;
+            }
+        }
+    }
+    [self setSelectedTextRange:[MarkupElementRange rangeWithStart:self.endPosition
+                                                              end:self.endPosition]];
 }
 
 

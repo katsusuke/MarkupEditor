@@ -12,12 +12,14 @@
 
 @interface MarkupViewCache : NSObject {
 @private
+    //各MarkupViews は先頭から順番に入ってる
 	NSMutableArray* caches_;    
 }
 
 - (void)addViewCache:(MarkupView*)markupView;
 
-- (CGFloat)lineHeightWithNumber:(NSInteger)lineNumber;
+- (CGFloat)lineHeightWithLineNumber:(NSInteger)lineNumber;
+- (NSArray*)lineBottomsByLine;
 - (void)setLineViewOriginYWithNumber:(NSInteger)lineNumber
 					  withLineHeight:(CGFloat)lineHeight;
 - (NSArray*)lineViewsWithNumber:(NSInteger)lineNumber;

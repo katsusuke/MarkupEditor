@@ -88,6 +88,7 @@
 - (UIFont*)font;
 - (UIColor*)color;
 - (id)copyWithZone:(NSZone*)zone;
+- (NSInteger)valueIndexFromPoint:(CGPoint)point;
 
 @end
 

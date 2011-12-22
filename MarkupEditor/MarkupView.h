@@ -14,6 +14,7 @@
 {
 	id<MarkupElement> element_;
 	NSInteger lineNumber_;
+    //各行内での順番
 	NSInteger order_;
 	CGFloat lineTop_;
 	CGRect frame_;

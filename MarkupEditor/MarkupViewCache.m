@@ -29,7 +29,7 @@
     [caches_ addObject:markupView];
 }
 
-- (CGFloat)lineHeightWithNumber:(NSInteger)lineNumber
+- (CGFloat)lineHeightWithLineNumber:(NSInteger)lineNumber
 {
 	CGFloat lineHeight = 0;
 	BOOL find = NO;
@@ -45,6 +45,19 @@
 	}
     ASSERT1(find, @"lineNumber:%d is out of range", lineNumber);
 	return lineHeight;
+}
+
+- (NSArray*)lineBottomsByLine
+{
+    NSMutableArray* res = [NSMutableArray array];
+    NSInteger lineNum = -1;
+    for(MarkupView* lv in caches_){
+        if(lineNum != lv.lineNumber){
+            [res addObject:[NSNumber numberWithFloat:lv.lineBottom]];
+            lineNum = lv.lineNumber;
+        }
+    }
+    return res;
 }
 
 - (void)setLineViewOriginYWithNumber:(NSInteger)lineNumber
