@@ -3,7 +3,7 @@
 //  MarkupEditor
 //
 //  Created by shimizu on 11/03/23.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 MK System. All rights reserved.
 //
 
 #import "HandWritingInputView.h"

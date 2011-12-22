@@ -118,6 +118,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
         }
     }
 }
+
 - (void)setTestData
 {
     [defaultFont_ release];
@@ -268,7 +269,6 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     [self syncCaretViewFrame];
     return [super becomeFirstResponder];
 }
-
 - (BOOL)resignFirstResponder{
     [cartView_ removeFromSuperview];
     [self syncCaretViewFrame];
@@ -277,7 +277,6 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [self becomeFirstResponder];
 }
-
 - (UITextPosition*)beginningOfDocument{
     return [MarkupElementPosition positionWithElementIndex:0 valueIndex:0];
 }

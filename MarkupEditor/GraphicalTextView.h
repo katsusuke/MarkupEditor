@@ -17,10 +17,7 @@ typedef enum{
 }
 InputTextMode;
 
-@interface GraphicalTextView : UIView
-<
-UITextInput
->
+@interface GraphicalTextView : UIView<UITextInput>
 {
     @private
 	NSMutableArray* elements_;
@@ -48,13 +45,13 @@ UITextInput
 - (UIView*)inputView;
 
 @property (nonatomic, assign)InputTextMode inputTextMode;
-@property(nonatomic, retain) UIFont* defaultFont;
-@property(nonatomic, retain) UIColor* defaultColor;
-@property(nonatomic, readonly) MarkupElementPosition* beginPosition;
-@property(nonatomic, readonly) MarkupElementPosition* endPosition;
+@property (nonatomic, retain) UIFont* defaultFont;
+@property (nonatomic, retain) UIColor* defaultColor;
+@property (nonatomic, readonly) MarkupElementPosition* beginPosition;
+@property (nonatomic, readonly) MarkupElementPosition* endPosition;
 
-@property(nonatomic, retain) UIFont* specificFont;
-@property(nonatomic, retain) UIColor* specificColor;
+@property (nonatomic, retain) UIFont* specificFont;
+@property (nonatomic, retain) UIColor* specificColor;
 
 - (void)addHandWritingPoints:(NSArray*)array;
 

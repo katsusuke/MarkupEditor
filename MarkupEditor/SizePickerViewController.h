@@ -3,7 +3,7 @@
 //  MarkupEditor
 //
 //  Created by  on 11/12/20.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 MK System. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
