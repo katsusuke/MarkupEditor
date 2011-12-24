@@ -11,6 +11,8 @@
 
 @implementation MarkupViewCache
 
+@synthesize caches=caches_;
+
 - (id)init {
     self = [super init];
     if (self) {

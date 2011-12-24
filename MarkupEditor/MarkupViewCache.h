@@ -24,4 +24,6 @@
 					  withLineHeight:(CGFloat)lineHeight;
 - (NSArray*)lineViewsWithNumber:(NSInteger)lineNumber;
 
+@property(nonatomic, readonly) NSArray* caches;
+
 @end

@@ -128,6 +128,18 @@
         return CGRectMake(0, markupView_.lineBottom, 0, markupView_.frame.size.height);
     }
 }
+- (NSInteger)valueIndexFromPoint:(CGPoint)point
+                  nextMarkupView:(MarkupView*)next{
+    if(markupView_.lineTop <= point.y && point.y < markupView_.lineBottom &&
+       markupView_.frame.origin.x <= point.x){
+        return 0;
+    }
+    return -1;
+}
+- (MarkupView*)firstMarkupView{
+    return markupView_;
+}
+
 
 @end
 
@@ -407,11 +419,56 @@
                       0,
                       view.frame.size.height);
 }
+
 - (NSInteger)valueIndexFromPoint:(CGPoint)point
+                  nextMarkupView:(MarkupView*)next
 {
-    
+    NSInteger valueIndex = 0;
+    for(NSInteger i = 0; i < [markupViews_ count]; ++i)
+    {
+        MarkupView* mv = [markupViews_ objectAtIndex:i];
+        NSString* str = [textList_ objectAtIndex:i];
+        if(mv == [markupViews_ lastObject] &&
+           next != nil &&
+           next.lineTop == mv.lineTop){
+            if(mv.lineTop <= point.y && point.y < mv.lineBottom &&
+               mv.frame.origin.x <= point.x && point.x <= CGRectGetMaxX(mv.frame)){
+                CGFloat previous = 0;
+                NSInteger j;
+                for(j = 1; j < [str length] + 1; ++j){
+                    NSString* substr = [str substringToIndex:j];
+                    CGFloat width = [substr widthWithFont:font_];
+                    if(point.x < mv.frame.origin.x + (width + previous) / 2){
+                        return valueIndex + j - 1;
+                    }
+                    previous = width;
+                }
+                //ASSERT(valueIndex + j == [self length], @"");
+                return valueIndex + j - 1;
+            }
+        }else if(mv.lineTop <= point.y && point.y < mv.lineBottom &&
+                 mv.frame.origin.x <= point.x){
+            CGFloat previous = 0;
+            NSInteger j;
+            for(j = 1; j < [str length] + 1; ++j){
+                NSString* substr = [str substringToIndex:j];
+                CGFloat width = [substr widthWithFont:font_];
+                if(point.x < mv.frame.origin.x + (previous + width) / 2){
+                    return valueIndex + j - 1;
+                }
+                previous = width;
+            }
+            return valueIndex + j - 1;
+        }else{
+            valueIndex += [str length];
+        }
+    }
+    return -1;
 }
 
+- (MarkupView*)firstMarkupView{
+    return [markupViews_ objectAtIndex:0];
+}
 @end
 
 @implementation MarkupHandWritingChar
@@ -593,5 +650,35 @@
 - (UIColor*)color{
     return color_;
 }
-           
+- (NSInteger)valueIndexFromPoint:(CGPoint)point
+                  nextMarkupView:(MarkupView*)next{
+    if(markupView_.lineTop <= point.y && point.y < markupView_.lineBottom){
+        if(markupView_.frame.origin.x <= point.x &&
+           point.x < markupView_.frame.origin.x + markupView_.frame.size.width / 2)
+        {
+            return 0;
+        }
+        else{
+            if(next != nil &&
+               next.lineTop == markupView_.lineTop){
+                if(markupView_.frame.origin.x + markupView_.frame.size.width / 2 <=
+                   point.x &&
+                   point.x < CGRectGetMaxX(markupView_.frame)){
+                    return 1;
+                }
+            }else{
+                if(markupView_.frame.origin.x + markupView_.frame.size.width / 2 <=
+                   point.x){
+                    return 1;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+- (MarkupView*)firstMarkupView{
+    return markupView_;
+}
+
 @end

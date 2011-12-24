@@ -190,9 +190,12 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     markedTextRange_ = nil;
     cartView_ = [[CaretView alloc]initWithFrame:CGRectZero];
     
-    UITapGestureRecognizer* recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTaped:)];
-    [self addGestureRecognizer:recognizer];
-    [recognizer release];
+    UIPanGestureRecognizer* panRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(singleTaped:)];
+    [self addGestureRecognizer:panRecognizer];
+    [panRecognizer release];
+    UITapGestureRecognizer* tapRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(singleTaped:)];
+    [self addGestureRecognizer:tapRecognizer];
+    [tapRecognizer release];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -611,19 +614,22 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
             markedText = @"";// nilが来ることある
         }
 		// Replace characters in text storage and update markedText range length
+        NSInteger index = [self indexFromPosition:markedTextRange_.startPosition];
         [self replaceRange:markedTextRange_ withText:markedText marked:YES];
-        [self setMarkedTextRange:
-         [self textRangeFromPosition:markedTextRange_.startPosition
-                          toPosition:[self positionFromPosition:markedTextRange_.startPosition
-                                                                               offset:markedText.length]]];
+        MarkupElementPosition* first = [self positionFromIndex:index];
+        MarkupElementPosition* last = [self positionFromIndex:index + markedText.length];
+        [self setMarkedTextRange:[self textRangeFromPosition:first
+                                                  toPosition:last]];
     } else{
         if([markedText length] != 0){
             // There currently isn't a marked text range, but there is a selected range,
             // so replace text storage at selected range and update markedTextRange.
+            NSInteger index = [self indexFromPosition:selectedTextRange_.startPosition];
             [self replaceRange:selectedTextRange_ withText:markedText marked:YES];
-            [self setMarkedTextRange:[self textRangeFromPosition:selectedTextRange_.startPosition
-                                                      toPosition:[self positionFromPosition:selectedTextRange_.startPosition
-                                                                                     offset:markedText.length]]];
+            MarkupElementPosition* first = [self positionFromIndex:index];
+            MarkupElementPosition* last = [self positionFromIndex:index + markedText.length];
+            [self setMarkedTextRange:[self textRangeFromPosition:first
+                                                      toPosition:last]];
         }else{
             // There currently isn't marked or selected text ranges, so just insert
             // given text into storage and update markedTextRange.
@@ -973,47 +979,41 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     return i;
 }
 
-- (void)singleTaped:(UITapGestureRecognizer*)sender
+- (void)singleTaped:(UIPanGestureRecognizer*)sender
 {
     T(@"sender:%@", sender);
     CGPoint point = [sender locationInView:self];
-    NSInteger lineNumber = 0;
-    for(NSNumber* lineBottomNumber in [viewCache_ lineBottomsByLine])
-    {
-        CGFloat lineBottom = [lineBottomNumber floatValue];
-        if(lineBottom < point.y){
-            break;
-        }
-        lineNumber++;
-    }
-    NSArray* lineViews = [viewCache_ lineViewsWithNumber:lineNumber];
-    for(MarkupView* lv in lineViews){
-        if(point.x < lv.frame.origin.x + lv.frame.size.width / 2 ||
-           lv == [lineViews lastObject]){
-            if([lv.element length] == 1){
-                NSInteger elementIndex = [self elementIndexByElement:lv.element];
-                [self setSelectedTextRange:[MarkupElementRange
-                                            rangeWithStartElement:elementIndex
-                                            startValueIndex:0
-                                            endElement:elementIndex
-                                            endValueIndex:0]];
-                return;
+    for(NSInteger i = 0; i < [elements_ count]; ++i){
+        id<MarkupElement> e = [elements_ objectAtIndex:i];
+        id<MarkupElement> next = [elements_ objectOrNullAtIndex:i + 1];
+        NSInteger valueIndex =
+        [e valueIndexFromPoint:point
+                nextMarkupView:(next? [next firstMarkupView] : nil)];
+        if(valueIndex != -1){
+            if(valueIndex == [e length]){
+                [self setSelectedTextRange:
+                 [MarkupElementRange
+                  rangeWithStartElement:i + 1
+                  startValueIndex:0
+                  endElement:i + 1
+                  endValueIndex:0]];
+                
+            }else{
+                [self setSelectedTextRange:
+                 [MarkupElementRange
+                  rangeWithStartElement:i
+                  startValueIndex:valueIndex
+                  endElement:i
+                  endValueIndex:valueIndex]];
+                
             }
-            else{
-                MarkupText* text = (MarkupText*)lv.element;
-                NSInteger elementIndex = [self elementIndexByElement:lv.element];
-                NSInteger valueIndex = [text valueIndexFromPoint:point];
-                [self setSelectedTextRange:[MarkupElementRange
-                                            rangeWithStartElement:elementIndex
-                                            startValueIndex:0
-                                            endElement:elementIndex
-                                            endValueIndex:0]];
-                return;
-            }
+            return;
         }
     }
-    [self setSelectedTextRange:[MarkupElementRange rangeWithStart:self.endPosition
-                                                              end:self.endPosition]];
+    
+    [self setSelectedTextRange:
+     [MarkupElementRange rangeWithStart:self.endPosition
+                                    end:self.endPosition]];
 }
 
 

@@ -30,6 +30,13 @@
 - (BOOL)isConnectableTo:(id<MarkupElement>)lhs;
 - (id<MarkupElement>)connectBack:(id<MarkupElement>)rhs;
 - (CGRect)createRectForValueIndex:(NSInteger)valueIndex;
+//point の示すvalueIndex を返す
+//point が範囲外の時は -1 を返す
+//valueIndex == length の時は、elementIndex += 1, valueIndex = 0 として扱う
+//next はnil が来る事もある
+- (NSInteger)valueIndexFromPoint:(CGPoint)point
+                  nextMarkupView:(MarkupView*)next;
+- (MarkupView*)firstMarkupView;
 
 @property(nonatomic, readonly)MarkupView* lastView;
 
@@ -88,7 +95,6 @@
 - (UIFont*)font;
 - (UIColor*)color;
 - (id)copyWithZone:(NSZone*)zone;
-- (NSInteger)valueIndexFromPoint:(CGPoint)point;
 
 @end
 
