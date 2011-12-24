@@ -575,11 +575,13 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     NSArray* elements
     = [NSArray arrayWithObject:
        [MarkupHandWritingChar charWithPoints:points font:font color:color]];
+    NSInteger index = [self indexFromPosition:selectedTextRange_.startPosition] + 1;
     [self replaceRange:selectedTextRange_ withElements:elements];
+    MarkupElementPosition* pos = [self positionFromIndex:index];
     
     [self setSelectedTextRange:
-     [[MarkupElementRange alloc]initWithStart:self.endPosition
-                                          end:self.endPosition]];
+     [[MarkupElementRange alloc]initWithStart:pos
+                                          end:pos]];
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
 }
