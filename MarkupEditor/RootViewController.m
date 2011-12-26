@@ -60,15 +60,14 @@
     
     
     const NSString* const sizes[] = {
-        @"8",
-        @"10",
-        @"12",
         @"14",
         @"16",
+        @"18",
         @"20",
         @"24",
         @"32",
         @"40",
+        @"48",
     };
     NSArray* sizeArray = [NSArray arrayWithObjects:sizes
                                              count:sizeof(sizes) / sizeof(sizes[0])];

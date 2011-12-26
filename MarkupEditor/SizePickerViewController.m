@@ -36,7 +36,7 @@
     // Release any cached data, images, etc that aren't in use.
 }
 - (void)selectRow:(NSInteger)row{
-    [pickerView selectRow:row inComponent:0 animated:YES];
+    [pickerView selectRow:row inComponent:0 animated:NO];
 }
 - (void)reloadAllComponents{
     [pickerView reloadAllComponents];
