@@ -605,6 +605,12 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     }
 }
 
+// MarkedText => 日本語入力とかで入力された文字列
+// selectedRange => 入力された文字列の中での選択範囲
+// あい|う
+// 
+// の様に あいの後ろにカーソルがあれば loc => 2 length => 0
+// length が 0以外になるタイミングは不明
 - (void)setMarkedText:(NSString *)markedText selectedRange:(NSRange)selectedNSRange
 {
     T(@"markedText:%@ selectedNSRange:(location:%d length:%d)",
@@ -640,8 +646,12 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     }    
 	// Updated selected text range and underlying SimpleCoreTextView
     if(markedTextRange_){
-        [self setSelectedTextRange:[self textRangeFromPosition:markedTextRange_.endPosition
-                                                    toPosition:markedTextRange_.endPosition]];	
+        NSInteger firstIndex = [self indexFromPosition:markedTextRange_.startPosition];
+        MarkupElementPosition* pos1 = [self positionFromIndex:firstIndex + selectedNSRange.location];
+        MarkupElementPosition* pos2 = [self positionFromIndex:firstIndex + selectedNSRange.location + selectedNSRange.length];
+        
+        [self setSelectedTextRange:[self textRangeFromPosition:pos1
+                                                    toPosition:pos2]];	
     }
     [self setNeedsDisplay];
     [self syncCaretViewFrame];
@@ -985,6 +995,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
 {
     T(@"sender:%@", sender);
     CGPoint point = [sender locationInView:self];
+    MarkupElementPosition* pos = nil;
+    
     for(NSInteger i = 0; i < [elements_ count]; ++i){
         id<MarkupElement> e = [elements_ objectAtIndex:i];
         id<MarkupElement> next = [elements_ objectOrNullAtIndex:i + 1];
@@ -993,29 +1005,49 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                 nextMarkupView:(next? [next firstMarkupView] : nil)];
         if(valueIndex != -1){
             if(valueIndex == [e length]){
-                [self setSelectedTextRange:
-                 [MarkupElementRange
-                  rangeWithStartElement:i + 1
-                  startValueIndex:0
-                  endElement:i + 1
-                  endValueIndex:0]];
-                
+                pos = [MarkupElementPosition positionWithElementIndex:i + 1 valueIndex:0];
             }else{
-                [self setSelectedTextRange:
-                 [MarkupElementRange
-                  rangeWithStartElement:i
-                  startValueIndex:valueIndex
-                  endElement:i
-                  endValueIndex:valueIndex]];
-                
+                pos = [MarkupElementPosition positionWithElementIndex:i valueIndex:valueIndex];
             }
-            return;
+            if([pos compareTo:markedTextRange_.startPosition] == NSOrderedAscending){
+                pos = markedTextRange_.startPosition;
+            }
+            break;
         }
     }
-    
-    [self setSelectedTextRange:
-     [MarkupElementRange rangeWithStart:self.endPosition
-                                    end:self.endPosition]];
+    if(markedTextRange_ == nil){
+        if(pos){
+            [self setSelectedTextRange:[MarkupElementRange rangeWithStart:pos
+                                                                      end:pos]];
+        }else{
+            [self setSelectedTextRange:
+             [MarkupElementRange rangeWithStart:markedTextRange_.endPosition
+                                            end:markedTextRange_.endPosition]];
+        }
+    }else{
+        if(pos == nil){
+            [self setSelectedTextRange:
+             [MarkupElementRange rangeWithStart:markedTextRange_.endPosition
+                                            end:markedTextRange_.endPosition]];
+        }
+        if([pos compareTo:markedTextRange_.startPosition] == NSOrderedAscending){
+            pos = markedTextRange_.startPosition;
+        }
+        if([pos compareTo:markedTextRange_.endPosition] == NSOrderedDescending){
+            pos = markedTextRange_.endPosition;
+        }
+        [self setSelectedTextRange:[MarkupElementRange rangeWithStart:pos
+                                                                  end:pos]];
+        /*
+         //ここのコードは効かない
+         //日本語入力後、変換区分の選択方法は不明
+        NSInteger first = [self indexFromPosition:markedTextRange_.startPosition];
+        NSInteger index = [self indexFromPosition:pos];
+        
+        [self setMarkedText:[self textInRange:markedTextRange_]
+              selectedRange:NSMakeRange(index - first, 0)];
+         */
+    }
 }
 
 
