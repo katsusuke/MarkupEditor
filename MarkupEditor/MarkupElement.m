@@ -100,8 +100,8 @@
 - (void)drawRect:(CGRect)rect{
 	//Do nothing
 #ifdef DEBUG
-	[@"↓" drawAtPoint:markupView_.frame.origin
-			 withFont:font_];
+//	[@"↓" drawAtPoint:markupView_.frame.origin
+//			 withFont:font_];
 #endif
 }
 - (NSInteger)length{
@@ -340,8 +340,8 @@
 			NSString* text = [textList_ objectAtIndex:i];
 			[text drawAtPoint:lineView.frame.origin withFont:font_];
 #ifdef DEBUG
-			CGContextRef currentContext = UIGraphicsGetCurrentContext();
-			CGContextStrokeRect(currentContext, lineView.frame);
+//			CGContextRef currentContext = UIGraphicsGetCurrentContext();
+//			CGContextStrokeRect(currentContext, lineView.frame);
 #endif
 		}
 	}

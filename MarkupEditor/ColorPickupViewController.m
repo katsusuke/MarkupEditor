@@ -73,6 +73,7 @@ static NSInteger ColorDiff(UIColor* left, UIColor* right)
         [colors_ addObject:[UIColor colorWithRed:0.964706 green:0.368627 blue:0.000000 alpha:1]];
         [colors_ addObject:[UIColor colorWithRed:0.976471 green:0.615686 blue:0.074510 alpha:1]];
         [colors_ addObject:[UIColor colorWithRed:0.000000 green:0.000000 blue:0.000000 alpha:1]];
+        self.color = [colors_ lastObject];
     }
     return self;
 }

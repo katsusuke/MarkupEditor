@@ -41,6 +41,7 @@
 		6332B181132F9E9F00A836B4 /* MarkupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332B180132F9E9B00A836B4 /* MarkupView.m */; };
 		6343D17314A207EF00F2FEC7 /* loupe.png in Resources */ = {isa = PBXBuildFile; fileRef = 6343D17214A207EF00F2FEC7 /* loupe.png */; };
 		6355A30D14A83FF8001EFADD /* UIView+PDFWritingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6355A30C14A83FF7001EFADD /* UIView+PDFWritingAdditions.m */; };
+		6355A31914A8C8E4001EFADD /* CanvasView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6355A31814A8C8E3001EFADD /* CanvasView.m */; };
 		63877160149F0E8700426BDA /* ColorPickupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6387715E149F0E8700426BDA /* ColorPickupViewController.m */; };
 		63877161149F0E8700426BDA /* ColorPickupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6387715F149F0E8700426BDA /* ColorPickupViewController.xib */; };
 		6390575814A08F9E00E0EFDA /* SizePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6390575614A08F9E00E0EFDA /* SizePickerViewController.m */; };
@@ -120,6 +121,8 @@
 		6343D17214A207EF00F2FEC7 /* loupe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = loupe.png; sourceTree = "<group>"; };
 		6355A30B14A83FF7001EFADD /* UIView+PDFWritingAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+PDFWritingAdditions.h"; sourceTree = "<group>"; };
 		6355A30C14A83FF7001EFADD /* UIView+PDFWritingAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+PDFWritingAdditions.m"; sourceTree = "<group>"; };
+		6355A31714A8C8E3001EFADD /* CanvasView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasView.h; sourceTree = "<group>"; };
+		6355A31814A8C8E3001EFADD /* CanvasView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasView.m; sourceTree = "<group>"; };
 		6387715D149F0E8700426BDA /* ColorPickupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorPickupViewController.h; sourceTree = "<group>"; };
 		6387715E149F0E8700426BDA /* ColorPickupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorPickupViewController.m; sourceTree = "<group>"; };
 		6387715F149F0E8700426BDA /* ColorPickupViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorPickupViewController.xib; sourceTree = "<group>"; };
@@ -296,6 +299,8 @@
 		6332B12E132F1FDA00A836B4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6355A31714A8C8E3001EFADD /* CanvasView.h */,
+				6355A31814A8C8E3001EFADD /* CanvasView.m */,
 				6332B135132F201600A836B4 /* GraphicalTextView.h */,
 				6332B136132F201600A836B4 /* GraphicalTextView.m */,
 				6332B12F132F1FF200A836B4 /* CaretView.h */,
@@ -482,6 +487,7 @@
 				63877160149F0E8700426BDA /* ColorPickupViewController.m in Sources */,
 				6390575814A08F9E00E0EFDA /* SizePickerViewController.m in Sources */,
 				6355A30D14A83FF8001EFADD /* UIView+PDFWritingAdditions.m in Sources */,
+				6355A31914A8C8E4001EFADD /* CanvasView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

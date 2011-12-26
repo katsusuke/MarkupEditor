@@ -58,6 +58,9 @@
     = CGSizeMake(270, 270);
     colorPickerViewController_.delegate = self;
     
+    canvasView_ = [[CanvasView alloc]initWithFrame:self.view.frame];
+    [self.view addSubview:canvasView_];
+    canvasView_.userInteractionEnabled = NO;
     
     const NSString* const sizes[] = {
         @"14",
@@ -100,7 +103,7 @@
 {
     // Return YES for supported orientations
     //return (interfaceOrientation == UIInterfaceOrientationPortrait);
-    return YES;
+    return interfaceOrientation == UIInterfaceOrientationPortrait;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -126,6 +129,7 @@
 {
     UISegmentedControl* sc = sender;
     if(sender == keyboardSelector){
+        canvasView_.userInteractionEnabled = NO;
         switch (sc.selectedSegmentIndex) {
             case 0://QWERTY
                 textView0.inputTextMode = InputTextModeQwerty;
@@ -137,6 +141,19 @@
                 textView1.inputTextMode = InputTextModeHandWriting;
                 textView2.inputTextMode = InputTextModeHandWriting;
                 break;
+            case 2://Pen
+                [self.firstResponderTextView resignFirstResponder];
+                canvasView_.penColor = colorPickerViewController_.color;
+                canvasView_.eraseMode = NO;
+                canvasView_.penWidth = 1;
+                canvasView_.userInteractionEnabled = YES;
+                return;
+            case 3://Eraser
+                [self.firstResponderTextView resignFirstResponder];
+                canvasView_.eraseMode = YES;
+                canvasView_.penWidth = 10;
+                canvasView_.userInteractionEnabled = YES;
+                return;
         }
         GraphicalTextView* textView = self.firstResponderTextView;
         [textView resignFirstResponder];
@@ -224,6 +241,17 @@
         [textView0 clear];
         [textView1 clear];
         [textView2 clear];
+        
+        CanvasView* canvas
+        = [[CanvasView alloc]initWithFrame:canvasView_.frame];
+        canvas.userInteractionEnabled = canvasView_.userInteractionEnabled;
+        canvas.eraseMode = canvasView_.eraseMode;
+        canvas.penWidth = canvasView_.penWidth;
+        canvas.penColor = canvasView_.penColor;
+        [canvasView_ removeFromSuperview];
+        [canvasView_ release];
+        canvasView_ = canvas;
+        [self.view addSubview:canvasView_];
     }
 }
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
@@ -236,6 +264,7 @@
         GraphicalTextView* textView = self.firstResponderTextView;
         textView.specificColor = colorPickerViewController_.color;
         
+        canvasView_.penColor = colorPickerViewController_.color;
     }
 }
 - (void)sizePickerViewController:(SizePickerViewController*)viewController

@@ -12,6 +12,7 @@
 
 #import "SizePickerViewController.h"
 #import "ColorPickupViewController.h"
+#import "CanvasView.h"
 
 @interface RootViewController :
 UIViewController<
@@ -28,6 +29,7 @@ UIAlertViewDelegate
     UIPopoverController *popover_;
     SizePickerViewController* sizePickerViewController_;
     ColorPickupViewController* colorPickerViewController_;
+    CanvasView* canvasView_;
 }
 
 - (IBAction)buttonBushed:(id)sender;

@@ -145,22 +145,26 @@
 								<object class="IBUISegmentedControl" key="IBUICustomView" id="407758537">
 									<reference key="NSNextResponder"/>
 									<int key="NSvFlags">292</int>
-									<string key="NSFrame">{{591, 7}, {170, 30}}</string>
+									<string key="NSFrame">{{441, 7}, {320, 30}}</string>
 									<reference key="NSSuperview"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView"/>
 									<bool key="IBUIOpaque">NO</bool>
 									<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 									<int key="IBSegmentControlStyle">2</int>
-									<int key="IBNumberOfSegments">2</int>
+									<int key="IBNumberOfSegments">4</int>
 									<int key="IBSelectedSegmentIndex">0</int>
 									<object class="NSArray" key="IBSegmentTitles">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<string>QWERTY</string>
 										<string>HANDWRITE</string>
+										<string>Pen</string>
+										<string>Eraser</string>
 									</object>
 									<object class="NSMutableArray" key="IBSegmentWidths">
 										<bool key="EncodedWithXMLCoder">YES</bool>
+										<real value="0.0"/>
+										<real value="0.0"/>
 										<real value="0.0"/>
 										<real value="0.0"/>
 									</object>
@@ -168,14 +172,20 @@
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<boolean value="YES"/>
 										<boolean value="YES"/>
+										<boolean value="YES"/>
+										<boolean value="YES"/>
 									</object>
 									<object class="NSMutableArray" key="IBSegmentContentOffsets">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<string>{0, 0}</string>
 										<string>{0, 0}</string>
+										<string>{0, 0}</string>
+										<string>{0, 0}</string>
 									</object>
 									<object class="NSMutableArray" key="IBSegmentImages">
 										<bool key="EncodedWithXMLCoder">YES</bool>
+										<reference ref="4"/>
+										<reference ref="4"/>
 										<reference ref="4"/>
 										<reference ref="4"/>
 									</object>
@@ -411,7 +421,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
-					<integer value="0"/>
+					<integer value="3"/>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>MarkupEditorAppDelegate</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
