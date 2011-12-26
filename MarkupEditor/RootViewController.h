@@ -13,7 +13,12 @@
 #import "SizePickerViewController.h"
 #import "ColorPickupViewController.h"
 
-@interface RootViewController : UIViewController<UIPopoverControllerDelegate> {
+@interface RootViewController :
+UIViewController<
+UIPopoverControllerDelegate, 
+ColorPickupViewControllerDelegate,
+SizePickerViewControllerDelegate
+> {
     IBOutlet GraphicalTextView* textView0;
     IBOutlet GraphicalTextView* textView1;
     IBOutlet GraphicalTextView* textView2;

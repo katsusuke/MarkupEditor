@@ -53,6 +53,7 @@ static NSInteger ColorDiff(UIColor* left, UIColor* right)
 
 @synthesize color=color_;
 @synthesize colors=colors_;
+@synthesize delegate=delegate_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -165,6 +166,7 @@ static NSInteger ColorDiff(UIColor* left, UIColor* right)
     if(i != ColorsCount){
         self.color = [colors_ objectAtIndex:i];
         [self setRingWithIndex:i];
+        [delegate_ colorPickupViewController:self didSelectedColor:self.color];
     }else{
         self.color = nil;
     }

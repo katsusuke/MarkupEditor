@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ColorPickupViewControllerDelegate;
+
 @interface ColorPickupViewController : UIViewController{
     IBOutlet UIImageView* imageView;
     UIColor* color_;
     NSMutableArray* colors_;
     UIImageView* ring_;
+    id<ColorPickupViewControllerDelegate> delegate_;
 }
 
 -(IBAction)handleSingleTap:(id)sender;
@@ -21,5 +24,14 @@
 
 @property (retain, nonatomic) UIColor* color;
 @property (readonly, nonatomic) NSArray* colors;
+@property (assign, nonatomic) id<ColorPickupViewControllerDelegate> delegate;
+
+@end
+
+
+@protocol ColorPickupViewControllerDelegate <NSObject>
+
+- (void)colorPickupViewController:(ColorPickupViewController*)viewController
+                    didSelectedColor:(UIColor*)color;
 
 @end

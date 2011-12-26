@@ -51,6 +51,7 @@
                                                  bundle:nil];
     colorPickerViewController_.contentSizeForViewInPopover
     = CGSizeMake(270, 270);
+    colorPickerViewController_.delegate = self;
     
     
     const NSString* const sizes[] = {
@@ -73,6 +74,7 @@
     sizePickerViewController_.sizes = sizeArray;
     [sizePickerViewController_ reloadAllComponents];
     [sizePickerViewController_ selectRow:2];
+    sizePickerViewController_.delegate = self;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -193,6 +195,19 @@
         }
         
     }
+}
+- (void)sizePickerViewController:(SizePickerViewController*)viewController
+                   didSelectSize:(CGFloat)size
+{
+    [popover_ dismissPopoverAnimated:YES];
+    [self popoverControllerDidDismissPopover:popover_];
+}
+
+- (void)colorPickupViewController:(ColorPickupViewController*)viewController
+                 didSelectedColor:(UIColor*)color
+{
+    [popover_ dismissPopoverAnimated:YES];
+    [self popoverControllerDidDismissPopover:popover_];
 }
 
 @end

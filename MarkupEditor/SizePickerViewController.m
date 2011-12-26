@@ -11,6 +11,7 @@
 @implementation SizePickerViewController
 
 @synthesize sizes=sizes_;
+@synthesize delegate=delegate_;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -78,6 +79,12 @@
 -(NSString*)pickerView:(UIPickerView*)pickerView
            titleForRow:(NSInteger)row forComponent:(NSInteger)component{
     return [sizes_ objectAtIndex:row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    NSString* sizeStr = [sizes_ objectAtIndex:row];
+    [delegate_ sizePickerViewController:self didSelectSize:[sizeStr floatValue]];
 }
 
 @end
