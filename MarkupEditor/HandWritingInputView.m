@@ -17,7 +17,7 @@ static CGSize HandWritingViewSize = {200, 240};
 {
     CGSize size = [[UIScreen mainScreen]applicationFrame].size;
     
-    self = [super initWithFrame:CGRectMake(0, 0, size.width, 20)];
+    self = [super initWithFrame:CGRectMake(0, 0, size.width, HandWritingViewSize.height + 20)];
     if (self) {
         textView_ = [textView retain];
         self.backgroundColor = [UIColor darkGrayColor];

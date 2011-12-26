@@ -264,7 +264,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     }else{
         HandWritingInputView* view
         = [[[HandWritingInputView alloc]initWithGraphicalTextView:self]autorelease];
-        view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        //view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
         return view;
     }
 }
@@ -398,6 +398,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     RECTLOG(frame);
     [super setFrame:frame];
     [self layout];
+    [self syncCaretViewFrame];
     [self setNeedsDisplay];
 }
 
