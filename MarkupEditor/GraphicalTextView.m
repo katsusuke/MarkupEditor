@@ -978,10 +978,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     PO(range);
     CGRect r0 = [self caretRectForPosition:POS_CAST(range.start)
                                      width:self.frame.size.width];
-    CGRect r1 = [self caretRectForPosition:POS_CAST(range.end)
-                                     width:self.frame.size.width];
-    RECTLOG(r0);
-    RECTLOG(r1);
+//    CGRect r1 = [self caretRectForPosition:POS_CAST(range.end)
+//                                     width:self.frame.size.width];
+//    RECTLOG(r0);
+//    RECTLOG(r1);
     r0.size.width = 30;
     return r0;
 }
@@ -1055,18 +1055,17 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
         }
     }
     if(pos == nil){
-        pos = markedTextRange_.endPosition;
+        pos = self.endPosition;
     }
     if(markedTextRange_ == nil){
-        self.specificFont = nil;
-        self.specificColor = nil;
-        if(pos){
+        if([selectedTextRange_.startPosition compareTo:pos] == NSOrderedSame &&
+           [selectedTextRange_.endPosition compareTo:pos] == NSOrderedSame){
+            
+        }else{
+            self.specificFont = nil;
+            self.specificColor = nil;
             [self setSelectedTextRange:[MarkupElementRange rangeWithStart:pos
                                                                       end:pos]];
-        }else{
-            [self setSelectedTextRange:
-             [MarkupElementRange rangeWithStart:self.endPosition
-                                            end:self.endPosition]];
         }
     }else{
         if([pos compareTo:markedTextRange_.startPosition] == NSOrderedAscending){
