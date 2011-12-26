@@ -10,7 +10,12 @@
 #import "ColorPickupViewController.h"
 #import "SizePickerViewController.h"
 
+@interface RootViewController()
+@property (nonatomic, readonly) GraphicalTextView* firstResponderTextView;
+@end
+
 @implementation RootViewController
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -105,6 +110,19 @@
     [textView0 becomeFirstResponder];
 }
 
+- (GraphicalTextView*)firstResponderTextView{
+    if([textView0 isFirstResponder]){
+        return textView0;
+    }
+    if([textView1 isFirstResponder]){
+        return textView1;
+    }
+    if([textView2 isFirstResponder]){
+        return textView2;
+    }
+    return nil;
+}
+
 - (IBAction)buttonBushed:(id)sender
 {
     UISegmentedControl* sc = sender;
@@ -121,18 +139,9 @@
                 textView2.inputTextMode = InputTextModeHandWriting;
                 break;
         }
-        if([textView0 isFirstResponder]){
-            [textView0 resignFirstResponder];
-            [textView0 becomeFirstResponder];
-        }
-        if([textView1 isFirstResponder]){
-            [textView1 resignFirstResponder];
-            [textView1 becomeFirstResponder];
-        }
-        if([textView2 isFirstResponder]){
-            [textView2 resignFirstResponder];
-            [textView2 becomeFirstResponder];
-        }
+        GraphicalTextView* textView = self.firstResponderTextView;
+        [textView resignFirstResponder];
+        [textView becomeFirstResponder];
     }
     else if(sender == styleSelector){
         switch (sc.selectedSegmentIndex) {
@@ -167,6 +176,10 @@
                 break;
             }
             case 2:{//Save
+                [textView0 resignFirstResponder];
+                [textView1 resignFirstResponder];
+                [textView2 resignFirstResponder];
+                
                 NSDateFormatter *inputDateFormatter = [[NSDateFormatter alloc] init];
                 [inputDateFormatter setDateFormat:@"yyyyMMddHHmmss"];
                 NSString* dateStr = [inputDateFormatter stringFromDate:[NSDate date]];
@@ -175,39 +188,54 @@
                  [NSString stringWithFormat:@"%@/Documents/%@.pdf", NSHomeDirectory(), dateStr];
                 
                 [self.view renderInPDFFile:path];
+                
+                NSMutableData *data = [[NSMutableData alloc] init];
+                
+                NSKeyedArchiver *archiver;
+                archiver = [[NSKeyedArchiver alloc]
+                            initForWritingWithMutableData: data];
+                [archiver setOutputFormat: NSPropertyListXMLFormat_v1_0];
+                
+                [archiver encodeObject:textView0.elements forKey:@"text0"];
+                [archiver encodeObject:textView1.elements forKey:@"text1"];
+                [archiver encodeObject:textView2.elements forKey:@"text2"];
+                [archiver finishEncoding];
+                [archiver release];
+                path = [NSString stringWithFormat:@"%@/Documents/%@.xml", NSHomeDirectory(), dateStr];
+                [data writeToFile:path atomically:YES];
+                [data release];
+                
+                break;
             }
             case 3:{//New
-                [textView0 clear];
-                [textView1 clear];
-                [textView2 clear];
+                UIAlertView* av = [[[UIAlertView alloc]initWithTitle:@"確認"
+                                                             message:@"現在の編集内容は破棄されますよろしいですか？"
+                                                            delegate:self
+                                                   cancelButtonTitle:@"OK"
+                                                   otherButtonTitles:@"キャンセル", nil]autorelease];
+                [av show];
+                break;
             }
         }
     }
-    
+}
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0){
+        [textView0 clear];
+        [textView1 clear];
+        [textView2 clear];
+    }
 }
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
     if(popover_.contentViewController == sizePickerViewController_){
-        if([textView0 isFirstResponder]){
-            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
-        }
-        if([textView1 isFirstResponder]){
-            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
-        }
-        if([textView2 isFirstResponder]){
-            textView0.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
-        }
+        GraphicalTextView* textView = self.firstResponderTextView;
+        textView.specificFont= [UIFont systemFontOfSize:sizePickerViewController_.size];
     }
     else if(popover_.contentViewController == colorPickerViewController_){
-        if([textView0 isFirstResponder]){
-            textView0.specificColor = colorPickerViewController_.color;
-        }
-        if([textView1 isFirstResponder]){
-            textView1.specificColor = colorPickerViewController_.color;
-        }
-        if([textView2 isFirstResponder]){
-            textView2.specificColor = colorPickerViewController_.color;
-        }
+        GraphicalTextView* textView = self.firstResponderTextView;
+        textView.specificColor = colorPickerViewController_.color;
         
     }
 }
@@ -216,6 +244,7 @@
 {
     [popover_ dismissPopoverAnimated:YES];
     [self popoverControllerDidDismissPopover:popover_];
+    [self.firstResponderTextView syncCaretViewFrame];
 }
 
 - (void)colorPickupViewController:(ColorPickupViewController*)viewController

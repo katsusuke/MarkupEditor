@@ -52,8 +52,10 @@ InputTextMode;
 
 @property (nonatomic, retain) UIFont* specificFont;
 @property (nonatomic, retain) UIColor* specificColor;
+@property (nonatomic, retain) NSArray* elements;
 
 - (void)addHandWritingPoints:(NSArray*)array;
 - (void)clear;
+- (void)syncCaretViewFrame;
 
 @end

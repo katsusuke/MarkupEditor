@@ -13,7 +13,7 @@
 @class MarkupView;
 @class MarkupViewCache;
 
-@protocol MarkupElement<NSCopying, NSObject>
+@protocol MarkupElement<NSCopying, NSObject, NSCoding>
 
 - (id)copy;
 

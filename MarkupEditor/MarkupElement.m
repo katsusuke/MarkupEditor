@@ -21,7 +21,17 @@
 	}
 	return self;
 }
-
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:font_ forKey:@"font"];
+}
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    if(self){
+        font_ = [[aDecoder decodeObjectForKey:@"font"]retain];
+    }
+    return self;
+}
 + (id)markupNewLineWithFont:(UIFont*)font{
     return [[[self alloc]initWithFont:font] autorelease];
 }
@@ -140,7 +150,6 @@
     return markupView_;
 }
 
-
 @end
 
 @implementation MarkupText
@@ -162,6 +171,27 @@
         marked_ = marked;
 	}
 	return self;
+}
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    //marked の時は保存しないで欲しい
+    ASSERT(marked_ == NO, @"marked MarkupText is exist.");
+    [aCoder encodeObject:text_ forKey:@"text"];
+    [aCoder encodeObject:font_ forKey:@"font"];
+    [aCoder encodeObject:color_ forKey:@"color"];
+
+}
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    if(self){
+        text_ = [[aDecoder decodeObjectForKey:@"text"]retain];
+        font_ = [[aDecoder decodeObjectForKey:@"font"]retain];
+        color_ = [[aDecoder decodeObjectForKey:@"color"]retain];
+        textList_ = [[NSMutableArray alloc]init];
+        markupViews_ = [[NSMutableArray alloc]init];
+        marked_ = NO;
+    }
+    return self;
 }
 
 + (MarkupText*)textWithText:(NSString*)text
@@ -518,7 +548,24 @@
         points_ = [[NSArray alloc]initWithArray:points];
         font_ = [font retain];
         color_ = [color retain];
-        size_.height = [font lineHeight];
+        size_.height = font.lineHeight;
+        [self createBitmap];
+    }
+    return self;
+}
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:points_ forKey:@"points"];
+    [aCoder encodeObject:font_ forKey:@"font"];
+    [aCoder encodeObject:color_ forKey:@"color"];
+}
+- (id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super init];
+    if(self){
+        points_ = [[aDecoder decodeObjectForKey:@"points"]retain];
+        font_ = [[aDecoder decodeObjectForKey:@"font"]retain];
+        color_ = [[aDecoder decodeObjectForKey:@"color"]retain];
+        size_.height = font_.lineHeight;
         [self createBitmap];
     }
     return self;

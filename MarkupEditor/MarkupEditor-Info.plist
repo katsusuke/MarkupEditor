@@ -35,5 +35,7 @@
 	</array>
 	<key>CFBundleDisplayName</key>
 	<string>PDCNote</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>

@@ -92,7 +92,7 @@
 								<object class="IBUISegmentedControl" key="IBUICustomView" id="193304099">
 									<reference key="NSNextResponder"/>
 									<int key="NSvFlags">292</int>
-									<string key="NSFrame">{{7, 7}, {170, 30}}</string>
+									<string key="NSFrame">{{7, 7}, {300, 30}}</string>
 									<reference key="NSSuperview"/>
 									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="407758537"/>

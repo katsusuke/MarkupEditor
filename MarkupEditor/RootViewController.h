@@ -17,7 +17,8 @@
 UIViewController<
 UIPopoverControllerDelegate, 
 ColorPickupViewControllerDelegate,
-SizePickerViewControllerDelegate
+SizePickerViewControllerDelegate,
+UIAlertViewDelegate
 > {
     IBOutlet GraphicalTextView* textView0;
     IBOutlet GraphicalTextView* textView1;
