@@ -185,7 +185,7 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     defaultFont_ = [[UIFont systemFontOfSize:20]retain];
     defaultColor_ = [[UIColor blackColor]retain];
     
-    [self setTestData];
+    //[self setTestData];
     
     [self setSelectedTextRange:
      [[MarkupElementRange alloc]initWithStart:self.endPosition
@@ -591,8 +591,10 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     UIFont* font = nil;
     UIColor* color = nil;
     [GraphicalTextView getLastFont:&font andColor:&color fromElements:firstElements];
-    if(!font){ font = defaultFont_; }
-    if(!color){ color = defaultColor_; }
+    if(specificFont_){ font = specificFont_; }
+    else if(!font){ font = defaultFont_; }
+    if(specificColor_){ color = specificColor_; }
+    else if(!color){ color = defaultColor_; }
     NSArray* elements
     = [NSArray arrayWithObject:
        [MarkupHandWritingChar charWithPoints:points font:font color:color]];
@@ -839,6 +841,8 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                                   offset:(NSInteger)offset
 {
     T(@"position:%@ direction:%d offset:%d", position, direction, offset);
+    self.specificFont = nil;
+    self.specificColor = nil;
     NSInteger toOffset = offset;
     switch (direction) {
         case UITextLayoutDirectionLeft:
@@ -1050,7 +1054,12 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
             break;
         }
     }
+    if(pos == nil){
+        pos = markedTextRange_.endPosition;
+    }
     if(markedTextRange_ == nil){
+        self.specificFont = nil;
+        self.specificColor = nil;
         if(pos){
             [self setSelectedTextRange:[MarkupElementRange rangeWithStart:pos
                                                                       end:pos]];
@@ -1060,11 +1069,6 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
                                             end:self.endPosition]];
         }
     }else{
-        if(pos == nil){
-            [self setSelectedTextRange:
-             [MarkupElementRange rangeWithStart:markedTextRange_.endPosition
-                                            end:markedTextRange_.endPosition]];
-        }
         if([pos compareTo:markedTextRange_.startPosition] == NSOrderedAscending){
             pos = markedTextRange_.startPosition;
         }
