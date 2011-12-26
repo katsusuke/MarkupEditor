@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UIView_renderInPDFFile : NSObject
+@interface UIView(PDFWritingAdditions)
+
+- (void)renderInPDFFile:(NSString*)path;
 
 @end

@@ -18,6 +18,6 @@
     #import "NSArray+objectOrNullAtIndex.h"
     #import "NSMutableArray+insertObjectsAtIndex.h"
     #import "NSString+drawing.h"
-
+    #import "UIView+PDFWritingAdditions.h"
     #import "Const.h"
 #endif

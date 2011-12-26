@@ -927,7 +927,15 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
     [self layout];
     if(position.elementIndex >= [elements_ count]){
         id<MarkupElement> last = [elements_ lastObject];
-        return [last createRectForValueIndex:[last length]];
+        if(last == nil){//空の時
+            if(specificFont_){
+                return CGRectMake(0, 0, 0, specificFont_.lineHeight);
+            }else{
+                return CGRectMake(0, 0, 0, defaultFont_.lineHeight);
+            }
+        }else{
+            return [last createRectForValueIndex:[last length]];
+        }
     }else{
         id<MarkupElement> elm = [elements_ objectAtIndex:position.elementIndex];
         return [elm createRectForValueIndex:position.valueIndex];
@@ -1049,6 +1057,24 @@ static MarkupElementPosition* POS_CAST(UITextPosition* pos)
               selectedRange:NSMakeRange(index - first, 0)];
          */
     }
+}
+
+- (void)setSpecificFont:(UIFont *)specificFont
+{
+    if(specificFont_ != specificFont){
+        [specificFont_ release];
+        specificFont_ = [specificFont retain];
+        [self syncCaretViewFrame];
+    }
+}
+
+- (void)clear{
+    [elements_ removeAllObjects];
+    [self setSelectedTextRange:[MarkupElementRange rangeWithStart:self.beginPosition end:self.beginPosition]];
+    [self setMarkedTextRange:nil];
+    [self layout];
+    [self syncCaretViewFrame];
+    [self setNeedsDisplay];
 }
 
 

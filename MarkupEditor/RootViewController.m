@@ -166,6 +166,21 @@
                                         animated:YES];
                 break;
             }
+            case 2:{//Save
+                NSDateFormatter *inputDateFormatter = [[NSDateFormatter alloc] init];
+                [inputDateFormatter setDateFormat:@"yyyyMMddHHmmss"];
+                NSString* dateStr = [inputDateFormatter stringFromDate:[NSDate date]];
+                [inputDateFormatter release];
+                NSString* path =
+                 [NSString stringWithFormat:@"%@/Documents/%@.pdf", NSHomeDirectory(), dateStr];
+                
+                [self.view renderInPDFFile:path];
+            }
+            case 3:{//New
+                [textView0 clear];
+                [textView1 clear];
+                [textView2 clear];
+            }
         }
     }
     

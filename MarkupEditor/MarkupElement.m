@@ -302,7 +302,7 @@
 		MarkupView* lineView = [markupViews_ objectAtIndex:i];
 		if(CGRectIntersectsRect(lineView.frame, rect)){
             if(marked_){
-                [[UIColor redColor]set];
+                [[UIColor colorWithRed:0.57255 green:0.517648 blue:1 alpha:1]set];
                 CGContextRef context = UIGraphicsGetCurrentContext();
                 CGContextFillRect(context, lineView.frame);
                 [color_ set];

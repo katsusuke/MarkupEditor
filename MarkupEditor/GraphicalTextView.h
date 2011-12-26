@@ -54,5 +54,6 @@ InputTextMode;
 @property (nonatomic, retain) UIColor* specificColor;
 
 - (void)addHandWritingPoints:(NSArray*)array;
+- (void)clear;
 
 @end
