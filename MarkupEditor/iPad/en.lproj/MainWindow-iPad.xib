@@ -44,10 +44,13 @@
 				<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 			</object>
 			<object class="IBUIWindow" id="380026005">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">1316</int>
 				<object class="NSPSMatrix" key="NSFrameMatrix"/>
 				<string key="NSFrameSize">{768, 1024}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
+				<reference key="NSNextKeyView"/>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
 					<bytes key="NSRGB">MSAxIDEAA</bytes>
@@ -86,10 +89,9 @@
 					<object class="IBUIViewController" id="619226028">
 						<object class="IBUINavigationItem" key="IBUINavigationItem" id="394667715">
 							<reference key="IBUINavigationBar"/>
-							<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="616263790">
+							<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="887517622">
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
-								<int key="IBUIStyle">2</int>
-								<object class="IBUISegmentedControl" key="IBUICustomView" id="193304099">
+								<object class="IBUISegmentedControl" key="IBUICustomView" id="866734668">
 									<reference key="NSNextResponder"/>
 									<int key="NSvFlags">292</int>
 									<string key="NSFrame">{{7, 7}, {300, 30}}</string>
@@ -100,10 +102,11 @@
 									<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 									<int key="IBSegmentControlStyle">2</int>
 									<int key="IBNumberOfSegments">4</int>
+									<int key="IBSelectedSegmentIndex">0</int>
 									<object class="NSArray" key="IBSegmentTitles">
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<string>Color</string>
-										<string>Size</string>
+										<string>Font</string>
 										<string>Save</string>
 										<string>New</string>
 									</object>
@@ -135,7 +138,6 @@
 										<reference ref="4"/>
 										<reference ref="4"/>
 									</object>
-									<bool key="IBMomentary">YES</bool>
 								</object>
 								<reference key="IBUINavigationItem" ref="394667715"/>
 							</object>
@@ -246,9 +248,9 @@
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">styleSelector</string>
 						<reference key="source" ref="619226028"/>
-						<reference key="destination" ref="193304099"/>
+						<reference key="destination" ref="866734668"/>
 					</object>
-					<int key="connectionID">44</int>
+					<int key="connectionID">56</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchEventConnection" key="connection">
@@ -258,15 +260,6 @@
 						<int key="IBEventType">13</int>
 					</object>
 					<int key="connectionID">29</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">buttonBushed:</string>
-						<reference key="source" ref="193304099"/>
-						<reference key="destination" ref="619226028"/>
-						<int key="IBEventType">13</int>
-					</object>
-					<int key="connectionID">46</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -334,7 +327,7 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="351144566"/>
-							<reference ref="616263790"/>
+							<reference ref="887517622"/>
 						</object>
 						<reference key="parent" ref="619226028"/>
 					</object>
@@ -354,18 +347,18 @@
 						<string key="objectName">Segmented Control - QWERTY, HANDWRITE</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">41</int>
-						<reference key="object" ref="616263790"/>
+						<int key="objectID">55</int>
+						<reference key="object" ref="887517622"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="193304099"/>
+							<reference ref="866734668"/>
 						</object>
 						<reference key="parent" ref="394667715"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">40</int>
-						<reference key="object" ref="193304099"/>
-						<reference key="parent" ref="616263790"/>
+						<int key="objectID">54</int>
+						<reference key="object" ref="866734668"/>
+						<reference key="parent" ref="887517622"/>
 					</object>
 				</object>
 			</object>
@@ -390,9 +383,9 @@
 					<string>27.IBPluginDependency</string>
 					<string>3.CustomClassName</string>
 					<string>3.IBPluginDependency</string>
-					<string>40.IBPluginDependency</string>
-					<string>40.IUISegmentedControlInspectorSelectedSegmentMetadataKey</string>
-					<string>41.IBPluginDependency</string>
+					<string>54.IBPluginDependency</string>
+					<string>54.IUISegmentedControlInspectorSelectedSegmentMetadataKey</string>
+					<string>55.IBPluginDependency</string>
 					<string>9.IBLastUsedUIStatusBarStylesToTargetRuntimesMap</string>
 					<string>9.IBPluginDependency</string>
 				</object>
@@ -447,7 +440,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">53</int>
+			<int key="maxID">56</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

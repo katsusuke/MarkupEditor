@@ -25,7 +25,8 @@ UIAlertViewDelegate
     IBOutlet GraphicalTextView* textView1;
     IBOutlet GraphicalTextView* textView2;
     IBOutlet UISegmentedControl* keyboardSelector;
-    IBOutlet UISegmentedControl* styleSelector;
+    //XIBがうまく動かなくなってしまったので急遽差し替え
+    UISegmentedControl* styleSelector;
     UIPopoverController *popover_;
     SizePickerViewController* sizePickerViewController_;
     ColorPickupViewController* colorPickerViewController_;

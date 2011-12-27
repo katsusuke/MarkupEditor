@@ -82,6 +82,23 @@
     [sizePickerViewController_ reloadAllComponents];
     [sizePickerViewController_ selectRow:2];
     sizePickerViewController_.delegate = self;
+    
+	styleSelector
+	= [[UISegmentedControl alloc]initWithItems:
+       [NSArray arrayWithObjects:@"Color",@"Font",@"Save",@"New",nil]];
+    styleSelector.frame
+    = CGRectMake(0, 0, 300, styleSelector.frame.size.height);
+	styleSelector.segmentedControlStyle = UISegmentedControlStyleBar;
+	styleSelector.momentary = YES;
+	[styleSelector addTarget:self
+					  action:@selector(buttonBushed:)
+			forControlEvents:UIControlEventValueChanged];
+	UIBarButtonItem* left = [[UIBarButtonItem alloc]initWithCustomView:styleSelector];
+	self.navigationItem.leftBarButtonItem = left;
+	[left release];
+    styleSelector.frame
+    = CGRectMake(styleSelector.frame.origin.x, styleSelector.frame.origin.y,
+                 300, 30);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
